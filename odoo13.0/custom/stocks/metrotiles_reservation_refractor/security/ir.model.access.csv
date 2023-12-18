@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_metrotiles_reservation_refractor_metrotiles_reservation_refractor,metrotiles_reservation_refractor.metrotiles_reservation_refractor,model_metrotiles_reservation_refractor_metrotiles_reservation_refractor,base.group_user,1,1,1,1

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="purchase_order_price_type_form">
+            <field name="name">purchase.order.price.type.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                    <field name="price_type"/>
+                    <field name="qty_sqm" attrs="{'invisible':[('price_type', '=', 'per_piece')]}"/>
+                </xpath>
+               <xpath expr="//tree/field[@name='product_id']" position="before">
+                    <field name="order_date" optional="show" force_save="1"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='price_subtotal']" position="after">
+                    <field name="delivery_address" optional="hide" force_save="1"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

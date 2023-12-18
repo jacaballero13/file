@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- product.product form view -->
+    <record id="pricing_product_inherit_view_tree" model="ir.ui.view">
+        <field name="name">product.product.view.tree</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree string="Product">
+                <field name="name"/>
+                <field name="lst_price"/>
+            </tree> 
+        </field>
+    </record>
+
+    <!-- model.name action window -->
+    <record id="product_pricing_action" model="ir.actions.act_window">
+        <field name="name">Product Pricing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" eval="pricing_product_inherit_view_tree"/>
+    </record>
+
+    <menuitem name="Product" sequence="5" id="product_pricing_menu"  action="product_pricing_action"/>
+</odoo>

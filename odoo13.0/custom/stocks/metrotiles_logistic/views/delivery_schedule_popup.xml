@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="delivery_schedule_popup_form">
+            <field name="name">delivery.schedule.popup.form</field>
+            <field name="model">delivery.schedule.popup</field>
+            <field name="arch" type="xml">
+                <form string="Create Delivery Schedule">
+                    <sheet>
+                        <group>
+                            <field name="commitment_date"/>
+                            <field name="track_id"/>
+                            <field name="trip"/>
+                            <field name='delivery_area'/>
+                            <field name="allday" invisible="1"/>
+                            <field name="dr_type" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" type="object"
+                                class="btn btn-success"
+                                icon="fa-calendar-minus-o"
+                                string="Confirm"/>
+                        <button special="cancel" class="btn btn-danger" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

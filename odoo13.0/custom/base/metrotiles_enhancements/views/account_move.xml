@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="account_move_inherit_form_view">
+            <field name="name">account.move.inherit.form.view</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ref']" position="before">
+                    <field name="manual_si"/>
+                    <field name="manual_date"/>
+                    <field name="order_date" force_save="1"/>
+                    <field name="show_button_draft" invisible="1" force_save="1"/>
+                </xpath>
+                <xpath expr="//button[@name='button_draft']" position="attributes">
+                    <attribute name="attrs">{"invisible": [["show_button_draft", "=", False]]}</attribute>
+                </xpath>
+            </field>
+        </record>
+         <record model="ir.ui.view" id="account_move_inherit_tree_view">
+            <field name="name">account.move.inherit.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_date']" position="after">
+                    <field name="order_date" force_save="1"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_origin']" position="after">
+                    <field name="sales_person" force_save="1"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_user_id']" position="attributes">
+                     <attribute name="invisible">1
+                     </attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Inherit Form view -->
+    <record id="metrotiles_reservation_sale_order_form" model="ir.ui.view">
+            <field name="name">metrotiles_quotation_view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            <field name="bom_display_name" position="after">
+                <!-- Add your fields or attributes here -->
+                <field name="cutting_attached" widget="pdf_viewer" string="Add Cutting List" attrs="{'invisible': [('to_fabricate', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

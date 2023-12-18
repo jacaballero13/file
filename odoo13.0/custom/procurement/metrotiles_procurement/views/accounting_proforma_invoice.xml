@@ -1,0 +1,128 @@
+<odoo>
+    <record id="accounting_proforma_invoice_form" model="ir.ui.view">
+        <field name="name">metrotiles_procurement.accounting_proforma_invoice.form</field>
+        <field name="model">metrotiles_procurement.accounting_proforma_invoice</field>
+        <field name="arch" type="xml">
+            <form string="Proforma Invoice Payment" class="o_accounting_proforma_invoice" edit="false" create="false">
+                 <header>
+                     <button name="action_cancelled" type="object"
+                                icon="fa-stop-circle-o"
+                                class="btn btn-danger"
+                                string="Cancelled"
+                                attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+                     <button name="action_enter_payment_details" type="object"
+                                icon="fa-pencil-square-o"
+                                class="btn btn-success"
+                                string="Enter Payment Details"
+                                attrs="{'invisible': [('state', 'in', ('cancelled', 'approved', 'processing'))]}"/>
+                     <button name="action_terms" type="object"
+                                icon="fa-calendar-minus-o"
+                                class="btn btn-warning"
+                                string="Terms"
+                                attrs="{'invisible': [('proforma_terms_id', '!=', False)]}"/>
+
+                     <button name="action_approved" type="object"
+                                class="btn btn-success"
+                                string="Approve"
+                                attrs="{'invisible': [('state', '!=', 'processing')]}"
+                                groups="purchase.group_purchase_manager"
+                     />
+                     <field name="state" widget="statusbar"/>
+                 </header>
+                <sheet>
+                    <field name="check_terms" invisible="1"/>
+                    <div class="oe_title">
+                        <span class="o_form_label">Proforma Invoice</span>
+                        <h1>
+                            <field name="purchase_proforma_invoice_id"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="purchase_order_id"/>
+                        </group>
+                        <group>
+                             <field name="status"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <!--<field name="attachment" multiple="true" accept="image/*,application/pdf,video/*"/>-->
+                            <field name="date_received"/>
+                        </group>
+                        <group>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('proforma_terms_id', '=', False)]}">
+                        <field name="proforma_terms_id" invisible="1"/>
+                        <group>
+                            <field name="due_date"/>
+                        </group>
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="amount_total"
+                                       widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="accounting_proforma_invoice_tree_view">
+        <field name="name">accounting_proforma_invoice.tree</field>
+        <field name="model">metrotiles_procurement.accounting_proforma_invoice</field>
+        <field name="arch" type="xml">
+            <tree string="Proforma Invoice Payment Tree"  edit="false" create="false">
+                <field name="purchase_proforma_invoice_id"/>
+                <field name="purchase_order_id"/>
+                <field name="partner_id"/>
+                <field name="amount_total"
+                                       widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="date_received"/>
+                <field name="status"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="accounting_proforma_invoice_search_view">
+        <field name="name">accounting_proforma_invoice.search</field>
+        <field name="model">metrotiles_procurement.accounting_proforma_invoice</field>
+        <field name="arch" type="xml">
+            <search string="accounting_proforma_invoice search">
+                <field name="purchase_proforma_invoice_id"/>
+                <field name="purchase_order_id"/>
+                <field name="date_received"/>
+                <field name="currency_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="accounting_proforma_invoice_list_action">
+        <field name="name">Proforma Invoice Payment</field>
+        <field name="res_model">metrotiles_procurement.accounting_proforma_invoice</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smiling_face">Create the first Proforma Invoice Payment
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="accounting_proforma_invoice_menu" name="Payment" parent="metrotiles_procurement.proforma_invoice_root_menu"
+              action="accounting_proforma_invoice_list_action" sequence="2"/>
+
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Groups -->
+        <record model="ir.module.category" id="module_category_inventory_count">
+            <field name="name">Inventory Count</field>
+            <field name="description">Inventory Qty Count Related.</field>
+            <field name="sequence">67</field>
+        </record>
+
+        <record id="group_inventory_count_user" model="res.groups">
+            <field name="name">Inventory Count User</field>
+            <field name="category_id" ref="inventory_adjustment_enhanced.module_category_inventory_count"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_inventory_count_manager" model="res.groups">
+            <field name="name">Inventory Count Manager</field>
+            <field name="category_id" ref="inventory_adjustment_enhanced.module_category_inventory_count"/>
+            <field name="implied_ids" eval="[(4, ref('inventory_adjustment_enhanced.group_inventory_count_user'))]"/>
+        </record>
+
+        <record id="group_inventory_count_accountant" model="res.groups">
+            <field name="name">Inventory Count Accountant</field>
+            <field name="category_id" ref="inventory_adjustment_enhanced.module_category_inventory_count"/>
+            <field name="implied_ids" eval="[(4, ref('inventory_adjustment_enhanced.group_inventory_count_manager'))]"/>
+        </record>
+
+    </data>
+</odoo>

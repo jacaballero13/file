@@ -1,0 +1,20 @@
+<odoo>
+    <record id="discount_view" model="ir.ui.view">
+        <field name="name">Additional Discount</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/form/group/group/div[@name='discount']" position="after">
+                <label for="Additional disc. %" groups="product.group_discount_per_so_line"/>
+                <div name="add_discount" groups="product.group_discount_per_so_line">
+                    <field name="add_discount" class="oe_inline"/>
+                    %
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="after">
+                <field name="add_discount" string="Add. Disc. %" groups="product.group_discount_per_so_line"
+                       optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

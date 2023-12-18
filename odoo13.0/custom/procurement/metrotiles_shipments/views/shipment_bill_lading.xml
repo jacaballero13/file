@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+    <data>
+        <record id="view_shipment_bill_lading_tree" model="ir.ui.view">
+          <field name="name">shipment.bill_lading.tree</field>
+          <field name="model">shipment.bill_lading</field>
+          <field name="arch" type="xml">
+              <tree>
+                  <field name="shipment_id" widget="many2onebutton"/>
+                  <field name="container_no"/>
+                  <field name="partner_id"/>
+                  <field name="xx_ets"/>
+                  <field name="xx_eta"/>
+                  <field name="total_inv_qty"/>
+                  <field name="total_ship_qty"/>
+              </tree>
+          </field>
+        </record>
+
+        <record id="view_shipment_bill_lading_form" model="ir.ui.view">
+          <field name="name">shipment.bill_lading.form</field>
+          <field name="model">shipment.bill_lading</field>
+          <field name="arch" type="xml">
+              <form>
+                  <header>
+                        <button name="action_validate" type="object"
+                                class="btn btn-primary"
+                                string="Validate"
+                                attrs="{'invisible':[('state', '!=', 'draft')]}" />
+                        <field name="state" widget="statusbar"
+                                statusbar_visible="draft,validate"
+                                statusbar_colors='{"validate":"blue"}' />
+                  </header>
+                <sheet>
+                  <div class="oe_title">
+                      <span class="o_form_label">Bill of Lading No.</span>
+                      <h1>
+                          <field name="name"/>
+                      </h1>
+                  </div>
+                  <group>
+                    <field name="shipment_id" widget="many2one_button"/>
+                    <field name="container_no"/>
+                  </group>
+                  <notebook>
+                    <page name="Bill" string="Bill of Lading">
+                        <field name="bill_line" widget="one2many_list" context="{'group_by': 'shipment_id' }"> 
+                      </field>
+                    </page>
+                  </notebook>
+                </sheet>
+              </form>
+          </field>
+        </record>
+
+
+        <record id="action_bill_of_lading" model="ir.actions.act_window">
+          <field name="name">Bill Of Lading</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">shipment.bill_lading</field>
+          <field name="view_mode">tree,form</field>
+          <field name="context">{}</field>
+          <field name="domain">[]</field>
+          <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create Bill Of Lading
+              </p>
+          </field>
+        </record>
+
+
+      <menuitem id="metrotiles_procurment_shipments_menu"
+                name="Encode Final Bill of Lading"
+                parent="main_parent_menu"
+                action="action_bill_of_lading"
+                sequence="75"
+                groups="base.group_user"/>
+
+    </data>
+  </odoo>
+

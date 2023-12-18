@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<odoo>
+	 <!--  Added a menu in action button -->
+	 <act_window id="create_proforma_invoice_lineup"
+            name="Line Up Shipments"
+            res_model="procurement_shipment.lineup" 
+            binding_model="metrotiles_procurement.proforma_invoice_item"
+            view_mode="form" 
+            target="new" />
+            
+     <!-- Popup a form on click the Lineup Shipments button in action menu -->
+    <record id="procurement_shipment_lineup_view" model="ir.ui.view">
+            <field name="name">procurement_shipment.lineup.form</field>
+            <field name="model">procurement_shipment.lineup</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request Order">
+                	<p class="oe_grey">
+                        Once Proforma Invoice Created, it will create a new shipment for the Line Up...
+                    </p>
+                    <group>
+                        <field name="shipment_id"/>
+                    </group>
+                    <footer>
+	                     <button name="action_lineup_shipments" class="btn-primary" type="object" string="Create Shipments" default_focus="1"/>
+	                     <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>  
+            </field>
+    </record>
+       
+</odoo>

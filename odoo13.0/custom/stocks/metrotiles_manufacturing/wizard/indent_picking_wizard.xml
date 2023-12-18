@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="indent_picking_wizard_view" model="ir.ui.view">
+        <field name="name">indent.picking.wizard.view.form</field>
+        <field name="model">indent.picking.wizard</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <notebook>
+                        <page name="products" string="Products">
+                            <field name="stock_move_ids">
+                                <tree create="0" editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="factory_id"/>
+                                    <field name="series_id"/>
+                                    <field name="variant"/>
+                                    <field name="sizes"/>
+                                    <field name="demand_qty"/>
+                                    <field name="indent_type" required="1"/>
+                                    <field name="raw_matt_id" attrs="{'required': [('indent_type', '=', 'raw_matt')]}" domain="[('factory_id', '=', factory_id)]"/>
+                                    <field name="qty_to_indent"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button string="Create Indent"  type="object"  name="create_indent_from_picking" class="oe_highlight"  confirm="Proceed in creating an indention for this picking?"/>
+                        <button string="Cancel" class="btn btn-danger" special="cancel" style="float:right"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

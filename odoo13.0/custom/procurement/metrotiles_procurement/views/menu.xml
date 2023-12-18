@@ -1,0 +1,6 @@
+<odoo>
+    <data>
+        <menuitem id="proforma_invoice_root_menu" name="Proforma Invoice" parent="purchase.menu_purchase_root" sequence="2"/>
+        <!--<menuitem id="shipments_root_menu" name="Shipments" parent="purchase.menu_purchase_root" sequence="3"/>-->
+    </data>
+</odoo>

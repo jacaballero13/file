@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="metrotiles_procurement_form_inherit">
+            <field name="name">shipment.number.inherit.form</field>
+            <field name="model">metrotiles_procurement.proforma_invoice</field>
+            <field name="inherit_id" ref="metrotiles_procurement.proforma_invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='order_line']" position="after">
+                    <field name="so_contract_ref" string="Contract"/>
+                    <field name="client_name"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+    

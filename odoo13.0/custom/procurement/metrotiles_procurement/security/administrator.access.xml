@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+         <record model="ir.model.access" id="proforma_invoice_model_administrator_access">
+            <field name="name">Proforma Invoice</field>
+            <field name="model_id" ref="model_metrotiles_procurement_proforma_invoice"/>
+            <field name="group_id" ref="metrotiles_procurement.administrator_res_groups"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record model="ir.model.access" id="proforma_invoice_item_model_administrator_access">
+            <field name="name">Proforma Invoice Item</field>
+            <field name="model_id" ref="model_metrotiles_procurement_proforma_invoice_item"/>
+            <field name="group_id" ref="metrotiles_procurement.administrator_res_groups"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+    </data>
+</odoo>

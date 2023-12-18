@@ -1,0 +1,12 @@
+<odoo>
+     <record id="product_supplierinfo_form_view" model="ir.ui.view">
+            <field name="name">product.supplierinfo.form.view</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/group/group//field[@name='name']" position="replace">
+                    <field name="name" context="{'res_partner_search_mode': 'supplier'}" domain="[('category_id.name', '=', 'Vendor')]"/>
+                </xpath>
+            </field>
+     </record>
+</odoo>

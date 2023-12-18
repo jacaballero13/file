@@ -1,0 +1,92 @@
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">Architect Page View</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <field  name="commission_enabled" invisible="1"/>
+                <page string="Architects Commissions" attrs="{'invisible': [('commission_enabled','!=',True)]}">
+                    <field name='architect_ids'>
+                        <tree string="Architect and Interior Designer"
+                              editable="bottom"
+                              delete="true"
+                        >
+                            <control>
+                                <create name="add_architect_control" string="Add a architect"/>
+                            </control>
+                            <field name="architect_id" context="{'is_creating_architect': True}"/>
+                            <field name="architect_commission"/>
+                            <field name="architect_com_type"/>
+                            <field name="architect_subtotal_price" widget="monetary"
+                                   options="{'currency_field': 'architect_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                        </tree>
+                    </field>
+                    <group name="note_group" col="6" modifiers="{}">
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_commission"
+                               modifiers="{}">
+                            <field name="architect_total_price" string="Initial Price" widget="monetary"
+                                   options="{'currency_field': 'architect_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                            <field name="architect_total_discount_char"/>
+                            <field name="architect_total_discount_rate" widget="monetary"
+                                   options="{'currency_field': 'architect_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                            <field name="architect_total_amount" widget="monetary"
+                                   options="{'currency_field': 'architect_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                <label for="architect_total_commission"/>
+                            </div>
+                            <field name="architect_total_commission" nolabel="1" class="oe_subtotal_footer_separator"
+                                   widget='monetary' options="{'currency_field': 'architect_currency_id'}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+            <xpath expr="//notebook/page[2]" position="after">
+                <field  name="commission_enabled" invisible="1"/>
+                <page string="Interior Designers Commissions" attrs="{'invisible': [('commission_enabled','!=',True)]}">
+                    <field name='designer_ids'>
+                        <tree string="Architect and Interior Designer"
+                              editable="bottom"
+                              delete="true"
+                        >
+                            <control>
+                                <create name="add_designer_control" string="Add a designer"/>
+                            </control>
+                            <field name="designer_id" context="{'is_creating_interior_designer': True}"/>
+                            <field name="designer_commission"/>
+                            <field name="designer_com_type"/>
+                            <field name="designer_subtotal_price" widget="monetary"
+                                   options="{'currency_field': 'designer_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                        </tree>
+                    </field>
+                    <group name="note_group" col="6" modifiers="{}">
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_commission"
+                               modifiers="{}">
+                            <field name="designer_total_price" string="Initial Price" widget="monetary"
+                                   options="{'currency_field': 'designer_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                            <field name="designer_total_disc_char"/>
+                            <field name="designer_total_discount_rate" widget="monetary"
+                                   options="{'currency_field': 'designer_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                            <field name="designer_total_amount" widget="monetary"
+                                   options="{'currency_field': 'designer_currency_id'}"
+                                   modifiers="{'readonly':true}"/>
+                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                <label for="designer_total_commission"/>
+                            </div>
+                            <field name="designer_total_commission" nolabel="1" class="oe_subtotal_footer_separator"
+                                   widget='monetary' options="{'currency_field': 'designer_currency_id'}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

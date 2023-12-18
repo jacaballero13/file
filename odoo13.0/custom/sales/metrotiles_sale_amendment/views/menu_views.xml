@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Top Menu -->
+        <menuitem id="menu_metrotiles_sale_amendment"
+                  name="Sale Adjustment"
+                  parent="sale.sale_order_menu"
+                  sequence="10"/>
+
+        <!-- Sale Adjustment -->
+        <menuitem id="menu_metrotiles_to_edit_sale_amendment"
+                  action="metrotiles_sale_amendment.action_sale_adjustment"
+                  parent="menu_metrotiles_sale_amendment"
+                  sequence="1"/>
+
+        <!-- Pending Sale Adjustment -->
+        <menuitem id="menu_metrotiles_to_approve_sale_amendment"
+                  action="metrotiles_sale_amendment.action_pending_sale_adjustment"
+                  parent="menu_metrotiles_sale_amendment"
+                  sequence="2"/>
+
+        <!-- Pending Sale Adjustment -->
+        <menuitem id="menu_metrotiles_outdated_sale_amendment"
+                  action="metrotiles_sale_amendment.action_outdated_sale_adjustment"
+                  parent="menu_metrotiles_sale_amendment"
+                  sequence="3"/>
+    </data>
+</odoo>

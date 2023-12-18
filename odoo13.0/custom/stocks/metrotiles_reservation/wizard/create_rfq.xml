@@ -1,0 +1,34 @@
+<odoo>
+     <record id="create_rfq_form" model="ir.ui.view">
+        <field name="name">product.temp.reserve.wizard.form</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="sale_indentions">
+                    <tree create="false" delete="false" editable="false">
+                        <field name="contract_ref" readonly="1" force_save="1"/>
+                        <field name="customer" readonly="1" force_save="1"/>
+                        <field name="series_id" string="Series" readonly="1" force_save="1"/>
+                        <field name="product_id" string="Product" readonly="1" force_save="1"/>
+                        <field name="quantity" string="Contract Qty" readonly="1" force_save="1"/>
+                        <field name="po_qty" readonly="1" force_save="1"/>
+                        <field name="balance" readonly="1" force_save="1"/>
+                        <field name="to_purchase_qty" string="Qty to purchase"/>
+                    </tree>
+                </field>
+
+                <footer>
+                    <button string='Create' name="create_rfq" type="object" class="btn-primary"/>
+                    <button string="Close" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="create_rfq_action" model="ir.actions.act_window">
+        <field name="name">Create RFQ</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="create_rfq_form"/>
+    </record>
+</odoo>

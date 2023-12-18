@@ -1,0 +1,79 @@
+<odoo>
+    <record model="ir.ui.view" id="proforma_invoice_item_form">
+        <field name="name">metrotiles_procurement.proforma_invoice_item.form</field>
+        <field name="model">metrotiles_procurement.proforma_invoice_item</field>
+        <field name="arch" type="xml">
+            <form string="Proforma Items">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="proforma_invoice_id"/>
+                            <field name="order_line"/>
+                        </group>
+                        <group>
+                            <field name="purchase_order_id"/>
+                            <field name="total_po_qty"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="check_product_qty"/>
+                        <field name="product_qty" attrs="{'invisible': [('check_product_qty', '=', False)]}"/>
+                        <field name="check_additional_qty"/>
+                        <field name="additional_qty" attrs="{'invisible': [('check_additional_qty', '=', False)]}"/>
+                        <field name="product_uom_id"/>
+                        <field name="price_unit"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="total_qty"/>
+                        </group>
+                        <group>
+                            <field name="remaining_qty"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="price_subtotal"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="proforma_invoice_item_tree_view">
+        <field name="name">proforma_invoice_item.tree</field>
+        <field name="model">metrotiles_procurement.proforma_invoice_item</field>
+        <field name="arch" type="xml">
+            <tree string="Proforma Invoice Items Tree" delete="false"  edit="false" create="false" default_order="po_reference desc">
+                <!-- <field name="shipment_id" widget="many2one_button"/> -->
+                <field name="po_reference" widget="many2one_button"/>
+                <field name="proforma_invoice_id" widget="many2one_button"/>
+                <field name="order_line" string="Description"/>
+                <field name="partner_id" optional="hide"/>
+                <field name="series_id"/>
+                <field name="variant"/>
+                <field name="size"/>
+                <field name="total_po_qty"/>
+                <field name="product_qty"/>
+                <field name="additional_qty"/>
+                <field name="product_uom_id"/>
+                <field name="price_unit" optional="hide"/>
+                <field name="status" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="proforma_invoice_item_list_action">
+        <field name="name">Line Up Shipments</field>
+        <field name="res_model">metrotiles_procurement.proforma_invoice_item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('status','=','approved')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smiling_face">No Proforma Line Up Shipments
+            </p>
+        </field>
+    </record>
+
+
+    
+   
+</odoo>

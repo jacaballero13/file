@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <record id="view_metrotiles_delivery_line_tree" model="ir.ui.view">
+            <field name="name">delivery.line.tree</field>
+            <field name="model">delivery.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="delivery_no"/>
+                    <field name="sale_order_id"/>
+                    <field name="quotation_type"/>
+                    <field name="warehouse_id"/>
+                    <field name="sales_ac"/>
+                    <field name="commitment_date"/>
+                    <field name="delivery_area"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+    </record>
+    <record model="ir.ui.view" id="delivery_line_calendar">
+            <field name="name">delivery.line.calendar</field>
+            <field name="model">delivery.line</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="Delivery Schedule" date_start="commitment_date" color="partner_id" event_limit="5">
+                    <field name="delivery_no"/>
+                    <field name="sale_order_id"/>
+                    <field name="quotation_type"/>
+                    <field name="warehouse_id"/>
+                    <field name="partner_id"/>
+                    <field name="commitment_date"/>
+                    <field name="delivery_area"/>
+                    <field name="trip"/>
+                </calendar>
+            </field>
+    </record>
+    <record id="view_metrotiles_line_form" model="ir.ui.view">
+        <field name="name">delivery.line.form</field>
+        <field name="model">delivery.line</field>
+        <field name="arch" type="xml">
+            <form string="Delivery Schedule">
+            <header>
+                <button name="button_to_delivery" 
+                        string="Process Delivery" 
+                        type="object" 
+                        class="oe_highlight" />
+            </header>
+            <sheet>
+                <widget name="web_ribbon" text="Delivered" bg_color="bg-success" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                <widget name="web_ribbon" text="Not Delivered" bg_color="bg-danger" attrs="{'invisible': [('state', '=', 'delivered')]}"/>
+                <div class="oe_edit_only">
+                    <label for="delivery_contract_id" class="oe_inline" />
+                </div>
+                <h1>
+                    <field name="delivery_contract_id" style="font-weight:400;" class="oe_readonly"/>
+                </h1>
+                <group>
+                    <group>
+                        <field name="delivery_no"/>
+                        <field name="sale_order_id" />
+                        <field name="quotation_type" />
+                        <field name="warehouse_id" />
+                        <field name="sales_ac" />
+                    </group>
+                    <group>
+                        <field name="partner_id" />
+                        <field name="site_contact" />
+                        <field name="site_number" />
+                        <field name="site_permit" />
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Delivery Order Line">
+                        <field name="delivery_item_ids" widget="section_one2many">
+                            <tree delete="false" editable="bottom">
+                                    <field name="delivery_line_id" invisible="1"/>
+                                    <field name="display_type" invisible="1"/>
+                                    <field name="name" readonly="1" invisible="1"/>
+                                    <field name="location_id" readonly="1" force_save="1"/>
+                                    <field name="product_id" invisible="1"/>
+                                    <field name="application_id" readonly="1" force_save="1"/>
+                                    <field name="factory_id" readonly="1" force_save="1"/>
+                                    <field name="series_id" readonly="1" force_save="1"/>
+                                    <field name="variant" readonly="1" force_save="1"/>
+                                    <field name="size" readonly="1" force_save="1"/>
+                                    <field name="qty_to_deliver" />
+                                    <field name="delivered_qty"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery Shedule">
+                        <group>
+                            <group>
+                                <field name="commitment_date" />
+                                <field name="delivery_area" />
+                                <field name="trip" />
+                            </group>
+                            <group>
+                                <field name="has_started" style="color:red;font-weight:400;"/>
+                                <field name="state"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipent'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_metrotiles_delivery_line" model="ir.actions.act_window">
+        <field name="name">Deliveries</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">delivery.line</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Delivery Lineup Schedule !
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="metrotiles_delivery_child_menu"
+                name="Delivery"
+                action="action_metrotiles_delivery_line"
+                parent="metrotiles_delivery_root_menu"
+                sequence="100"
+                groups="base.group_user"/>
+
+</odoo>

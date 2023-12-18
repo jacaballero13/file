@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Inherit Form view -->
+    <record id="mrp_production_inherit_form_view" model="ir.ui.view">
+        <field name="name">.mrp.production.view.inherit.form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page/field[@name='move_raw_ids']" position="after">
+                    <field name="cutting_attached" widget="pdf_viewer" string="Add Cutting List"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

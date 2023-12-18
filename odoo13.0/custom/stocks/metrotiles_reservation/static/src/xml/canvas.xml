@@ -1,0 +1,10 @@
+<template>
+    <t t-name="Canvas">
+        <div class="pb-2">
+            <input placeholder="width" id="cutWidth" class="o_input"></input>
+            <input placeholder="height" id="cutHeight" class="o_input"></input>
+            <button placeholder="width" id="addButton" class="btn btn-primary btn-sm">Add</button>
+        </div>
+        <canvas id="canvas" width="800" height="800" style="background-color: #eee"></canvas>
+    </t>
+</template>

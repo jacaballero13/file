@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report id="purchase_form_print"
+            string="Purchase Order"
+            model="purchase.order"
+            report_type="qweb-pdf"
+            name="metrotiles_purchase_extension.po_print_document"
+            file="metrotiles_purchase_extension.po_print_document"
+            print_report_name="'Purchase Order - %s' % (object.name)"
+            menu="False"
+        />
+
+
+
+        <record model="report.paperformat" id="purchase_order_print_format">
+            <field name="name">Purchase</field>
+            <field name="default" eval="False" />
+            <field name="format">custom</field>
+            <field name="page_width">0</field>
+            <field name="page_height">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">35</field>
+            <field name="report_ids" eval="[(6,0,[ref('metrotiles_purchase_extension.purchase_form_print')])]"/>
+        </record>
+    </data>
+</odoo>

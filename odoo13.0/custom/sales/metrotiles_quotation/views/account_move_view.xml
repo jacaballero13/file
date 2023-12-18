@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">metrotiles_move_form_view</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="before">
+                <field name="location_id" invisible="1"/>
+                <field name="application_id" optional="hide"/>
+                <field name="factory_id" optional="hide"/>
+                <field name="series_id" optional="hide"/>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='discount']" position="after">
+                <field name="price_net"/>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="before">
+                <field name="price_gross"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

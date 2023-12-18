@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for Pallet Number -->
+        <record id="seq_pallet_number" model="ir.sequence">
+            <field name="name">Metrotiles Pallet Sequence</field>
+            <field name="code">metrotiles.pallet</field>
+            <field name="prefix"></field>
+            <field name="padding">6</field>
+        </record>
+    </data>
+</odoo>

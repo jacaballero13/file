@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="account_move_credit_note_inherit_form">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_post']" position="before">
+                    <button class="btn btn-info" type="object" name="button_approve" states="waiting" string="Approve">
+                    </button>
+                </xpath>
+                <xpath expr="//button[@name='action_post']" position="before">
+                    <button class="btn btn-info" type="object" name="button_approve1" states="approve_actng" string="Approve">
+                    </button>
+                </xpath>
+                <xpath expr="//button[@name='button_approve']" position="after">
+                    <button class="btn btn-danger" type="object" name="button_reject" states="waiting, approve_actng" string="Reject">
+                    </button>
+                </xpath>
+                <xpath expr="//button[@name='action_post']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('state', 'not in', ('draft', 'approve'))]}</attribute>
+                    
+                </xpath>
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="sale_order"></field>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_picking_indent_form" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_assign']" position="after">
+                <field name="indent_created" invisible="1"/>
+                <button string="Make Indention" name="open_indent_wizard" type="object" 
+                class="oe_highlight" attrs="{'invisible': ['|',('indent_created', '=', True),
+                ('state','=', 'done')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

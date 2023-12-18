@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+    <data>
+
+      <record id="view_metrotiles_procurement_shipment_number_tree" model="ir.ui.view">
+        <field name="name">shipment.number.tree</field>
+        <field name="model">shipment.number</field>
+        <field name="arch" type="xml">
+            <tree>
+              <field name="name" widget="many2onebutton"/>
+              <field name="container_no"/>
+              <field name="partner_id"/>
+            </tree>
+        </field>
+      </record>
+
+      <record id="view_metrotiles_procurement_shipment_number_form" model="ir.ui.view">
+        <field name="name">shipment.number.form</field>
+        <field name="model">shipment.number</field>
+        <field name="arch" type="xml">
+              <form>
+                <sheet>
+                  <div class="oe_title">
+                      <span class="o_form_label">Shipment Number</span>
+                      <h1>
+                          <field name="name"/>
+                      </h1>
+                  </div>
+                <group>                    
+                  <field name="container_no" attrs="{'invisible':[('container_no', '=', False)]}"/>     
+                </group>
+                <notebook>
+                  <page string="Line Up Shipment" name="shipment_line">
+                    <field name="proforma_invoice_item" widget="one2many_list"/>
+                    <group class="oe_subtotal_footer oe_right">
+                          <field name="weight" force_save="1" />
+                    </group>
+                    </page>
+                </notebook>
+              </sheet>
+            </form>
+        </field>
+      </record>
+
+      <record id="action_metrotiles_procurement_shipment_number" model="ir.actions.act_window">
+        <field name="name">Shipment Reference Number</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipment.number</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Line Up Shipments
+            </p>
+        </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="proforma_invoice_item_list_action">
+          <field name="name">Line Up Shipments</field>
+          <field name="res_model">metrotiles_procurement.proforma_invoice_item</field>
+          <field name="view_mode">tree,form</field>
+          <field name="domain">[('status','=','approved')]</field>
+          <field name="help" type="html">
+              <p class="oe_view_nocontent_smiling_face">No Proforma Line Up Shipments
+              </p>
+          </field>
+      </record>
+
+
+      <!-- <menuitem id="metrotiles_procurement_shipments_root" 
+                name="Logistics"
+                web_icon="metrotiles_shipments,static/descriptions/icon.png"
+                sequence="1"
+                groups="base.group_user"/>  -->
+                <!-- groups="metrotiles_procurement.procurement_res_groups -->
+      <menuitem
+          id="main_parent_menu"
+          name="Shipments"
+          parent="stock.menu_stock_root"
+          sequence="2"
+      />
+      <menuitem id="xx_proforma_invoice_sub_menu" 
+          name="Line Up Shipments" 
+          parent="main_parent_menu"
+          action="proforma_invoice_item_list_action" 
+          sequence="5"/>
+
+
+      <menuitem id="metrotiles_procurment_shipments_child"
+          name="Shipments Lines"
+          parent="main_parent_menu"
+          action="action_metrotiles_procurement_shipment_number"
+          sequence="10"
+          groups="base.group_user"/>
+
+    </data>
+
+</odoo>

@@ -1,0 +1,67 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     Inherit calendar view of stock picking delivery orders
+    <record model="ir.ui.view" id="view_stock_picking_calendar_inherit">
+        <field name="name">stock.picking.calendar</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.stock_picking_calendar" />
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='state']" position="before">
+                <field name="track_id"/>
+          </xpath>
+        </field>
+    </record>
+    Inherited form view of stokc picking operations
+    <record id="view_picking_operation_form_inherit" model="ir.ui.view">
+          <field name="name">metrotiles_picking_operation_form</field>
+          <field name="model">stock.picking</field>
+          <field name="inherit_id" ref="stock.view_picking_form"/>
+          <field name="arch" type="xml">
+            <xpath expr="//page//field[@name='group_id']" position="after">
+                <field name="track_id" options="{'no_create': True}"/>
+            </xpath>
+          </field>
+    </record>   
+     Inherited form view of stokc picking tree operations
+    <record id="view_picking_operation_tree_inherit" model="ir.ui.view">
+          <field name="name">stock.picking.tree_inherit</field>
+          <field name="model">stock.picking</field>
+          <field name="inherit_id" ref="stock.vpicktree"/>
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                  <field name="track_id" options="{'no_create': True}"/>
+            </xpath>
+          </field>
+    </record>   
+
+    <record id="view_metrotiles_track_tree" model="ir.ui.view">
+        <field name="name">delivery.track.tree</field>
+        <field name="model">delivery.track</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="1" edit="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_metrotiles_track" model="ir.actions.act_window">
+        <field name="name">Metrotiles Track </field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">delivery.track</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Create your Track name !
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="metrotiles_track_root_menu" 
+              name="Track Name"
+              parent="stock.menu_stock_config_settings"
+              sequence="80"
+              action="action_metrotiles_track"/>
+
+</odoo> -->

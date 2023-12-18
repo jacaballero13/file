@@ -1,0 +1,22 @@
+<template>
+    <t t-name="Many2ManyDiscountsReadOnly">
+        <table class="o_group o_inner_group " style="margin:0 0 !important">
+            <tbody>
+                <t t-set="i" t-value="1"/>
+                <t t-foreach="discounts" t-as="discount">
+                    <tr class="discount-color">
+                        <td class="o_td_label text-right pr-0">
+                            <label class="font-weight-bold">
+                                Additional Disc. <t t-if="discount.discount_type == 'percentage'" t-esc="discount.value + '%'"/>:
+                            </label>
+                        </td>
+                        <td style="width:100%; padding:0 0 0 0">
+                            <t t-esc="discount.display_amount"/>
+                        </td>
+                    </tr>
+                    <t t-set="i" t-value="i+1"/>
+                </t>
+            </tbody>
+        </table>
+    </t>
+</template>

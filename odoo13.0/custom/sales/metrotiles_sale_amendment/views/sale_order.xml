@@ -1,0 +1,423 @@
+<odoo>
+    <record id="metoritles_sale_amendment_view_order_form" model="ir.ui.view">
+        <field name="name">metoritles_sale_amendment_view_order_form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="/form/header/button[@name='action_cancel']" position="before">
+                <button name="create_new_version" type="object" string="Create sale adjustment"
+                        attrs="{'invisible': [('state', 'not in', ['sale', 'sale_adjustment_approved'] )]}"/>
+            </xpath>
+
+            <xpath expr="/form/header" position="inside">
+                <button name="roll_back_sale_adjustment" type="object" class="btn-success" string="Roll Back"
+                        attrs="{'invisible': [('state', '!=', 'sale_adjustment')]}"/>
+
+                <button name="sale_adjustment_apply_for_approval" type="object" class="btn-primary"
+                        string="Apply for approval"
+                        attrs="{'invisible': [('state', '!=', 'sale_adjustment')]}"/>
+                
+                <button name="sale_adjustment_approve_prcmnt" type="object" class="btn-primary"
+                    string="Approve Sale Adjustment"
+                    attrs="{'invisible': [('state', '!=', 'approve_prcmnt')]}"/>
+
+                <button name="sale_adjustment_approve_acctng" type="object" class="btn-primary"
+                    string="Approve Sale Adjustment"
+                    attrs="{'invisible': [('state', '!=', 'approve_acctng')]}"/>
+
+                <button name="%(metrotiles_sale_amendment.metrotiles_amendment_sale_order_reason_action)d" type="action"
+                        string="Cancel Contract"
+                        class="btn-danger"
+                        context="{'is_reason_for': 'cancel_contract'}"
+                        attrs="{'invisible': [('state', '!=', 'sale_adjustment')]}"/>
+
+                <button name="approve_sale_adjustment" type="object" string="Approve Sale Adjustment"
+                        class="btn-primary" attrs="{'invisible': [('state', '!=', 'approve_admin')]}"/>
+
+                <button name="%(metrotiles_sale_amendment.metrotiles_amendment_sale_order_reason_action)d"
+                        string="Decline"
+                        type="action"
+                        context="{'is_reason_for': 'decline'}"
+                        class="btn-warning"
+                        attrs="{'invisible': [('state', '!=', 'pending_sale_adjustment')]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="to_cancel_contract" invisible="1"/>
+                <span class="alert alert-info badge badge-pill text-warning text-center ml16"
+                      attrs="{'invisible': ['|', ('state', '!=', 'pending_sale_adjustment'), ('to_cancel_contract', '=', False)]}"
+                      role="alert">
+                    Cancelling Contract
+                </span>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="metrotiles_sale_amendment_view_order_tree" model="ir.ui.view">
+        <field name="name">sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"></field>
+        <field name="arch" type="xml">
+            <xpath expr="/tree" position="attributes">
+                <attribute name="decoration-muted">state == 'outdated_version' or state == 'cancel'</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mertotiles_amendment_view_order_form" model="ir.ui.view">
+        <field name="name">Architect Page View</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="metrotiles_commission.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='architect_id']" position="before">
+                <field name="previous_version_id" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='designer_id']" position="before">
+                <field name="previous_version_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Compare !-->
+
+    <record id="metrotiles_sale_amendment_view_order_form_wee" model="ir.ui.view">
+        <field name="name">Previous Version</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']//field[@name='order_line']/form" position="inside">
+                <field name="previous_version_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field[@name='order_line']/tree" position="inside">
+                <field name="previous_version_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//field[@name='order_line']/kanban" position="inside">
+                <field name="previous_version_id" invisible="1"/>
+            </xpath>
+
+            <xpath expr="/form/sheet/notebook" position="inside">
+                <field name="version_number" invisible="1"></field>
+
+                <page string="View Adjustment changes"
+                      class="sale-adjustment-nav-item"
+                      attrs="{'invisible': ['|',('version_number', '=', 1), ('version_number', '=', 0)]}">
+
+                    <h3>Legends</h3>
+                    <ul class="legends">
+                        <li><span class="bg-success"></span> New</li>
+                        <li><span class="bg-warning"></span> Modified</li>
+                        <li><span class="bg-danger"></span> Removed</li>
+                        <li><span></span> No Changes</li>
+                    </ul>
+
+                    <notebook>
+                        <page string="Order Lines" name="order_lines_changes">
+                            <field
+                                    name="order_line_changes"
+                                    widget="section_and_note_one2many"
+                                    attrs="{'readonly': 1}"
+                                    domain="[('version_state','=','duplicated')]"
+                            >
+                                <tree
+                                        string="Sales Order Lines"
+                                        attrs="{'invisible':1}"
+                                >
+                                    <field name="display_type" invisible="1"/>
+                                    <field name="order_id" invisible="1"/>
+                                    <field name="previous_version_id" invisible="1"/>
+                                    <field name="product_id"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               }"
+                                           string=" "
+                                           type="Many2one" class="d-none" column_invisible="1"/>
+
+                                    <field name="location_id"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               'watch_field': 'product_id'
+                                               }"
+                                           type="Many2one"
+                                           style="display:block !important"/>
+
+                                    <field name="application_id"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               'watch_field': 'product_id'
+                                               }"
+                                           type="Many2one"
+                                           style="display:block !important"/>
+
+                                    <field name="factory_id"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               'watch_field': 'product_id'
+                                               }"
+                                           type="Many2one"
+                                           style="display:block !important"/>
+
+                                    <field name="series_id"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               'watch_field': 'product_id'
+                                               }"
+                                           type="Many2one"
+                                           style="display:block !important"/>
+
+                                    <field name="product_id"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes'
+                                               }"
+                                           type="Many2one"/>
+                                    <field name="product_uom_qty"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               'watch_field': 'product_id'
+                                               }"
+                                           type="Number"/>
+                                    <field name="price_unit"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               'watch_field': 'product_id'
+                                               }"
+                                           type="Number"/>
+                                    <field name="discount" style="display: block !important"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               'watch_field': 'product_id'
+                                               }"
+                                           type="Number"/>
+
+                                    <field name="version_status" style="display: block !important"
+                                           string="Status"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'order_line',
+                                               'current_field': 'order_line_changes',
+                                               }"
+                                           type="Status"/>
+                                </tree>
+                            </field>
+
+                            <group name="metrotiles_amendment_note_group" col="6">
+                                <group colspan="2" name="changes_uni_discount" class="order-0 mr-auto">
+                                    <label for="discount_type_wrapper" string="Discount Type" class="w-100"/>
+                                    <div name="discount_type_wrapper">
+                                        <field name="discount_type_changed" invisible="1"/>
+
+                                        <field name="previous_version_discount_type"
+                                               nolabel="1"
+                                               readonly="1"
+                                               attrs="{'invisible': [('discount_type_changed', '=', True)]}"/>
+
+                                        <field name="discount_type" nolabel="1"
+                                               attrs="{'invisible': [('discount_type_changed', '=', False)]}"
+                                               class="mr-1 text-success"
+                                               readonly="1"
+                                               force_save="1"/>
+
+                                         <field name="previous_version_discount_type"
+                                               nolabel="1"
+                                               readonly="1"
+                                               style="text-decoration: line-through"
+                                                class="text-muted"
+                                               attrs="{'invisible': [('discount_type_changed', '=', False)]}"/>
+                                    </div>
+                                    <label for="discount_value_wrapper" string="Discount Value" class="w-100"/>
+                                    <div name="discount_value_wrapper">
+                                        <field name="discount_value_changed" invisible="1"/>
+
+                                        <field name="previous_version_discount_value"
+                                               nolabel="1"
+                                               attrs="{'invisible': [('discount_value_changed', '=', True)]}"/>
+
+                                        <field name="discount_value" nolabel="1"
+                                               attrs="{'invisible': [('discount_value_changed', '=', False)]}"
+                                               class="mr-1 text-success"
+                                               readonly="1"
+                                               force_save="1"/>
+
+                                        <field name="previous_version_discount_value"
+                                               nolabel="1"
+                                               style="text-decoration: line-through"
+                                               class="text-muted"
+                                               attrs="{'invisible': [('discount_value_changed', '=', False)]}"/>
+                                    </div>
+                                </group>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                    <field name="amount_untaxed" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+
+                                    <field name="previous_vatable" nolabel="1" invisible="1"></field>
+                                    <field name="vatable_changed" nolabel="1" invisible="1"></field>
+
+                                    <div class="o_td_label w-100">
+                                        <div attrs="{'invisible': [('vatable_changed', '=', True)]}">
+                                            <label for="amount_tax"
+                                                   string="VATABLE"
+                                                   attrs="{'invisible': [('previous_vatable', '=', False)]}"
+                                            />
+                                            <label for="amount_tax"
+                                                   string="NOT-VATABLE"
+                                                   attrs="{'invisible': [('previous_vatable', '=', True)]}"
+                                            />
+                                        </div>
+
+                                        <div attrs="{'invisible': [('vatable_changed', '=', False)]}">
+                                            <label for="amount_tax"
+                                                   string="NOT-VATABLE"
+                                                   class="text-success"
+                                                   attrs="{'invisible': [('previous_vatable', '=', False)]}"/>
+
+                                            <label for="amount_tax"
+                                                   string="VATABLE"
+                                                   class="text-success"
+                                                   attrs="{'invisible': [('previous_vatable', '=', True)]}"/>
+                                        </div>
+
+                                         <div attrs="{'invisible': [('vatable_changed', '=', False)]}">
+                                            <label for="amount_tax"
+                                                   string="VATABLE"
+                                                   style="text-decoration: line-through"
+                                                   class="text-muted"
+                                                   attrs="{'invisible': [('previous_vatable', '=', False)]}"
+                                            />
+                                            <label for="amount_tax"
+                                                   string="NOT-VATABLE"
+                                                   style="text-decoration: line-through"
+                                                   class="text-muted"
+                                                   attrs="{'invisible': [('previous_vatable', '=', True)]}"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <field name="amount_tax" nolabel="1"></field>
+
+                                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                        <label for="amount_total"/>
+                                    </div>
+                                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator"
+                                           widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group>
+                        </page>
+
+                        <page string="Architects Commissions" name="architect_commission_changes">
+                            <field
+                                    name="architect_changes"
+                                    mode="tree"
+                                    attrs="{'readonly': 1}"
+                            >
+                                <tree
+                                        string="Sales Order Lines"
+                                        attrs="{'invisible':1}"
+                                >
+                                    <field name="previous_version_id" invisible="1"/>
+                                    <field name="architect_id" widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'architect_ids',
+                                               'current_field': 'architect_changes',
+                                               }"
+                                           type="Many2one"
+                                    />
+                                    <field name="architect_commission" widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'architect_ids',
+                                               'current_field': 'architect_changes',
+                                               }"
+                                           type="Number"
+                                    />
+
+                                    <field name="architect_com_type" widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'architect_ids',
+                                               'current_field': 'architect_changes'
+                                               }"
+                                           type="Text"
+                                    />
+
+                                    <field name="version_status" style="display: block !important"
+                                           string="Status"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'architect_ids',
+                                               'current_field': 'architect_changes',
+                                               }"
+                                           type="Status"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Interior Designers Commissions" name="designer_commission_changes">
+                            <field
+                                    name="designer_changes"
+                                    mode="tree"
+                                    attrs="{'readonly': 1}"
+                            >
+                                <tree
+                                        string="Sales Order Lines"
+                                        attrs="{'invisible':1}"
+                                >
+                                    <field name="previous_version_id" invisible="1"/>
+                                    <field name="designer_id" widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'designer_ids',
+                                               'current_field': 'designer_changes',
+                                               }"
+                                           type="Many2one"
+                                    />
+
+                                    <field name="designer_commission" widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'designer_ids',
+                                               'current_field': 'designer_changes',
+                                               }"
+                                           type="Number"
+                                    />
+
+                                    <field name="designer_com_type" widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'designer_ids',
+                                               'current_field': 'designer_changes',
+                                               }"
+                                           type="Text"
+                                    />
+
+                                    <field name="version_status" style="display: block !important"
+                                           string="Status"
+                                           widget="metrotiles-sale-amendment-changes"
+                                           options="{
+                                               'target_field': 'designer_ids',
+                                               'current_field': 'designer_changes',
+                                               }"
+                                           type="Status"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

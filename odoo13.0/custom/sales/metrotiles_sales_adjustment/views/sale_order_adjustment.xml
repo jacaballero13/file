@@ -1,0 +1,321 @@
+
+<odoo>
+    <data>
+        <record id="metrotiles_sales_adjustment_view_tree" model="ir.ui.view">
+            <field name="name">sales.order.adjustment.view.tree</field>
+            <field name="model">sales.order.adjustment</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="sale_order_id"/>
+                    <field name="adjustment_type"/>
+                    <field name="date_created"/>
+                    <field name="sales_ac"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="metrotiles_sales_adjustment_view_form" model="ir.ui.view">
+            <field name="name">sales.order.adjustment.view.form</field>
+            <field name="model">sales.order.adjustment</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <header>
+                        <button name="button_draft" states="rejected"
+                            string="Reset to Draft" type="object"
+                            />
+                        <button name="button_to_approve" states="draft" string="Request approval"
+                            type="object" class="oe_highlight" groups="sales_team.group_sale_salesman"
+                            />
+                        <!--approved by sales manager-->
+                        <button name="button_approve1" states="to_approve" string="Approve"
+                            type="object" class="oe_highlight" groups="sales_team.group_sale_manager"
+                            />
+                        <!--approved by procurment-->
+                        <button name="button_approve2" states="second_approve" string="Approve"
+                            type="object" class="oe_highlight" groups="purchase.group_purchase_manager"
+                        />
+                        <!--approved by accounting-->
+                        <button name="button_approve3" states="third_approve" string="Approve"
+                            type="object" class="oe_highlight" groups="account.group_account_user"
+                        />
+                        <!--approved by admin-->
+                        <button name="button_approved4" string="Approve" groups="base.group_erp_manager"
+                            type="object"  states="fourth_approve" class="oe_highlight"
+                        />
+                        <button name="button_rejected" states="to_approve,second_approve,third_approve,fourth_approve"
+                            string="Reject" type="object" 
+                            />
+                            <!-- groups="sale.group_sale_manager" /> -->
+                        <field name="state" widget="statusbar"
+                            statusbar_visible="draft,to_approve,approved,rejected"
+                            statusbar_colors='{"approved":"blue"}' />
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" text="Approved" bg_color="bg-success" attrs="{'invisible': [('status', '!=', 'approve_admin')]}"/>
+                        <widget name="web_ribbon" text="Waiting" bg_color="bg-primary" attrs="{'invisible': [('status', '=', 'approve_admin')]}"/>
+                        <widget name="web_ribbon" text="Rejected" bg_color="bg-danger" attrs="{'invisible': [('status', '!=', 'rejected')]}"/>
+                        <div class="oe_edit_only">
+                            <label for="name" class="oe_inline"/>
+                        </div>
+                        <h1>
+                            <field name="name" class="oe_readonly" readonly="1"/>           
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="sale_order_id"/>
+                                <field name="adjustment_type"/>
+                                <field name="date_created"/>
+                            </group>
+                            <group>
+                                <field name="sales_ac"/>
+                                <field name="partner_id"/>
+                                <field name="status" context="{'default_status': 'active' }"/>
+                            </group>
+                            <group>
+                                <field name="column_discounts" force_save="1" widget="many2many_tags" attrs="{'invisible':[('adjustment_type', '!=', 'change_discount')]}"/>
+                                <field name="total_discounts" force_save="1" widget="many2many_tags" attrs="{'invisible':[('adjustment_type', '!=', 'change_discount')]}"/>
+                                <field name="current_vat" attrs="{'invisible':[('adjustment_type', '!=', 'change_vat')]}" />
+                                <field name="new_vat_type" attrs="{'invisible':[('adjustment_type', '!=', 'change_vat')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Cancellation of Items Page"
+                                attrs="{'invisible':[('adjustment_type', '!=', 'cancel_items')]}">
+                                <field name="cancel_item_lines" 
+                                    widget="one2many_list" 
+                                    nolabel="1" >
+                                    <tree editable="buttom" create="0">
+                                        <field name="cancel_item_id" invisible="1"/>
+                                        <field name="select" string="Check to Cancel"/>
+                                        <field name="location_id"/>
+                                        <field name="factory_id"/>
+                                        <field name="series_id"/>
+                                        <field name="application_id"/>
+                                        <field name="product_id"/>
+                                        <field name="package_id" force_save="1" optional="hide"/>
+                                        <field name="size"/>
+                                        <field name="variant"/>
+                                        <field name="total_qty"/>
+                                        <field name="price_unit" force_save="1"/>
+                                        <field name="column_discounts" widget="many2many_tags" force_save="1" optional="hide"/>
+                                        <field name="rif"/>
+                                        <field name="qty_delivered"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Change Charges Page" 
+                                attrs="{'invisible':[('adjustment_type', '!=', 'change_charges')]}">
+                                <field name="change_charges_lines" 
+                                    widget="one2many_list" 
+                                    nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="charge_id"/>
+                                        <field name="charge_amount"/>
+                                        <field name="charge_adjustment"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Change Architect/Commission Page"
+                                attrs="{'invisible':[('adjustment_type', '!=', 'change_designer')]}">
+                                <field name="change_architect_lines" 
+                                    nolabel="1"
+                                    widget="one2many_list">
+                                    <tree editable="bottom">
+                                        <field name="architect_line_id" invisible="1"/>
+                                        <!-- <field name="architect_name"/> -->
+                                        <field name="architect_id"/>
+                                        <field name="architect_com_type"/>
+                                        <field name="architect_commission"/>
+                                        <field name="architect_subtotal_price" force_save="1" readonly="1"/>
+                                        <field name="architect_adjust_total" force_save="1"/>
+                                        <field name="architect_currency_id" invisible="1"/>
+                                    </tree> 
+                                </field>
+                            </page>
+                            <page string="Change Designer/Commission Page"  
+                                attrs="{'invisible':[('adjustment_type', '!=', 'change_designer')]}">
+                                <field name="change_designer_lines" 
+                                    nolabel="1"
+                                    widget="one2many_list">
+                                    <tree editable="bottom">
+                                        <field name="change_designer_id" invisible="1"/>
+                                        <!-- <field name="designer_name"/> -->
+                                        <field name="designer_id"/>
+                                        <field name="designer_com_type"/>
+                                        <field name="designer_commission"/>
+                                        <field name="designer_subtotal_price" 
+                                            widget="monetary"
+                                            options="{'currency_field': 'architect_currency_id'}"
+                                            force_save="1" readonly="1"/>
+                                        <field name="designer_adjust_total" 
+                                            widget="monetary"
+                                            options="{'currency_field': 'architect_currency_id'}"
+                                            force_save="1"/>
+                                        <field name="designer_currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Change Contract Items Page"
+                                attrs="{'invisible':[('adjustment_type', '!=', 'change_items')]}">
+                                <field name="change_item_lines" 
+                                    nolabel="1"
+                                    widget="one2many_list">
+                                    <tree editable="buttom">
+                                        <field name="change_item_id" invisible="1"/>
+                                        <field name="location_id"/>
+                                        <field name="factory_id"/>
+                                        <field name="series_id"/>
+                                        <field name="application_id"/>
+                                        <field name="product_id"/>
+                                        <field name="package_id" force_save="1" optional="hide"/>
+                                        <field name="size"/>
+                                        <field name="variant"/>
+                                        <field name="total_qty"/>
+                                        <field name="price_unit" force_save="1"/>
+                                        <field name="column_discounts" widget="many2many_tags" force_save="1" optional="hide"/>
+                                        <field name="rif"/>
+                                        <field name="qty_delivered"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Change Contract Quantity Page"
+                                attrs="{'invisible':[('adjustment_type', '!=', 'change_qty')]}">
+                                <field name="change_quantity_lines" 
+                                    nolabel="1"
+                                    widget="one2many_list">
+                                    <tree editable="buttom" create="0">
+                                        <field name="change_quant_id" invisible="1"/>
+                                        <field name="location_id" optional="hide"/>
+                                        <field name="factory_id" optional="hide"/>
+                                        <field name="series_id" optional="hide"/>
+                                        <field name="application_id" force_save="1"/>
+                                        <field name="product_id" force_save="1"/>
+                                        <field name="package_id" force_save="1"/>
+                                        <field name="size" force_save="1"/>
+                                        <field name="variant" force_save="1"/>
+                                        <field name="total_qty" force_save="1"/>
+                                        <field name="price_unit" optional="hide"/>
+                                        <field name="column_discounts" widget="many2many_tags" force_save="1" optional="hide"/>
+                                        <field name="rif" force_save="1"/>
+                                        <field name="qty_delivered"/>
+                                        <field name="new_qty"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sales_order_adjustment" model="ir.actions.act_window">
+            <field name="name">Sales Adjustment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sales.order.adjustment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'draft')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                        Sales Adjustment Form !
+                </p>
+            </field>
+        </record>
+
+
+        <record id="action_sales_order_adjustment_approved" model="ir.actions.act_window">
+            <field name="name">Sales Adjustment Approve</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sales.order.adjustment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '!=', 'draft')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                        Sales Adjustment Approve !
+                </p>
+            </field>
+        </record>
+
+        <record id="action_account_invoice_adjustment" model="ir.actions.act_window">
+            <field name="name">Sales Adjustment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sales.order.adjustment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'draft')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                        Sales Adjustment Form !
+                </p>
+            </field>
+        </record>
+        
+        <menuitem id="sales_adjustment_menu_root"
+            name="Sales Adjustment"
+            parent="sale.sale_order_menu"
+            sequence="10"
+            groups="sales_team.group_sale_salesman"
+        />
+        <menuitem id="sales_adjustment_menu_pending"
+            name="Sales Adjustment / Pending Request"
+            action="action_sales_order_adjustment"
+            parent="sales_adjustment_menu_root"
+            sequence="20"
+            groups="sales_team.group_sale_salesman"
+        />
+        <menuitem id="sales_adjustment_menu_approved"
+            name="Sales Adjustment / Approved"
+            action="action_sales_order_adjustment_approved"
+            parent="sales_adjustment_menu_root"
+            sequence="30"
+            groups="sales_team.group_sale_salesman"
+        />
+
+        <!--This section will add extension menu on accounting-->
+        <menuitem
+            id="accounting_extension_menu_root"
+            name="For Approval"
+            parent="account.menu_finance"
+            groups="account.group_account_manager"
+            sequence="50"
+        />
+        <menuitem
+            id="accounting_sub_menu"
+            name="Sales Adjustment / Pending Request"
+            parent="accounting_extension_menu_root"
+            action="metrotiles_sales_adjustment.action_account_invoice_adjustment"
+            sequence="60"
+        />
+        <menuitem
+            id="accounting_sub_menu1"
+            name="Sales Adjustment / Approved"
+            parent="accounting_extension_menu_root"
+            action="metrotiles_sales_adjustment.action_sales_order_adjustment_approved"
+            sequence="70"
+        />
+        <!--This section will add extension menu on purchase-->
+        <!-- <menuitem
+            id="accounting_extension_menu_root"
+            name="For Approval"
+            parent="purchase.menu_purchase_root"
+            groups="purchase.group_purchase_manager"
+            sequence="50"
+        />
+        <menuitem
+            id="accounting_sub_menu"
+            name="Sales Adjustment / Pending Request"
+            parent="accounting_extension_menu_root"
+            action="metrotiles_sales_adjustment.action_account_invoice_adjustment"
+            sequence="60"
+        />
+        <menuitem
+            id="accounting_sub_menu1"
+            name="Sales Adjustment / Approved"
+            parent="accounting_extension_menu_root"
+            action="metrotiles_sales_adjustment.action_sales_order_adjustment_approved"
+            sequence="70"
+        /> -->
+    </data>
+        
+</odoo>

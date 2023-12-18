@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added required fields in columns of list view -->
+        <record model="ir.ui.view" id="sale_order_inherit_sales_report_tree1">
+            <field name="name">sale.order.inherited.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="company_type" string="Company Type" force_save="1" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+       <!--  <record model="ir.ui.view" id="sale_order_inherit_sales_report_form_view_approval_aa">
+            <field name="name">sale.order.inherited.form.view.approval</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='partner_id']" position="attributes">
+                     <attribute name="options">{'no_create': True, 'no_create_edit: True'}
+                     </attribute>
+                </xpath>
+            </field>
+        </record> -->
+    </data>
+</odoo>

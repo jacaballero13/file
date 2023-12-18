@@ -1,0 +1,20 @@
+<odoo>
+    <record id="charge_form_view" model="ir.ui.view">
+        <field name="name">charge.form</field>
+        <field name="model">metrotiles.name_charges</field>
+        <field name="arch" type="xml">
+            <form string="Charge Form">
+                <sheet>
+                    <group>
+                        <field name="account_charge_id" style="width: 30%" groups="account.group_account_manager"/>
+                        <field name="name" style="width: 30%"/>
+                    </group>
+                    <div>
+                        <label for="description">Notes</label>
+                        <field name="description"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

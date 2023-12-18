@@ -1,0 +1,44 @@
+
+<odoo>
+
+    <record id="metrotiles_changes_charges_view_form" model="ir.ui.view">
+        <field name="name">metrotiles.changes.charges.view.form</field>
+        <field name="model">metrotiles.changes.charges</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="sales_order_id"/>
+                        <field name="adjustment_type"/>
+                    </group>
+                    <group>
+                        <notebook>
+                            <page string="Change Charges Page">
+                                <field name="charge_ids" widget="one2many_list" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="charge_line_id" invisible="1"/>
+                                        <field name="charge_id" string="Current Charge" force_save="1"/>
+                                        <field name="charge_amount" string="Current Amount" force_save="1" readonly="1"/>
+                                        <field name="charge_adjustment" string="Adjust Amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_change_charges" 
+                        string="Create" 
+                        type="object" 
+                        class="btn-primary"/>
+                    <button name="action_create_new" 
+                        string="Save/New" 
+                        type="object" 
+                        class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

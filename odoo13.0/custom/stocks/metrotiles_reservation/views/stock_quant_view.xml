@@ -1,0 +1,50 @@
+<odoo>
+    <record model="ir.ui.view" id="metrotiles_reservation_view_stock_quant_tree_editable">
+        <field name="name">stock.quant.tree.editable</field>
+        <field name="model">stock.quant</field>
+        <field eval="10" name="priority"/>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reserved_quantity']" position="before">
+                <field name="temp_reserved"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="metrotiles_reservation_view_stock_quant_tree">
+        <field name="name">stock.quant.tree</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='quantity']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='reserved_quantity']" position="attributes">
+                <attribute name="string">Contract Reserved</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='value']" position="attributes">
+                <attribute name="invisible">context.get('quotation_view', False)</attribute>
+            </xpath>
+
+             <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="invisible">context.get('quotation_view', False)</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='lot_id']" position="attributes">
+                <attribute name="invisible">context.get('quotation_view', False)</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='reserved_quantity']" position="before">
+                <field name="on_hand"/>
+                <field name="temp_reserved" string="Temp. Reserved"/>
+            </xpath>
+
+             <xpath expr="//field[@name='product_id']" position="after">
+                <field name="variant"/>
+                <field name="size"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

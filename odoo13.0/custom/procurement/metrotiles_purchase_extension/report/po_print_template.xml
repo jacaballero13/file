@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="po_print_document">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+                        <style>
+                            table {
+                                border-collapse: collapse;
+                                width: 100%;
+                            }
+                            table td, table th {
+                                border: 1px solid #ddd;
+                                padding: 8px;
+                            }
+                            table tr:nth-child(even){background-color: #f2f2f2;}
+                        </style>
+                        <div>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Purchase Order No.:</strong>
+                                <p t-field="o.name" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Order Date:</strong>
+                                <p t-field="o.date_order" class="m-0"/>
+                            </div>
+                        </div>
+
+                            <table>
+                                <tr>
+                                    <th>Contract Date</th>
+                                    <th>Contract Ref</th>
+                                    <th>Customer</th>
+                                    <th>Factory</th>
+                                    <th>Series</th>
+                                    <th>Description</th>
+                                    <th>Variant</th>
+                                    <th>Size</th>
+                                    <th>UoM</th>
+                                    <th>Contract Qty</th>
+                                    <th>PO Qty</th>
+                                    <th>Price Type</th>
+                                    <th>QTY in sqm</th>
+                                    <th>Unit Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                                <t t-set="data" t-value="o.run_sql('SELECT msi.name as contractref,
+                                                                            sum(msi.quantity) as contract_qty,
+                                                                            rp.name as customer,
+                                                                            (select name from res_partner where res_partner.id = pol.partner_id) as factory,
+                                                                            pol.name as description, 
+                                                                            sum(pol.product_qty) as prod_qty,
+                                                                            pol.price_unit as price_unit,
+                                                                            sum(pol.price_total) as prod_total_price
+                                                                            from purchase_order_line pol 
+                                                                            left join metrotiles_sale_indention msi on msi.id = pol.indention_id
+                                                                            left join sale_order so on so.name = msi.name
+                                                                            left join res_partner rp on rp.id = so.partner_id  
+                                                                            where pol.product_id is not null and pol.order_id = %s
+                                                                            group by pol.price_unit,pol.partner_id,rp.name, pol.product_id,  msi.name,pol.name order by msi.name asc' % o.id)"/>
+                                <t t-set="overall_total" t-value="0"/>
+                                <t t-foreach="o.order_line" t-as="line">
+                                        <t t-set="overall_total" t-value="overall_total + line.price_subtotal"/>
+                                    <t t-if="line.product_id">
+                                        <tr>
+                                            <t t-if="line.indention_id.sale_line_id.order_id.date_order"> 
+                                                <td><span t-esc="line.indention_id.sale_line_id.order_id.date_order" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/></td>
+                                            </t>
+                                            <t t-if="not line.indention_id.sale_line_id.order_id.date_order"> 
+                                                <td>No Contract</td>
+                                            </t>
+                                            <t t-if="not line.indention_id"> 
+                                                <td>No Contract</td>
+                                            </t>
+                                            <t t-if="line.indention_id"> 
+                                                <td><span t-esc="line.indention_id.contract_ref"/></td>
+                                            </t>
+                                            <t t-if="not line.indention_id.customer">
+                                                <td>No Contract</td>
+                                            </t>
+                                            <t t-if="line.indention_id.customer">
+                                                <td><span t-esc="line.indention_id.customer"/></td>
+                                            </t>
+                                            <td><span t-esc="line.partner_id.name"/></td>
+                                            <td><span t-esc="line.series_id.name"/></td>
+                                            <td><span t-esc="line.product_id.name"/></td>
+                                            <td><span t-esc="line.variant"/></td>
+                                            <td><span t-esc="line.size"/></td>
+                                            <td><span t-esc="line.product_uom.name"/></td>
+                                            <td><span t-esc="line.indention_id.quantity"/></td>
+                                            <td><span t-esc="'%.0f'%line.product_qty"/></td>
+                                            <td><span t-esc="line.price_type"/></td>
+                                            <td><span t-esc="'{} {}'.format(line.qty_sqm,'sqm')"/></td>
+                                            <td><span t-esc="line.price_unit"/></td>
+                                            <td><span t-esc="line.price_subtotal"/></td>
+                                        </tr>
+                                    </t>
+                                    <!-- <t t-set="overall_total" t-value="overall_total + line['prod_total_price']"/>
+                                    <tr>
+                                        <t t-if="not line['contractref']"> 
+                                            <td>No Contract</td>
+                                        </t>
+                                        <t t-if="line['contractref']"> 
+                                            <td><span t-esc="line['contractref']"/></td>
+                                        </t>
+                                        <t t-if="not line['customer']">
+                                            <td>No Contract</td>
+                                        </t>
+                                        <t t-if="line['customer']"> 
+                                            <td><span t-esc="line['customer']"/></td>
+                                        </t>
+                                        <td><span t-esc="line['factory']"/></td>
+                                        <td><span/></td>
+                                        <td><span t-esc="line['description']"/></td>
+                                        <td><span /></td>
+                                        <td><span /></td>
+                                        <td><span /></td>
+                                        <t t-if="not line['contract_qty']">
+                                            <td>No Contract</td>
+                                        </t>
+                                        <t t-if="line['contract_qty']">
+                                            <td><span t-esc="line['contract_qty']"/></td>
+                                        </t>
+                                        <td><span t-esc="'%.0f'%line['prod_qty']"/></td>
+                                        <td><span t-esc="line['price_unit']"/></td>
+                                        <td><span t-esc="line['prod_total_price']"/></td>
+                                    </tr> -->
+                                </t>
+                                <tr class="text-right">
+                                    <td colspan="99" id="subtotal">
+                                        <strong class="mr16">Total</strong>
+                                        <span t-esc="overall_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

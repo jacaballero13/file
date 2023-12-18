@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mt_create_proforma_popup_user,metrotiles_proforma_invoice.mt_create.proforma_popup,model_mt_create_proforma_popup,base.group_user,1,1,1,1

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="stock_picking_outgoing_inherit_view_form">
+            <field name="name">stock.picking.outgoing.iherit.view</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="quotation_type"/>
+                </xpath>
+                <xpath expr="//notebook/page[@name='extra']" position="after" >
+                    <page string="Details" attrs="{'invisible':[('picking_type_code', '!=', 'outgoing')]}">
+                    <group>
+                        <group>
+                            <field name="delivery_contract_id"/>
+                            <field name="track_id"/>
+                            <field name="trip"/>
+                        </group>
+                        <group>
+                            <field name="delivery_area"/>
+                            <field name="has_started"/>
+                            <field name="acknowledge"/>
+                        </group>
+                    </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="before">
+                    <field name="delivery_no" attrs="{'invisible':[('picking_type_code', '!=', 'outgoing')]}"/>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

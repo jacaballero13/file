@@ -1,0 +1,172 @@
+<odoo>
+    <data>
+        <record model="report.paperformat" id="rfq_po_template_paperformat">
+            <field name="name">RFQ/PO Format</field>
+            <field name="default" eval="False" />
+            <field name="format">Letter</field>
+            <!-- <field name="format">custom</field>
+            <field name="page_width">50</field>
+            <field name="page_height">500</field> -->
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">35</field>            <!-- Tips : Hide unnecessary header -->
+        </record>
+
+        <report id='rfq_report_template' model='purchase.order' string='RFQ' report_type='qweb-pdf' name='metrotiles_rfq_po_template.rfq_international_template' file='metrotiles_rfq_po_template.rfq_international_template' paperformat="metrotiles_rfq_po_template.rfq_po_template_paperformat"/>
+
+        <!-- attachment='str(purchase.order.name)' +'.pdf'  -->
+
+
+        <template id='rfq_international_template'>
+            <t t-call='web.html_container'>
+                <t t-foreach='docs' t-as='o'>
+                    <t t-call='web.external_layout'>
+                        <style>
+                    table {
+                        table-layout: fixed;
+                        border-collapse: collapse;
+                        width:100%;
+                    }
+                    td{
+                        text-align: left;
+                    }
+                        </style>
+                        <!-- HEADER -->
+                        <div >
+                            <span style="font-family: 'Adobe Garamond Pro Bold', sans-serif;font-size:55px;color:red;">metrotiles</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <strong>REQUEST FOR QUOTATION</strong>
+                                    </td>
+                                    <td>RFQ DATE</td>
+                                    <td>SUPPLIER NAME:</td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span t-field="o.name" style="color:red;"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.date_order"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.partner_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- CONTENT -->
+                        <div class='page'>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>CONTRACT NO.</th>
+                                        <th>CUSTOMER NAME.</th>
+                                        <th>ITEM CODE</th>
+                                        <th>SERIES</th>
+                                        <th>DESCRIPTION</th>
+                                        <th>SIZE</th>
+                                        <th>TOTAL QTY IN PC.</th>
+                                        <th>TOTAL QTY IN SQM.</th>
+                                        <th>UNIT PRICE</th>
+                                        <th>PRICE TYPE</th>
+                                        <th>SUBTOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="contract_id" t-value=""/>
+                                    <t t-set="product_default_code" t-value=""/>
+                                    <tr t-foreach="request.env['purchase.order.line'].read_group([('order_id','=',o.id)],fields=['x_contract_name','product_id','qty_sqm','product_qty','x_prod_id','price_subtotal'],groupby=['x_contract_name','x_prod_id'],orderby='name',lazy=False)" t-as="obj">
+                                        <t t-foreach="set(o.order_line.mapped('product_id'))" t-as="x" t-if="x.default_code==obj['x_prod_id']">
+                                            <td>
+                                                <span t-esc="obj['x_contract_name']"></span>
+                                            </td>
+                                            <td>
+                                                <t t-set="counter" t-value="0"/>
+                                                <t t-foreach="o.order_line" t-as="lines" t-if="x.default_code==lines.product_id.default_code and counter ==0">
+                                                    <span t-field="lines.indention_id.customer"/>
+                                                    <t t-set="counter" t-value="counter+1"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span t-field="x.default_code"/>
+                                            </td>
+                                            <td>
+                                                <t t-set="counter" t-value="0"/>
+                                                <t t-foreach="o.order_line" t-as="lines" t-if="x.default_code==lines.product_id.default_code and counter ==0">
+                                                    <span t-field="lines.series_id"/>
+                                                    <t t-set="counter" t-value="counter+1"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-set="counter" t-value="0"/>
+                                                <t t-foreach="o.order_line" t-as="lines" t-if="x.default_code==lines.product_id.default_code and counter ==0">
+                                                    <span t-field="lines.product_id.name"/>
+                                                    <t t-set="counter" t-value="counter+1"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-set="counter" t-value="0"/>
+                                                <t t-foreach="o.order_line" t-as="lines" t-if="x.default_code==lines.product_id.default_code and counter ==0">
+                                                    <span t-field="lines.size"/>
+                                                    <t t-set="counter" t-value="counter+1"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span t-esc="obj['product_qty']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="obj['qty_sqm']"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-set="counter" t-value="0"/>
+                                                <t t-foreach="o.order_line" t-as="lines" t-if="x.default_code==lines.product_id.default_code and counter ==0">
+                                                    <span t-field="lines.price_unit"/>
+                                                    <t t-set="counter" t-value="counter+1"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-set="counter" t-value="0"/>
+                                                <t t-foreach="o.order_line" t-as="lines" t-if="x.default_code==lines.product_id.default_code and counter ==0">
+                                                    <span t-field="lines.price_type"/>
+                                                    <t t-set="counter" t-value="counter+1"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span t-esc="obj['price_subtotal']"/>
+                                            </td>
+
+                                        </t>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                            <div class="container" style="margin-top:-10px">
+                                <div class="footer" style="font-size:10px;">
+                                    <p>NOTE: THIS IS NOT CONSIDERED AS PURCHASE ORDER.<br/>
+                                    <br/>
+
+                                Metro Tiles, Inc.<br/>
+                                Address: 228 Tomas Morato Ave. Cor. Scout De Guia, Quezon City, Philippines 1103<br/>
+                                Tel: +63 8-290-9371 / +63 8-928-9357<br/>
+                                Website: https://metrotiles.com.ph</p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+</t>
+</template>
+</data>
+</odoo>

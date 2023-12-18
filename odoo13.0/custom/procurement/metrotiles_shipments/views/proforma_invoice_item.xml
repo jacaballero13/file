@@ -1,0 +1,16 @@
+
+<odoo>
+        <record model="ir.ui.view" id="metrotiles_procurement_inherit_view_tree">
+            <field name="name">metrotiles_procurement.proforma_invoice_item.model.tree</field>
+            <field name="model">metrotiles_procurement.proforma_invoice_item</field>
+            <field name="inherit_id" ref="metrotiles_procurement.proforma_invoice_item_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='po_reference']" position="before">
+                    <field name="shipment_id" widget="many2one_button"/>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>
+
+

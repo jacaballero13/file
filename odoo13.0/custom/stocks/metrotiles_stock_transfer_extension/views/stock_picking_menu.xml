@@ -1,0 +1,47 @@
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="stock.all_picking">
+            <field name="name">Stock Transfer</field>
+        </record>
+
+        <record model="ir.ui.menu" id="stock.menu_action_inventory_form">
+            <field name="name">Stock Adjustment</field>
+        </record>
+        <!--Action for done stock transfer list-->
+        <record id="action_metrotiles_internal_transfer_done" model="ir.actions.act_window">
+            <field name="name">Internal Transfer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form,kanban,calendar</field>
+            <field name="view_id" ref="stock.vpicktree"/> 
+            <field name="domain">[
+                    ('state' ,'=', 'done'),
+                    ('picking_type_id.code', '=', 'internal'),
+                    ('picking_type_id.sequence_code', '=', 'INT')]
+            </field>
+        </record>
+
+        <menuitem name="Stock Transfer" 
+                sequence="15" 
+                id="metrotiles_fleet_stock_transfer" 
+                parent="fleet.menu_root" 
+            />
+        <menuitem
+                id="action_menu_stock_transfer_lineup"
+                name="Lineups"
+                sequence="16"
+                parent="metrotiles_fleet_stock_transfer"
+                action="metrotiles_approvals.action_metrotiles_internal_transfer_request"
+            />
+        <menuitem
+            id="action_menu_stock_transfer_done"
+            name="Stock Transfer List"
+            sequence="17"
+            parent="metrotiles_fleet_stock_transfer"
+            action="action_metrotiles_internal_transfer_done"
+        />
+        <!-- <record id="metrotiles_approvals.action_metrotiles_internal_transfer_request" model="ir.actions.act_window">
+            <field name="name">New record name</field>
+        </record> -->
+    </data>
+</odoo>

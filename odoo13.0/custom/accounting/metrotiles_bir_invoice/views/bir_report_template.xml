@@ -1,0 +1,154 @@
+<odoo>
+<data>
+    <template id="metrotiles_bir_invoice">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.internal_layout">
+                        <div class="page">
+                            <!-- Headers -->
+                            <div style="position:absolute;top:31mm;left:33mm">
+                                <table style="border: none;">
+                                    <thead>
+                                        <tr>
+                                            <td colspan="6" style="border: none;width:140mm">
+                                                <span style="font-weight:bold; font-size:12px; " t-field="o.partner_id"/>
+                                            </td>
+
+                                            <td style="border: none;">
+                                                <span style="font-weight:bold; font-size:12px; " t-field="o.invoice_date"/>
+                                            </td>
+                                        </tr>
+
+                                        <!-- <tr>
+                                            <td colspan="7" style="border: none;">
+                                                <t t-if="o.partner_id.vat">
+                                                    <span style="font-weight:bold; font-size:12px; " t-field="o.partner_id.vat"/>
+                                                </t>
+                                            </td>
+                                        </tr> -->
+                                        
+                                        <tr>
+                                            <td colspan="7" style="border: none;">
+                                                <t t-if="o.partner_id.invoice_address">
+                                                    <span style="font-weight:bold; font-size:12px; " t-field="o.partner_id.invoice_address"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        
+                                        
+                                        <tr></tr>
+                                        <tr>
+                                            <td colspan="7" style="border: none;">
+                                                <t t-if="o.partner_id.delivery_address">
+                                                    <span style="font-weight:bold; font-size:12px; " t-field="o.partner_id.delivery_address"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span style="font-weight:bold; font-size:12px;" t-field="o.ref"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7" style="border: none;">
+                                            </td>
+                                            <td>
+                                                <span style="font-weight:bold; font-size:12px;" t-field="o.invoice_user_id"/>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            
+                            <!-- CONTENT -->
+                            <div style="position:absolute;top:79mm;left:9mm">
+                                <table>
+                                    <!--<table class="table table-condensed" >-->
+                                    <!-- PRODUCT LINES -->
+                                    <t t-foreach="o.invoice_line_ids" t-as="lines">
+                                        <t t-if="lines.price_unit>0">
+                                            <tr>
+                                                <td class="text-left" width="50">
+                                                    <span style="font-weight:bold; font-size:13px; " t-esc="'%.0f'%(lines.quantity)"/>
+                                                </td>
+                                                <td width="100">
+                                                    <span style="font-weight:bold; font-size:13px; " t-field="lines.product_uom_id"/>
+                                                </td>
+                                                <td width="393" >
+                                                    <span style="font-weight:bold; font-size:13px;margin-left:10px" t-field="lines.product_id.name"/>
+                                                </td>
+                                                <td width="80">
+                                                    <t t-foreach="lines.product_id.product_template_attribute_value_ids.filtered(lambda x: x.attribute_id.name == 'Sizes')" t-as="size">
+                                                    <span t-esc="size.name"/>
+                                                    </t>
+                                                </td>
+                                                <td  width="80">
+                                                    <span style="font-weight:bold; font-size:13px;" t-field="lines.price_unit"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span style="font-weight:bold; font-size:13px;" t-field="lines.price_subtotal"/>
+                                                </td> 
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <!-- SUBTOTAL -->
+                                    <!-- <tr class="is-subtotal text-right">
+                                        <td colspan="80" style="border: none;">
+                                            <strong>Subtotal</strong>
+                                            <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                        </td>
+                                        
+                                    </tr> -->
+                                </table>
+                            </div>
+
+                            <div style="position:absolute;top:228mm;left:150mm">
+                                <t t-set="net_sales" t-value="0"/>
+                                <t t-set="taxes" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="lines">
+                                    <t t-set="net_sales" t-value="net_sales+lines.price_subtotal"/>
+                                    <t t-set="taxes" t-value="taxes+((lines.price_subtotal*lines.tax_ids.amount)/100)"/>
+                                </t>
+                                <span/><br/>
+                                <span/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(net_sales)"/><br/>
+                                <span/><br/>
+                                <span/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(taxes)"/>
+                            </div>
+
+
+                            <!-- BOTTOM RIGHT BREAKDOWN -->
+                            <div style="position:absolute;top:228mm;left:210mm">
+                                <t t-set="net_sales" t-value="0"/>
+                                <t t-set="taxes" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="lines">
+                                    <t t-set="net_sales" t-value="net_sales+lines.price_subtotal"/>
+                                    <t t-set="taxes" t-value="taxes+((lines.price_subtotal*lines.tax_ids.amount)/100)"/>
+                                </t>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(o.amount_total)"/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(taxes)"/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(net_sales)"/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(o.amount_discount)"/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(net_sales)"/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(taxes)"/><br/>
+                                <span style="font-weight:bold; font-size:15px;" t-esc="'{:,.2f}'.format(o.amount_total)"/>
+                            </div>
+
+                            <!-- <div style="position:absolute;top:270mm;left:10mm">
+                                <li t-if="o.report_salesman" class="list-inline-item d-inline"><span t-field="o.report_salesman"/></li>
+                            </div> -->
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    <report id="metrotiles_bir_invoice"
+            string="BIR Invoice"
+            model="account.move"
+            report_type="qweb-pdf"
+            name="metrotiles_bir_invoice.metrotiles_bir_invoice"
+            file="metrotiles_bir_invoice.metrotiles_bir_invoice"
+            print_report_name="'BIR Invoice'"
+            menu="True"
+        />
+</data>
+</odoo>

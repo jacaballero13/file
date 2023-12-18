@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="app_email_compose_message_wizard_form" model="ir.ui.view">
+    <field name="name">app.mail.compose.message.form</field>
+    <field name="model">mail.compose.message</field>
+    <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//button[@name='action_send_mail'][1]" position="before">
+            <button string="Send Email" title="" name="action_set_send" type="object" class="btn-primary o_set_state"/>
+        </xpath>
+    </field>
+  </record>
+</odoo>
+

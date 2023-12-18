@@ -1,0 +1,42 @@
+<odoo>
+  <data>
+    <menuitem id="metrotiles_pull_outs_root_menu" 
+              name="Pull Outs"
+              parent="fleet.menu_root"
+              sequence="3"/>
+
+    <menuitem id="metrotiles_pull_outs_sub_menu_lineups"
+              name="Lineups"
+              action="action_metrotiles_pull_outs"
+              parent="metrotiles_pull_outs_root_menu"
+              sequence="80"
+              groups="base.group_user"/>
+
+    <menuitem id="metrotiles_pull_outs_sub_menu_pull_outs"
+              name="Pull Outs"
+              action="stock_picking_pull_outs_action"
+              parent="metrotiles_pull_outs_root_menu"
+              sequence="90"
+              groups="base.group_user"/>
+
+    <menuitem id="metrotiles_pull_outs_sales_returns_root"
+              name="Sales Returns"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="15"
+              groups="base.group_user"/>
+
+    <menuitem id="metrotiles_pull_outs_sales_returns_sample"
+              name="Sample Returns"
+              parent="metrotiles_logistic_pull_outs.metrotiles_pull_outs_sales_returns_root"
+              sequence="15"
+              action="stock_picking_pull_outs_returns_sample_action"
+              groups="base.group_user"/>
+
+    <menuitem id="metrotiles_pull_outs_sales_returns_regular"
+              name="Regular Returns"
+              parent="metrotiles_logistic_pull_outs.metrotiles_pull_outs_sales_returns_root"
+              sequence="20"
+              action="stock_picking_pull_outs_returns_regular_action"
+              groups="base.group_user"/>
+  </data>
+</odoo>

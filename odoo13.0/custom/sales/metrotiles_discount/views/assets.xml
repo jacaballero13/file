@@ -1,0 +1,11 @@
+<odoo>
+    <template id="assets_backend" name="tree view menu" inherit_id="web.assets_backend">
+         <xpath expr="link[last()]" position="after">
+            <link rel="stylesheet" type="text/scss" href="/metrotiles_discount/static/src/scss/metrotiles_discount_style.scss"/>
+        </xpath>
+        <xpath expr="." position="inside">
+            <script type="text/javascript"
+                    src="/metrotiles_discount/static/src/js/many2many_discounts.js"></script>
+        </xpath>
+    </template>
+</odoo>

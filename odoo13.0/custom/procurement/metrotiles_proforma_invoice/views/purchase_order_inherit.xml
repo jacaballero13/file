@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record id="purchase_order_form_inherit_view" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.view</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_ref']" position="after">
+                    <field name="proforma_ref" attrs="{'invisible':[('state', 'not in', 'purchase')]}"/>
+                </xpath>
+                <button name="button_confirm" position="before">
+                    <button class="oe_highlight" type="object" 
+                            name="create_proforma_invoice" 
+                            string="Create Pro-Forma" 
+                            icon="fa-plus" 
+                            attrs="{'invisible': [('state', 'not in', ['purchase'])]}"/>
+                </button>
+                <!-- Add additional smart button after existing sheet -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object" name="action_open_proforma_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('proforma_invoice_count', '=', 0), ('state', 'in', ('draft','sent','to approve'))]}">
+                        <field name="proforma_invoice_count" widget="statinfo" string="Proforma Invoices"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

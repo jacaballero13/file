@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- Search View -->
+    <record model="ir.ui.view" id="shipment_inherit_filters_search">
+        <field name="name">shipment.number.search</field>
+        <field name="model">shipment.number</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="proforma_invoice_item" string="Product Name/Default Code" filter_domain="['|',('proforma_invoice_item.order_line.product_id.default_code','ilike',self),('proforma_invoice_item.order_line.product_id.name','ilike',self)]"/>
+                <field name="proforma_invoice_item" string="Contract Ref #" filter_domain="[('proforma_invoice_item.so_contract_ref','ilike',self)]"/>
+                <field name="proforma_invoice_item" string="Client Name" filter_domain="[('proforma_invoice_item.client_name','ilike',self)]"/>
+                <field name="container_no" string="Container #" filter_domain="[('container_no','ilike',self)]"/>
+                <field name="name" string="Shipment #" filter_domain="[('name','ilike',self)]"/>
+            </search>
+        </field>
+    </record>
+</odoo>

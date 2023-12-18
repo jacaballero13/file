@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="commission_lines_payee_form">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='architect_commission']" position="before">
+                    <field name="check_payee"/>
+                </xpath>
+                <xpath expr="//field[@name='designer_commission']" position="before">
+                    <field name="check_payee"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

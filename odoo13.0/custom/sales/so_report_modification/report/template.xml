@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="quotation_with_discounts_template">
+             <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <div>
+                            <t t-if="doc.branch_id.name == 'QUADRO'">
+                                <img t-if="doc.branch_id" t-attf-src="data:image/*;base64,{{doc.branch_id.branch_logo}}"/>
+                                </t>
+                                
+                                <t t-if="not doc.branch_id.name == 'QUADRO'">
+                                <span style="font-family: 'Adobe Garamond Pro Bold', sans-serif;font-size:55px;color:red;">metrotiles</span>
+                            </t>
+                        </div>
+
+                        <t t-if="doc.branch_id.address">
+                            <span t-field="doc.branch_id.address"/>
+                        </t>
+                        <p style="display: block;                             height: 1px;                             border: 0;                             border-top: 1px solid #ccc;                             margin: 1em 0;                             padding: 0;"/>
+                        <div>
+                        <span t-field="doc.partner_id" style="padding-top:10px"/>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="column">
+                                <table>
+                                <tr>
+                                    <th>Delivery Address:</th>
+                                    <th>Invoice Address:</th>
+                                </tr>
+                                
+                                <tr>
+                                    <td><t t-if="doc.delivery_address">
+                                        <span t-field="doc.delivery_address"></span></t>
+                                    </td>
+                                    
+                                    <td><t t-if="doc.invoice_address">
+                                        <span t-field="doc.invoice_address"></span></t>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td></td>
+                                    <th>
+                                    Payment Terms:     <span t-field="doc.payment_term_id" style="font-weight: normal"></span>
+                                    </th>
+                                </tr>
+                                </table>
+                            </div>
+                            <div class="column">
+                                <table>
+                                <tr>
+                                    <t t-if="doc.architect_ids">
+                                    <th>Architect Name:</th>
+                                    </t>
+                                    
+                                    <t t-if="doc.designer_ids">
+                                    <th>Designer Name:</th>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <t t-if="doc.architect_ids">
+                                    <td><t t-foreach="doc.architect_ids.architect_id" t-as="architects">
+                                        <span style="weight:bold" t-field="architects.name"/><br/>
+                                        </t>
+                                    </td>
+                                    </t>
+                                    <t t-if="doc.designer_ids">
+                                    <td><t t-foreach="doc.designer_ids.designer_id" t-as="designers">
+                                        <span t-field="designers.name"/><br/>
+                                        </t>
+                                    </td>
+                                    </t>
+                                </tr>
+                                </table>
+                            </div>
+                            </div>
+
+                        <div class="page">
+                            <div class="oe_structure"/>
+
+                            <h2 class="mt16">
+                                <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                                    <span style="font-size:25px;" t-if="doc.state not in ['draft','sent']">Order # </span>
+                                    <span style="font-size:25px" t-if="doc.state in ['draft','sent']">Quotation # </span>
+                                </t>
+                                <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                                    <span>Pro-Forma Invoice # </span>
+                                </t>
+                                <span style="font-size:25px" t-field="doc.name"/> <t t-if="doc.vatable==True"><span style="display:inline;font-size:20px;color:black;">Vatable</span></t>
+                                </h2>
+
+                                <div class="row mt32 mb32" id="informations">
+                                    <div t-if="doc.client_order_ref" class="col-auto mw-100 mb-2">
+                                        <strong>Your Reference:</strong>
+                                        <p class="m-0" t-field="doc.client_order_ref"/>
+                                    </div>
+                                    <div t-if="doc.date_order and doc.state not in ['draft','sent']" class="col-auto mw-100 mb-2">
+                                        <strong>Order Date:</strong>
+                                        <p class="m-0" t-field="doc.date_order"/>
+                                    </div>
+                                    <div t-if="doc.site_contact" class="col-auto mw-100 mb-2">
+                                            <strong>Site Contact Person:</strong>
+                                            <p class="m-0" t-field="doc.site_contact"/>
+                                    </div>
+                                    <div t-if="doc.site_number" class="col-auto mw-100 mb-2">
+                                            <strong>Site Contact Number:</strong>
+                                            <p class="m-0" t-field="doc.site_number"/>
+                                    </div>
+                                    <div t-if="doc.from_time" class="col-auto mw-100 mb-2">
+                                            <strong>Delivery Date:</strong>
+                                            <p class="m-0" t-field="doc.commitment_date" widget="date"/>
+                                    </div>
+                                    <div t-if="doc.from_time" class="col-auto mw-100 mb-2">
+                                            <strong>Delivery Time (From):</strong>
+                                            <p class="m-0" t-field="doc.from_time"/>
+                                    </div>
+                                    <div t-if="doc.to_time" class="col-auto mw-100 mb-2">
+                                            <strong>Delivery Time (To):</strong>
+                                            <p class="m-0" t-field="doc.to_time"/>
+                                    </div>
+                                    <!-- <div t-if="doc.sales_ac" class="col-auto mw-100 mb-2">
+                                            <strong>Account Coordinator:</strong>
+                                            <p class="m-0" t-field="doc.sales_ac"/>
+                                    </div> -->
+                                    <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-auto mw-100 mb-2">
+                                        <strong>Quotation Date:</strong>
+                                        <p class="m-0" t-field="doc.date_order" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                                    </div>
+                                    <div t-if="doc.validity_date and doc.state in ['draft', 'sent']" class="col-auto mw-100 mb-2" name="expiration_date">
+                                        <strong>Expiration:</strong>
+                                        <p class="m-0" t-field="doc.validity_date"/>
+                                    </div>
+                                    <div t-if="doc.user_id.name" class="col-auto mw-100 mb-2">
+                                        <strong>Salesperson:</strong>
+                                        <p class="m-0" t-field="doc.user_id"/>
+                                    </div>
+                                </div>
+
+                                <!-- Is there a discount on at least one line? -->
+                                <t t-set="display_discount" t-value="any([l.discount for l in doc.order_line])"/>
+                                
+                            <table class="table table-sm" id="table_with_discount">
+                            <!-- main table -->
+                                <thead class="bg-100 text-danger">
+                                    <tr>
+                                        <th class="border">Image</th>
+                                        <th colspan="2" class="border">AREA DESCRIPTION</th>
+                                        <th class="border">DESCRIPTION</th>
+                                        <th class="text-center">SIZE (cm)</th>
+                                        <th class="border text-right">QTY (Pc)</th>
+                                        <th class="border text-right">GROSS PRICE</th>
+                                        <th class="border text-center">DISCOUNTS</th>
+                                        <th class="border text-right">PRICE NET</th>
+                                        <th class="border text-right" colspan="99">AMOUNT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="location_total" t-value="0"/>
+                                    <t t-set="current_section" t-value="False"/>
+
+                                    <t t-foreach="doc.location_variant_group" t-as="l">
+                                        <t t-if="l.get('display_type') == 'line_section'">
+                                            <tr class="bg-100">
+                                                <td/>
+                                                <td colspan="99">
+                                                    <t t-esc="l.get('name')"/>
+                                                </td>
+                                            </tr>
+                                            <t t-set="current_section" t-value="l.get('name')"/>
+                                        </t>
+                                    <t t-elif="l.get('display_type') == 'line_total'">
+                                        <tr>
+                                            <td colspan="9" class="text-right" style="border: 0px solid #dee2e6">
+                                                <strong>
+                                                    <t t-esc="current_section  + ' SUBTOTAL:'"/>
+                                                </strong>
+                                            </td>
+                                            <td style="border: 0px solid #dee2e6" class="text-right">
+                                                <strong>
+                                                    <t t-esc="l.get('amount')" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </t>
+                        <t t-else="">
+                            <tr>
+                                <td>
+                                    <t t-value="l.get('product_id')" t-set="photo_id"/>
+                                    <t t-foreach="doc.order_line.product_id" t-as="p_id">
+                                        <t t-if="p_id.id == photo_id">
+                                            <img t-attf-src="data:image/*;base64,{{p_id.image_1920}}" style="height:100px%; width:100px"/>          
+                                        
+                                        </t>
+                                    </t>
+                                </td>
+                                <td class="border" colspan="2">
+                                    <t t-esc="l.get('application','N/A')"/>
+                                </td>
+                                <td class="border">
+				
+
+                                <t t-if="l.get('factory')">
+                                    <span style="text-transform: uppercase;"> 
+                                        <t style="text-transform: uppercase;" t-esc="l.get('factory')+' - '+l.get('series_id','N/A')+' '+ l.get('product_display_name')"/>
+                                    </span>
+                                </t>
+                                <t t-if="not l.get('factory')">
+                                    <span style="text-transform: uppercase;"> 
+                                        <t style="text-transform: uppercase;" t-esc="'N/A'+' - '+l.get('series_id','N/A')+' '+ l.get('product_display_name')"/>
+                                    </span>
+                                </t>
+                                </td>
+                                <td t-esc="l.get('size')" class="border text-center"/>
+                                <td t-esc="l.get('qty')" class="border text-right"/>
+                                <td t-esc="l.get('price_unit')" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}" class="border text-right"/>
+                                <td class="border text-center">
+                                    <t t-esc="l.get('discounts', 'N/A') or 'N/A'"/>
+                                </td>
+                                <td t-esc="l.get('price_net')" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}" class="border text-right"/>
+                                <td t-esc="l.get('price_subtotal')" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}" class="border text-right" colspan="99"/>
+                            </tr>
+
+                            <t t-set="location_total" t-value="location_total + l.get('price_subtotal')"/>
+                            </t>
+                        </t>
+
+                                <tr class="border-top-0 text-right">
+                                    <td colspan="9">
+                                        <strong>TOTAL:</strong>
+                                    </td>
+                                    <td>
+                                        <span data-id="total_untaxed" t-field="doc.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;,&quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                    </td>
+                                </tr>
+
+                                <!-- DISCOUNTS !-->
+                                <t t-set="i" t-value="1"/>
+                                <t t-set="total_untaxed" t-value="doc.amount_untaxed"/>
+                                <t t-foreach="doc.total_discounts" t-as="discount">
+                                    <tr class="border-top-0 text-right">
+                                        <td colspan="9" class="border-top-0">
+                                            <span class="mr-1">Additional Disc.</span>
+                                            <t t-if="discount.discount_type == 'percentage'" t-esc="'{}{}'.format(discount.value,'%')"/>:
+                                        </td>
+                                        <td class="text-right border-top-0">
+                                            <t t-if="discount.discount_type == 'percentage'">
+                                                <t t-set="amount_disc" t-value="total_untaxed * (discount.value / 100)"/>
+                                                <t t-set="total_untaxed" t-value="total_untaxed - amount_disc"/>
+
+                                                <t t-esc="amount_disc" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-set="total_untaxed" t-value="total_untaxed - discount.value"/>
+                                                <t t-esc="discount.value" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                 <!-- MATERIAL NET TOTAL !-->
+                                <!--<tr class="border-top-0 text-right" t-if="doc.amount_tax &gt; 0 and len(doc.total_discounts) &gt; 0">-->
+                                <!--    <td colspan="9" class="border-top-0">-->
+                                <!--        <strong>PRODUCT NET TOTAL:</strong>-->
+                                <!--    </td>-->
+                                <!--    <td class="border-top-0">-->
+                                <!--        <span data-id="materials_net_total" t-field="doc.materials_net_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>-->
+                                <!--    </td>-->
+                                <!--</tr>-->
+
+                                <!-- TAX !-->
+                                <tr class="border-top-0 text-right" t-if="doc.amount_tax &gt; 0">
+                                    <td colspan="9" class="border-top-0">
+                                        <strong>
+                                            VAT:
+                                        </strong>
+                                    </td>
+                                    <td class="text-right border-top-0 text-info">
+                                        <span data-id="amount_tax" t-field="doc.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                    </td>
+                                </tr>
+
+                                <!-- MATERIAL NET TOTAL !-->
+                                <tr class="border-top-0 text-right">
+                                    <!--<t t-if="has_charges">-->
+                                        <td colspan="9" class="border-top-0 pb-4">
+                                            <strong>PRODUCT NET TOTAL:</strong>
+                                        </td>
+                                        <td class="border-top-0">
+                                            <strong data-id="material_total" t-field="doc.material_total" class="border-dark border-top" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    <!--</t>-->
+                                    <!--<t t-else="">-->
+                                    <!--    <tr class="border-top text-right">-->
+                                    <!--        <td colspan="9" class="border-top-0">-->
+                                    <!--            <strong>TOTAL CONTRACT PRICE:</strong>-->
+                                    <!--        </td>-->
+                                    <!--        <td class="text-right border-top-0 bg-200">-->
+                                    <!--            <strong data-id="total_amount" t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>-->
+                                    <!--        </td>-->
+                                    <!--    </tr>-->
+                                    <!--</t>-->
+                                </tr>
+
+                                <!-- CHARGES !-->
+                                <t t-if="doc.charge_ids">
+                                    <tr>
+                                        <th colspan="99" class="bg-100 text-danger text-left border">Charges and Fees</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="9" name="th_description" class="bg-100 text-danger text-left border">
+                                            Description
+                                        </th>
+                                        <th colspan="1" name="th_amount" class="bg-100 text-danger text-right border" style="width:145px; max-width:300px">Amount Charges
+                                        </th>
+                                    </tr>
+                                    <t t-foreach="doc.charge_ids" t-as="line">
+                                        <tr>
+                                            <td colspan="9" class="text-left border">
+                                                <span t-field="line.charge_id"/>
+                                            </td>
+                                            <td colspan="" class="text-right border">
+                                                <span t-field="line.charge_amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <!-- NET CHARGES !-->
+                                    <tr t-if="doc.vat_charges" class="border-top-0 border-bottom-0 text-right">
+                                        <td t-if="doc.charge_ids" colspan="9" class="border-top-0">
+                                            <strong>NET CHARGES:</strong>
+                                        </td>
+                                        <td class="border-top-0 ">
+                                            <span data-id="net_charges" t-field="doc.net_charges" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <!-- VAT CHARGES !-->
+                                    <tr t-if="doc.vat_charges" class="border-top-0 border-bottom-0 text-right">
+                                        <td colspan="9" class="border-top-0">
+                                            <strong>VAT:</strong>
+                                        </td>
+                                        <td class="border-top-0 ">
+                                            <span class="text-info" data-id="vat_charges" t-field="doc.vat_charges" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <!-- CHARGE TOTAL !-->
+                                    <tr class="border-top-0 border-bottom-0 text-right">
+                                        <td class="border-top-0 pb-4" colspan="9">
+                                            <strong>CHARGE TOTAL:</strong>
+                                        </td>
+                                        <td class="border-top-0 pb-4">
+                                            <strong t-if="doc.vat_charges" class="border-dark border-top" data-id="total_charges" t-field="doc.total_charges" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+
+                                            <strong t-else="" data-id="total_charges" t-field="doc.total_charges" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <!-- GRAND TOTALS !-->
+                                    <!-- VAT TOTAL !-->
+                                    <t t-set="vat_total" t-value="doc.amount_tax + doc.vat_charges"/>
+                                    <tr class="text-right">
+                                        <td colspan="10" class="border-top">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-top text-right" t-if="vat_total &gt; 0">
+                                        <td colspan="9" class="border-top-0">
+                                            <strong>VAT TOTAL:</strong>
+                                        </td>
+                                        <td class="text-right border-top-0">
+                                            <strong t-esc="vat_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="text-right" t-if="vat_total &gt; 0">
+                                        <td colspan="9" class="border-top-0 ">
+                                            <strong>PRODUCT AND CHARGES NET TOTAL:</strong>
+                                        </td>
+                                        <td class="text-right border-top-0 ">
+                                            <strong t-esc="doc.net_charges + doc.materials_net_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <!-- CONTRACT PRICE !-->
+                                    <tr class="text-right">
+                                        <td colspan="9" class="border-top-0">
+                                            <strong>TOTAL CONTRACT PRICE:</strong>
+                                        </td>
+                                        <td class="text-right border-top-0 bg-200">
+                                            <strong data-id="total_amount" t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                </tbody>
+                            </table>
+                            <div style="text-align:justify; text-justify:inter-word;">
+
+Proposal Notes <br></br>
+Quantifications were based on plan and subject for owner’s approval upon conforme. The company is not responsible for over or under quantity ordered. Buyer is responsible for quantity ordered and must confirm with contractor and Architect/ID for accuracy of quantity.<br></br>
+<br></br>
+ 
+Terms and Conditions <br></br>
+
+1.On stock items:  Full payment is required upon submission by customer of the duly signed quotation/contract or purchased order. <br></br>
+   Indent items: 50% down-payment shall be required upon submission by customer of the duly signed quotation/contract or purchased order. <br></br>
+The 50% balance shall be payable at least 3 working days before the scheduled date of delivery. Payment must be cleared before applying the delivery lead time. No delivery shall be made without full payment. Should the contract require partial delivery, the items for delivery must be paid in full with remaining payment to cover for 50% of the undelivered indent or for fabrication items. <br></br>
+
+   For progress billing: Settlement should not be more than 2 weeks after the date of delivery transaction. Please ensure payment on or before the due date. Late payments shall be charged with a rate of three percent (3%). <br></br>
+
+2. Delivery: <br></br>
+a. Lead Time: <br></br>
+i. On stock items - 5-7 working days upon receipt of duly signed/conformed quotation/contract with full payment. <br></br>
+ii. Indent orders - upon receipt of duly signed/conformed quotation/contract and down-payment and confirmation of shipment schedule: <br></br>
+1. Italy = 120 to 150 days (counting off month of August) <br></br>
+2. China = 45 to 60 days (counting off Chinese New Year) <br></br>
+
+b. General: <br></br>
+i. Price(s) given are exclusive of delivery, hauling and handling charges. Delivery fee should be charged based on weight, quantity and delivery area. Items for pick-up at the showroom should have one to two (1-2) days allowance notice. <br></br>
+ii. Village Entrance Fee for every delivery will be in the account of the client and should be processed on or before the actual delivery date. <br></br>
+iii. Drop-off point from unloading area will be for a maximum of ten (10) meters and shall be on the ground floor only or of same floor from unloading point. <br></br>
+iv. Delivery Schedule will only be anytime between 9:00 am to 5:00 pm, otherwise, subject for additional charges. It is the responsibility of the client or authorized representative to check purchased item/s upon delivery including but not limited to chips, breakages, dimension, color, quality, quantity. Disputes not indicated in the Delivery Receipt will not be honored. <br></br>
+
+3. Quantification should be on a per box basis.  <br></br>
+
+4. Storage:  <br></br>
+Products from Europe, 5 months free warehousing from the date of confirmation. Storage fee will be applied accordingly thereafter. <br></br>
+
+Products from China, 3 months free warehousing from the date of confirmation. Storage fee will be applied accordingly thereafter. <br></br>
+
+The company will store goods with utmost care. Should there be any unforeseen event, the good/s stored will be at the risk of the client. The company shall be held free of any liability for breakages or missing items while in storage. Furthermore, unclaimed / undelivered good/s beyond 1 year shall be forfeited in favor of the company as storage and penalty fee. Client waives any right over the good/s. <br></br>
+
+5. The company will not be held liable for any delay caused by force majeure or any instance beyond the company's control. <br></br>
+
+6. Fabrication: Items for cutting, step thread/bull nose, color combination, special design – subject for 50% down-payment prior to production. 50% balance before delivery. <br></br>
+
+7. Returns: <br></br>
+a. On-stock purchases - within 5% of total quantity delivered and on a per BOX basis and within 60 days from the delivery date. Goods must be in saleable condition, subject for the company’s inspection.
+ Process of rebates shall be fifteen (15) working days from confirmation of approval. <br></br>
+b. Indent and/or fabricated – no returns acceptable. <br></br>
+c. Trucking to and from the company’s warehouse will be in the account of the client. <br></br>
+
+8. Exchange: <br></br>
+a. Only for on-stock purchases.  <br></br>
+b. Subject for approval  <br></br>
+c. On a per BOX basis. Goods must be in saleable condition, subject for the company’s inspection. <br></br>
+d. Within 30 days from the delivery date <br></br>
+e. Item for exchange shall be equivalent or greater than in value. <br></br>
+f. Trucking to and from the company’s warehouse will be in the account of the client. <br></br>
+
+9. Cancellation: <br></br>
+a. On-stock items – after thirty (30) days from contract date, the company reserves the right to forfeit the down-payment to compensate warehousing and possible loss sales costs. <br></br>
+b. Indent items – no change or cancellation is allowed, as such, the company reserves the right to forfeit the down-payment to compensate for importation and warehousing costs. <br></br>
+
+Customer refund – Refund shall be payable to client and not to other entity. Processing is up to fifteen (15) working days. Goods must be in saleable condition, subject for the company’s inspection. <br></br>
+
+10. Prices and stock availability are subject to change without prior notice, unless prior deposit was made to secure stock. <br></br>
+
+11. All prices indicated do not include installation. <br></br>
+
+12. Upon receipt of materials and in any case before it is installed, careful verification of the shade, work size and choice of material is important since no claims on installed items will be accepted if their defects were visible before installation. <br></br>
+
+13. Tile Flatness: to offset the even minimum manufacturing tolerances, the minimum grout line installations of 2mm joint on rectified materials are recommended. It is absolutely advised against joint-less installations. Size and thickness quoted are nominal due to the inherent nature of ceramics. Variations during manufacture cannot avoided, such variation falls within the allowable tolerance and is accepted in the industry standards. <br></br>
+
+14. The company is not liable for any injuries or damages due to inappropriate tile finish for the area application. Certain tiles may be slippery when wet. <br></br>
+
+RECOMMENDATION: <br></br>
+1. Installation: It is necessary to use high-quality adhesives; grouts and spacer for better result. <br></br>
+2. Joints-Grouts: <br></br>
+a. It is highly recommended that tile is installed with a minimum separation gapping of 1.5 mm for rectified tiles and 2-3 mm for non-rectified tiles. It is absolutely advised against joint-less installations. The manufacturer and/or supplier shall not be responsible for damaged products or imperfect tiling should the user failed to comply with these recommendations. <br></br>
+b. Fill the joints with grout only when the floor can safely be walked on, having first removed all kinds of residue from the joints. <br></br>
+3. Cleaning the Floor or Wall after Installation: after giving enough time for the grout to hardened, it is necessary to carry out a cleaning of the grouted areas. <br></br>
+4. General Suggestions:<br></br>
+a. Make sure the installer has carried out a proper cleaning to remove all installation residues. <br></br>
+b. Before installation, it is the tile installer’s responsibility to always check the materials before laying; lay out a number of tiles on the ground (at least 3 square meters), and carefully check the overall effect, the shade, choice and caliber; <br></br>
+c. During Installation, take materials from more than one (1) box; <br></br>
+d. Do not mark the face side of the tiles with marker pens. <br></br>
+e. Do not install tiles if there are defects <br></br>
+f. Use of acids in cleaning or any other harmful chemical is not recommended <br></br>
+ 
+</div>  
+            <p t-if="doc.payment_term_id.note">
+                <span t-field="doc.payment_term_id.note"/>
+            </p>
+            <table style="border: none;width:100%">
+              <tr style="border-top: 1px solid black;height:50px">
+                <td style="width:100px;">Pepared By: </td>
+                <td class="text-center" style="border-bottom: 1px solid black;vertical-align:bottom"><span t-field="doc.create_uid"/></td>
+                <td></td>
+                <td style="width:110px">Approved By:</td>
+                <td class="text-center" style="border-bottom: 1px solid black;vertical-align:bottom">
+                  <span t-if="doc.branch_id.name=='MORATO'">Jennifer Mendoza</span>
+                  <span t-if="doc.branch_id.name=='TAGUIG'">Wowie Evangelista</span>
+                  <span t-if="doc.branch_id.name=='QUADRO'">Emerson Lee</span>
+                  <span t-if="doc.branch_id.name=='CEBU'">Joel Co</span>
+                </td>
+                <td></td>
+                <td style="width:90px">Conforme:</td>
+                <td style="width:20%;border-bottom: 1px solid black;"></td>
+              </tr>
+            </table>
+            <p id="fiscal_position_remark" t-if="doc.fiscal_position_id and doc.fiscal_position_id.sudo().note">
+                <strong>Fiscal Position Remark:</strong>
+                <span t-field="doc.fiscal_position_id.sudo().note"/>
+            </p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

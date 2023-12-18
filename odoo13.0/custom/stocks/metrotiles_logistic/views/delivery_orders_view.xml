@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="action_logistic_delivery_order_search" model="ir.actions.act_window">
+            <field name="name">To Do</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="domain"></field>
+            <field name="context">{'search_default_picking_type_id': [active_id],'default_picking_type_id':
+                active_id,'search_default_available':1,'search_default_waiting':1,
+                'from_picking': 1}
+            </field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="view_id" ref="stock.vpicktree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No transfer found. Let's create one!
+                </p>
+                <p>
+                    Transfers allow you to move products from one location to another.
+                </p>
+            </field>
+        </record>
+
+        <!-- Delivery Order List views -->
+        <record id="view_logistic_delivery_orders_tree" model="ir.ui.view">
+            <field name="name">Logistic_delivery_orders.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="arch" type="xml">
+                <tree string="Delivery Orders">
+                    <field name="delivery_no" string="Delivery No." optional="hide"/>
+                    <field name="name" string="WH Ref."/>
+                    <field name="scheduled_date" string="Delivery Date" optional="hide"/>
+                    <field name="xx_ets" optional="hide"/>
+                    <field name="xx_eta" optional="hide"/>
+                    <field name="sales_person"/>
+                    <field name="contract_client"/>
+                    <field name="attn" string="AE" optional="hide"/>
+                    <field name="partner_id" string="Client" optional="hide"/>
+                    <field name="origin" optional="show"/>
+                    <field name="shipment_ref" optional="show"/>
+                    <field name="container_ref" optional="hide"/>
+                    <field name="bol_ref" optional="hide"/>
+                    <field name="location_id" optional="show" string="From"/>
+                    <field name="location_dest_id" string="To" optional="show"/>
+                    <field name="state" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Actions of Delivery Orders -->
+        <record id="action_logistic_delivery_orders" model="ir.actions.act_window">
+            <field name="name">Delivery List</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="domain">[('picking_type_id.code' ,'=', 'outgoing'), ('state','=',['assigned', 'done'])]</field>
+            <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0]}</field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="view_id" ref="metrotiles_logistic.view_logistic_delivery_orders_tree"/> 
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No transfer found. Let's create one!
+                </p><p>
+                    Transfers allow you to move products from one location to another.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_logistic_delivery_orders" 
+                name="Deliveries" 
+                parent="metrotiles_logistic.metrotiles_delivery_root_menu"
+                sequence="3" 
+                action="action_logistic_delivery_orders"
+                groups="stock.group_stock_manager,stock.group_stock_user"
+                />
+    </data>
+</odoo>

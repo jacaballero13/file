@@ -1,0 +1,7 @@
+<odoo>
+    <template id="assets_backend" name="tree view menu" inherit_id="web.assets_backend">
+         <xpath expr="link[last()]" position="after">
+            <link rel="stylesheet" type="text/scss" href="/metortiles_totals_and_reports/static/src/scss/metrotiles_totals_and_reports_style.scss"/>
+        </xpath>
+    </template>
+</odoo>

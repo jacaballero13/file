@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="res_branch_inherit_image_form">
+            <field name="name">res.branch.inherit.image.form</field>
+            <field name="model">res.branch</field>
+            <field name="inherit_id" ref="branch.branch_res_branch_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='address']" position="after">
+                    <field name="branch_logo"  class="float-left oe_avatar" widget="image"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <template id="branch_logo_header" inherit_id="web.external_layout_standard">
+            <xpath expr="//div[@id='branch_logo']" position="replace">
+                <style>
+                @import url('http://fonts.cdnfonts.com/css/adobe-garamond-pro-bold');
+                @import url('http://fonts.cdnfonts.com/css/calibri-light');
+                
+                .row {
+                  margin-left:5px;
+                  margin-right:5px;
+                }
+                
+                .column {
+                  flex: left;
+                  width: 40%;
+                }
+                th, td{
+                      padding-right: 10px;
+                    }
+
+                </style>
+                <t t-if="xmlid == 'sale.report_saleorder'">
+                <div>
+                  
+                    <!--<img t-if="o.branch_id" t-attf-src="data:image/*;base64,{{o.branch_id.branch_logo}}" />-->
+                    <t t-if="o.branch_id.name == 'QUADRO'">
+                      <img t-if="o.branch_id" t-attf-src="data:image/*;base64,{{o.branch_id.branch_logo}}" />
+                    </t>
+                    
+                    <t t-if="not o.branch_id.name == 'QUADRO'">
+                    <span style="font-family: 'Adobe Garamond Pro Bold', sans-serif;font-size:55px;color:red;">metrotiles</span>
+                    </t>
+                    <!--<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="padding-bottom:15px;width: 300px;height: 80px;" alt="Logo"/>  -->
+                    
+                </div>
+                    <t t-if="o.branch_id.address">
+                      <span t-field="o.branch_id.address"/>
+                    </t>
+                 <p style="display: block;
+                      height: 1px;
+                      border: 0;
+                      border-top: 1px solid #ccc;
+                      margin: 1em 0;
+                      padding: 0;"/>
+                <div>
+                  <span t-field="o.partner_id" style="padding-top:10px"></span>
+                </div>
+                
+                <div class="row">
+                  <div class="column">
+                    <table>
+                      <tr>
+                         <th>Delivery Address:</th>
+                         <th>Invoice Address:</th>
+                      </tr>
+                      
+                      <tr>
+                        <td><t t-if="o.delivery_address">
+                            <span t-field="o.delivery_address"></span></t>
+                        </td>
+                        
+                        <td><t t-if="o.invoice_address">
+                            <span t-field="o.invoice_address"></span></t>
+                        </td>
+                      </tr>
+                      
+                       <tr>
+                        <td></td>
+                        <th>
+                          Payment Terms:     <span t-field="docs.payment_term_id" style="font-weight: normal"></span>
+                        </th>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="column">
+                    <table>
+                      <tr>
+                        <t t-if="o.architect_ids">
+                          <th>Architect Name:</th>
+                        </t>
+                        
+                        <t t-if="o.designer_ids">
+                          <th>Designer Name:</th>
+                        </t>
+                      </tr>
+                      <tr>
+                        <t t-if="o.architect_ids">
+                          <td><t t-foreach="o.architect_ids.architect_id" t-as="architects">
+                            <span style="weight:bold" t-field="architects.name"/><br/>
+                            </t>
+                          </td>
+                        </t>
+                        <t t-if="o.designer_ids">
+                          <td><t t-foreach="o.designer_ids.designer_id" t-as="designers">
+                            <span t-field="designers.name"/><br/>
+                            </t>
+                          </td>
+                        </t>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                </t>
+                
+                 <t t-if="xmlid == 'stock.report_deliveryslip'">
+                <div>
+                  
+                    <!--<img t-if="o.branch_id" t-attf-src="data:image/*;base64,{{o.branch_id.branch_logo}}" />-->
+                    <t t-if="o.branch_id.name == 'QUADRO'">
+                      <img t-if="o.branch_id" t-attf-src="data:image/*;base64,{{o.branch_id.branch_logo}}" />
+                    </t>
+                    
+                    <t t-if="not o.branch_id.name == 'QUADRO'">
+                    <span style="font-family: 'Adobe Garamond Pro Bold', sans-serif;font-size:55px;color:red;">metrotiles</span>
+                    </t>
+                    <!--<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="padding-bottom:15px;width: 300px;height: 80px;" alt="Logo"/>  -->
+                   
+                </div>
+                    <t t-if="o.branch_id.address">
+                      <span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;" t-field="o.branch_id.address"/>
+                    </t>
+                 <p style="display: block;
+                      height: 1px;
+                      border: 0;
+                      border-top: 1px solid #ccc;
+                      margin: 1em 0;
+                      padding: 0;"/>
+                <div>
+                  <span t-field="o.partner_id" style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:25px;padding-top:10px"></span>
+                </div>
+                
+                <div style="width:50%">
+                  <table >
+                    <th class="text-left"> Delivery Address:</th>
+                    <th style="border: 0;width:25px"></th>
+                    <th class="text-left">Invoice Address:</th>
+                    <tr class="spacer" style="height:10px"></tr>
+                    <tr>
+                      <td  style="vertical-align:top" class="text-left">
+                        <t t-if="o.delivery_address">
+                          <span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:13px;"  t-field="o.delivery_address" ></span>
+                        </t>
+                      </td>
+                      <td style="border: 0"></td>
+                      <td  style="vertical-align:top" class="text-left">
+                        <t t-if="o.invoice_address">
+                          <span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:13px;" t-field="o.invoice_address"></span>
+                        </t>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="border:0"></td>
+                      <td style="border:0"></td>
+                      <td class="text-left" style="border: 0">
+                       <strong style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:13px;">Payment Terms:</strong>
+                       <t t-if="o.sale_id.payment_term_id">
+                        <span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:13px;" t-field="o.sale_id.payment_term_id" ></span>
+                      </t>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

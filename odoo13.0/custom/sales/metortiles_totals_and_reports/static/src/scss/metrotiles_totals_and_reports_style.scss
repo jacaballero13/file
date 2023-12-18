@@ -1,0 +1,14 @@
+.custom-border {
+  margin-top: 100px !important;
+}
+
+table.sale-total {
+  width: 400px !important;
+  background-color: rebeccapurple;
+  clear: both;
+
+  td, td.o_td_label {
+  background-color: #fff;
+    width: 50% !important;
+  }
+}

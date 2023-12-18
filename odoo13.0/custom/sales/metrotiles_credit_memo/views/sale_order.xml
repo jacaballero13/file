@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record id="sale_order_credit_memo_request_inherit" model="ir.ui.view">
+            <field name="name">sale.order.form.credi.memo.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_quotation_send']" position="before">
+                    <button class="oe_highlight" type="object" name="get_credit_memo_request" string="CM Request" icon="fa-sticky-note-o" attrs="{'invisible': [('state', 'not in', ['sale'])]}">
+                    </button>
+                </xpath>
+                <xpath expr="//button[@name='action_view_invoice']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <button name="open_credit_memo_lines" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('credit_memo_count', '=', 0)]}">
+                        <field name="credit_memo_count" widget="statinfo" string="CM Form"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

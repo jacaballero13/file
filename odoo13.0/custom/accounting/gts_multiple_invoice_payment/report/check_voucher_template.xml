@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_check_voucher">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.html_container">
+	                <t t-call="web.external_layout">
+						<div>
+							<t t-if="o.branch_id.name == 'QUADRO'">
+							<img t-if="o.branch_id" t-attf-src="data:image/*;base64,{{o.branch_id.branch_logo}}" />
+							</t>
+							
+							<t t-if="not o.branch_id.name == 'QUADRO'">
+							<span style="font-family: 'Adobe Garamond Pro Bold', sans-serif;font-size:55px;color:red;">metrotiles</span>
+							</t>
+						</div>
+						<t t-if="o.branch_id.address">
+						<span style="font-family: 'Calibri Light', sans-serif;font-weight: 400;" t-field="o.branch_id.address"/>
+						</t>
+							<p style="display: block;
+								height: 1px;
+								border: 0;
+								border-top: 1px solid #ccc;
+								margin: 1em 0;
+							padding: 0;"/>
+						<div>
+							<span t-field="o.name" style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:25px;padding-top:10px"></span>
+						</div>
+						<div style="width:100%">
+							<table class="table table-condensed">
+								<th class="text-left">Payee</th>
+								<th class="text-right">Cheque Reference:</th>
+								<th class="text-right">Payment Date: </th>
+								<tr>
+									<td  style="vertical-align:top" class="text-left">
+										<t t-if="o.partner_id">
+											<span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:13px;"  t-field="o.partner_id.name" ></span>
+										</t>
+										</td>
+									<td  style="vertical-align:top" class="text-right">
+										<t t-if="o.cheque_reference">
+											<span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:13px;" t-field="o.cheque_reference"></span>
+										</t>
+									</td>
+									<td  style="vertical-align:top" class="text-right">
+										<t t-if="o.payment_date">
+										<span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:13px;" t-field="o.payment_date" ></span>
+										</t>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div>
+							<div style="position: absolute;top: 0px;right: 0px;">
+								<span style="font-family: 'Calibri Light', sans-serif;font-weight: 900;font-size:25px;padding-top:10px">CHECK VOUCHER</span>
+							</div>
+							<table class="table" >
+								<thead>
+										<th>ACCOUNT</th>
+										<th>PARTICULARS</th>
+										<th>DEBIT</th>
+										<th>CREDIT</th>
+									</thead>
+									<tbody>
+										<t t-foreach="payment_dict[o.id]" t-as="line1">
+											<t t-foreach="line1"   t-as="line">
+											<tr>
+												<td>
+													<span>
+														<t t-esc = "line['account_id'].code + line['account_id'].name" />
+													</span>
+												</td>
+												<td> 
+													<span>
+														<t t-esc="line['name']" />
+													</span>
+												</td>
+												<td>
+													<span>
+														<t t-esc="line['debit']" />
+													</span>
+												</td>
+												<td>
+													<span>
+														<t t-esc="line['credit']" />
+													</span>
+												</td>
+											</tr>
+										</t>
+									</t>
+										<tr>
+											<td>TOTALS</td>
+											<td></td>
+											<td><t t-esc ="payment_dict['debit'+str(o.id)]" /></td>
+											<td><t t-esc ="payment_dict['credit'+str(o.id)]" /></td>
+										</tr>
+										<hr></hr>
+								</tbody>
+							</table>
+							<div class="page">
+								<style>
+								td,
+									th {
+										border: 1px solid rgb(190, 190, 190);
+										text-align:center;
+										vertical-align:bottom;
+										
+									}
+									table {
+										border-collapse: collapse;
+										letter-spacing: 1px;
+										font-family: sans-serif;
+										font-size: .8rem;
+									}
+									.underline {
+											border-bottom: 2px solid currentColor;
+											}
+									.text-bottom > * {
+											vertical-align: text-bottom;
+											}
+									.bottom > * {
+											vertical-align: bottom;
+											}
+
+								</style>
+								<table class="table table-condensed">
+									<tbody>
+										<!-- Row 1 Signatures -->
+										<tr>
+											<th class="text-center"><strong>Amount in Words: <span t-if="o.check_amount_in_word" style="color:black" t-field="o.check_amount_in_word"/> </strong></th>
+											<th class="text-center"><strong>Amount in Figures: <span t-field="o.check_amount"/></strong></th>
+										</tr>
+									</tbody>
+								</table>
+								<table class="table table-condensed">
+									<tbody>
+										<!-- Row 1 Signatures -->
+										<tr>
+												<th class="text-center"><strong>Received By: </strong></th>
+												<th class="text-center"><strong><p class="underline">Signature Over Printed Name</p></strong></th>
+												<th class="text-center"><strong><p class="underline">Check Date</p></strong></th>  
+										</tr>
+										
+										<!-- Row 1 End  -->
+										<!-- Row 2 Start  -->
+									
+										<tr style="text-align:right;font-weight:400;"> 
+												<td class="text-center" ><p><i>Prepared By:</i></p></td>
+												<td class="text-center">
+												<p><i>Approved By:</i></p>
+												</td>
+												<td class="text-center">
+												<p><i>Noted By:</i></p>
+												</td>
+										</tr>
+									</tbody>
+								</table>  
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

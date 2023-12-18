@@ -1,0 +1,121 @@
+<odoo>
+    <data>
+        <report id='installlation_report' 
+        model='sale.order' 
+        string='Installation' 
+        report_type='qweb-html' 
+        name='metrotiles_installation_template.installation_report_template' 
+        file='metrotiles_installation_template.installation_report_template' 
+        menu="True"
+        paperformat="base.paperformat_us"
+        />
+        
+        <template id="installation_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <div class='page'>
+                            <div>
+                                <t t-if="not doc.branch_id.name == 'QUADRO'">
+                                    <span style="display:inline-block;font-family: 'Adobe Garamond Pro Bold', sans-serif;font-size:55px;color:red;">metrotiles</span>
+                                </t>
+
+                                <p>228 Scout de Guia St., Tomas Morato<br/>
+                                Quezon City, Philippines<br/>
+                                Tel. No. 411-1105<br/>       
+                                Fax No. 928-9357
+                                </p>
+                            </div>
+
+                            <p style="display: block;
+                                height: 1px;
+                                border: 0;
+                                border-top: 1px solid #ccc;
+                                margin: 1em 0;
+                                padding: 0;"/>
+                            <div>
+                            <strong><span t-field="doc.partner_id" style="padding-top:10px"></span></strong>
+                            </div>
+
+
+                            <div style="padding-top:20px">
+                            
+                            <p>Project: <span t-field="doc.project_name_installation"/></p><br/>
+                            <p>RE: <span t-field="doc.re_installation"/> </p>
+                            </div>
+
+                            <div style="padding-top:20px">
+                                <div style="padding:5px">
+                                    <p class="text-center">We are pleased to quote you for the supply of labor of the ff:</p>
+                                </div>
+                                <table class="table table-condensed">
+                                    <tr>
+                                        <td>AREAS</td>
+                                        <td>DESCRIPTION</td>
+                                        <td>QUANTITY</td>
+                                        <td>UNIT</td>
+                                        <td>UNIT COST</td>
+                                        <td>TOTAL</td>
+                                    </tr>
+                                    <t t-set="total_amount" t-value="0"/>
+                                    <tr t-foreach="doc.installation_ids" t-as="lines">
+                                        <t t-if="not lines.product_id.name=='SUPERVISION'">
+                                            <td></td>
+                                            <td><span t-esc="lines.product_id.name"/></td>
+                                            <td><span t-esc="lines.uom_qty"/></td>
+                                            <td><span t-field="lines.gross_price"/></td>
+                                            <td><span t-esc="lines.uom.name"/></td>
+                                            <td><span t-field="lines.subtotal"/></td>
+                                            <t t-set="total_amount" t-value="lines.subtotal+total_amount"/>
+                                        </t>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="border: none;"></td>
+                                        <td style="border: none;"></td>
+                                        <td style="border: none;"></td>
+                                        <td style="border: none;">
+                                            <strong>Amount</strong>
+                                        </td>
+                                        <td style="border: none;"></td>
+                                        <td style="border: none;"><span  t-esc="total_amount" /></td>
+                                    </tr>
+                                    <tr t-foreach="doc.installation_ids" t-as="lines">
+                                        <t t-if="lines.product_id.name=='SUPERVISION'">
+                                            <td style="border: none;"></td>
+                                            <td style="border: none;"></td>
+                                            <td style="border-bottom: double;border-top: none;"></td>
+                                            <td style="border-bottom: double;border-top: none;">
+                                                <span t-field="lines.product_id.name"/>
+                                            </td>
+                                            <td style="border-bottom: double;border-top: none;"></td>
+                                            <td style="border-bottom: double;border-top: none;">
+                                                <span t-field="lines.subtotal"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="border: none;"></td>
+                                        <td style="border: none;"></td>
+                                        <td style="border-bottom: double"></td>
+                                        <td colspan="2" style="border-bottom: double">
+                                            TOTAL CONTRACT AMOUNT
+                                        </td>
+                                        <td style="border-bottom: double">
+                                            <span t-field="doc.installation_total"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div>
+                                Note:<p t-field="doc.note"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,133 @@
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">metrotiles_quotation_view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet//field[@name='partner_id']" position="replace">
+                <field
+                        name="partner_id"
+                        widget="res_partner_many2one"
+                        context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True, 'is_creating_customer': 1}"
+                        options="{'no_open':True,'no_create': True}"
+                        domain="[('category_id.name', '=', 'Customer')]"
+                />
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="before">
+                <field name="series_ids" invisible="1"></field>
+                <field name="remarks" invisible="1"/>
+                <field name="location_id" class="oe_edit_only"/>
+                <field name="application_id"/>
+                <field name="factory_id" domain="[('category_id.name','=', 'Vendor')]" options="{'no_open':True,'no_create': True}"/>
+                <field name="series_id" domain="[('id', 'in', series_ids)]" options="{'no_open':True,'no_create': True}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="replace">
+                <field
+                        name="product_id"
+
+                        attrs="{
+                                'readonly': [('product_updatable', '=', False)],
+                                'required': [('display_type', '=', False)],
+                               }"
+
+                        options="{'no_open':True,'no_create': True}"
+                        force_save="1"
+                        context="{
+                                    'partner_id': parent.partner_id,
+                                    'quantity': product_uom_qty,
+                                    'pricelist': parent.pricelist_id,
+                                    'uom':product_uom,
+                                    'company_id': parent.company_id,
+                                    'default_lst_price': price_unit,
+                                    'default_description_sale': name
+                         }"
+
+                        domain="[('sale_ok', '=', True),('series_id', '=', series_id), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                        widget="product_configurator"
+                />
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
+                <attribute name="class" add=" oe_read_only" separator=" "/>
+                <attribute name="string" add="Product" separator=" "/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="variant" class="text-center"/>
+                <field name="size" class="text-right"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+               <field name="price_subtotal_main_currency"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree//create[@name='add_section_control']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//create[@name='add_note_control']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='sequence']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Price Net !-->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="after">
+                <field name="price_net"/>
+            </xpath>
+             <xpath expr="//field[@name='order_line']/tree/field[@name='price_net']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_net']" position="after">
+                  <field name="price_net_main_currency"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                 <field name="price_unit_main_currency"/>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']//group[@name='note_group']//field[@name='amount_untaxed']"
+                   position="attributes">
+                <attribute name="string">Gross Total</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="after">
+                <span  attrs="{'invisible': ['|', ('is_a_version','=', True), ('latest_version', '&lt;=', 1)]}"> v</span>
+                <field name="latest_version" nolabel="1" readonly="1" force_save="1"
+                       attrs="{'invisible': ['|',('is_a_version','=', True), ('latest_version', '&lt;=', 1)]}"
+                />
+            </xpath>
+
+            <xpath expr="//page[@name='customer_signature']" position="after">
+                <field name="is_a_version" invisible="1"/>
+                <page string="Quotation Versions" attrs="{'invisible': ['|', ('is_a_version','=', True), ('latest_version', '&lt;=', 1)]}" class="version-page-link">
+                    <field name="latest_version" invisible="1"/>
+                    <field name="versions" readonly="1" force_save="1">
+                        <tree>
+                            <field name="version" invisible="1"/>
+                            <field name="name" string="Name"/>
+                            <field name="state" invisible="1"/>
+                            <field name="is_a_version" invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+
+
+    </record>
+
+    <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+        <field name="domain">[('is_a_version', '=', False)]</field>
+    </record>
+</odoo>

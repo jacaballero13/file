@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="assign_container_popup_form_view" model="ir.ui.view">
+            <field name="name">Assign Container Details</field>
+            <field name="model">assign_container.popup</field>
+            <field name="arch" type="xml">
+                <form string="Assign Container Details">
+                        <group>
+                            <field name="shipment_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="container_no"/>
+                            <field name="xx_ets"/>
+                            <field name="xx_eta"/>
+                            <field name="xx_broker"/>
+                            <field name="xx_forwarder"/>
+                            <field name="xx_forwarder_ref"/>
+                            <field name="xx_consignee"/>
+                        </group>
+                    <footer>
+                        <button name="action_assign_container" type="object"
+                                class="btn btn-success"
+                                icon="fa-check "
+                                string="Assign Container"/>
+                        <button special="cancel" class="btn btn-danger" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <act_window name="Assign Container"
+                id="assign_container_popup_form"
+                res_model="assign_container.popup"
+                binding_model="shipment.number"
+                binding_views="form"
+                view_mode ="form"
+                target="new" />
+
+    </data>
+
+</odoo>

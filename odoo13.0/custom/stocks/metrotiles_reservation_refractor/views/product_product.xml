@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="metrotiles_refractor_product_product_reservation_form" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="metrotiles_reservation.product_header_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_quants']" position="before">
+                <button class="oe_stat_button" icon="fa-cubes" groups="sales_team.group_sale_salesman,sales_team.group_sale_manager,sales_team.group_sale_salesman_all_leads">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="sales_reserved_qty" widget="statinfo" nolabel="1" class="mr4"/>
+                            <field name="uom_name"/>
+                        </span>
+                        <span class="o_stat_text">Sales (Stock View)</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="metrotiles_refractor_attributes_form" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_quants']" position="attributes">
+                <attribute name="groups">stock.group_stock_manager</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="metrotiles_temp_reserve_attribute_form" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="metrotiles_reservation.product_header_button" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(metrotiles_reservation.product_temp_reserve_wizard_action)d']" position="attributes">
+                <attribute name="groups">sales_team.group_sale_salesman,sales_team.group_sale_manager,sales_team.group_sale_salesman_all_leads</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="metrotiles_ohnand_refractor_tree" model="ir.ui.view">
+        <field name="name">product.product.tree</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='price']" position="before">
+                <field name="on_hand_qty"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

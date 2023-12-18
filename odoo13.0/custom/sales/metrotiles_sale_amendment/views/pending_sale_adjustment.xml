@@ -1,0 +1,15 @@
+<odoo>
+    <record id="action_pending_sale_adjustment" model="ir.actions.act_window">
+        <field name="name">Pending / To approve</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+        <field name="domain">[('state','=','pending_sale_adjustment')]</field>
+        <field name="context"></field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Pending Sale Order Adjustments
+            </p>
+        </field>
+    </record>
+</odoo>

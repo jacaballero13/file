@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>    
+	    <record id="view_multi_account_payment_invoices_form_inherited" model="ir.ui.view">
+	        <field name="name">account.payment.register.wizard.form</field>
+	        <field name="model">account.payment.register</field>
+	        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+	        <field name="arch" type="xml">
+	            <xpath expr="//field[@name='communication']" position="after">
+	                <field name="tax_type" invisible="1"/>
+	                <field name="tax_id" domain="[('type_tax_use', '=',tax_type),('is_withholding_tax','=',True)]"/>
+	                <field name="tax_amount"  attrs="{'invisible': [('tax_id', '=', False)]}" readonly="1"/>
+	                <field name="check_amount"/>
+	                <field name="check_amount_in_word"/>
+	            </xpath>
+	            <xpath expr="//field[@name='payment_type']" position="replace">
+	            </xpath>
+	             <xpath expr="//field[@name='partner_type']" position="replace">
+	            </xpath>
+	             <xpath expr="//field[@name='partner_id']" position="replace">
+	            </xpath>
+	            <xpath expr="//field[@name='journal_id']" position="before">
+	            	<field name="payment_type"/>
+	            	<field name="partner_type"/>
+	            	<field name="partner_id"/>
+	            </xpath>
+	        </field>
+	    </record>
+	</data>
+</odoo>

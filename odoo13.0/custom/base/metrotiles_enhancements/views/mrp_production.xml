@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added required fields in columns of form view -->
+        <record model="ir.ui.view" id="mrp_production_inherited_tree_view1">
+            <field name="name">mrp.production.inherited.tree.view</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="sales_person"/>
+                    <field name="contract_client"/>
+                    <field name="factory_id"/>
+                    <field name="series_id"/>
+                    <field name="variant"/>
+                    <field name="size"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

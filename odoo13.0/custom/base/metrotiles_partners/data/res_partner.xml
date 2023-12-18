@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="res_partner_customer" model="res.partner.category">
+            <field name="name">Customer</field>
+            <field name="color" eval="4"/>
+        </record>
+
+        <record id="res_partner_vendor" model="res.partner.category">
+            <field name="name">Vendor</field>
+            <field name="color" eval="3"/>
+        </record>
+
+        <record id="architect_title" model="res.partner.title">
+            <field name="name">Architect</field>
+            <field name="shortcut">Arch.</field>
+        </record>
+
+        <record id="interior_designer_title" model="res.partner.title">
+            <field name="name">Interior Designer</field>
+            <field name="shortcut">IDr.</field>
+        </record>
+
+        <record id="res_partner_category_architect" model="res.partner.category">
+            <field name="name">Architect</field>
+            <field name="color" eval="1"/>
+        </record>
+
+        <record id="res_partner_category_designer" model="res.partner.category">
+            <field name="name">Interior Designer</field>
+            <field name="color" eval="2"/>
+        </record>
+
+        <!-- PRODUCT_CATEGORY !-->
+        <record id="product_category_tiles" model="product.category">
+            <field name="parent_id" ref="product.product_category_all"/>
+            <field name="name">Tiles</field>
+        </record>
+
+        <!-- Res Config !-->
+        <record id="re_config_base_category" model="res.config.settings">
+            <field name="base_category_id" ref="product_category_tiles"/>
+            <field name="res_cat_vendor_tag_id" ref="res_partner_vendor"/>
+        </record>
+    </data>
+</odoo>

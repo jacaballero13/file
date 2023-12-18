@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+         <record model="res.groups" id="users">
+            <field name="category_id" ref="base.module_category_procurement"/>
+            <field name="name">Purchase Users</field>
+            <field name="menu_access" eval="[
+                (6, 0, [
+                    ref('purchase.menu_purchase_root'),
+                ])]"/>
+        </record>
+    </data>
+</odoo>

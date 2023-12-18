@@ -1,0 +1,34 @@
+<odoo>
+    <record id="metrotiles_reservation_view_partner_form" model="ir.ui.view">
+        <field name="name">metrotiles.res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="before">
+                <field name="factory_settings" attrs="{'invisible':[('company_type', '=', 'person')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="reserve_product_supplierinfo_form_view" model="ir.ui.view">
+        <field name="name">product.supplierinfo.form.view</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="uom" />
+            </xpath>
+        </field>
+    </record>
+    
+    <record model="ir.actions.act_window" id="factory_designer_list">
+        <field name="name">Factory</field>
+        <field name="res_model">metrotiles.factory.settings</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">FACTORY</p>
+        </field>
+    </record>
+    <menuitem id="factory_root_menu" name="Factory" action="factory_designer_list" parent="metrotiles_partners.partners_root_menu" sequence="6"/>
+
+</odoo>

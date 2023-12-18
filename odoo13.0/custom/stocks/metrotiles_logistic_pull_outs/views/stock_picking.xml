@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- stock.picking form view -->
+        <record id="stock_picking_pull_out_no_view_form" model="ir.ui.view">
+            <field name="name">stock.picking.pull.out.inherit.view.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="before">
+                    <field name="pull_out_no"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- stock.picking tree view -->
+        <record id="stock_picking_pull_outs_tree" model="ir.ui.view">
+            <field name="name">stock.picking.pull.outs.view.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <tree default_order='origin desc'>
+                    <field name="name" invisible="1"/>
+                    <field name="origin"/>
+                    <!-- <field name="quotation_type"/> -->
+                    <field name="scheduled_date"/>
+                    <field name="picking_type_id"/>
+                    <field name="pull_out_no"/>
+                    <!-- <field name="attn"/> -->
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- stock.picking action window -->
+        <record id="stock_picking_pull_outs_action" model="ir.actions.act_window">
+            <field name="name">Pull Outs</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('pull_out_no', '!=', False),('name', 'ilike', 'OUT'), ('state','=','done')]</field>
+            <!-- <field name="view_id" ref="stock_picking_pull_outs_tree"/> -->
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('metrotiles_logistic_pull_outs.stock_picking_pull_outs_tree')}),]"/>
+        </record>
+
+        <record id="stock_picking_pull_outs_returns_sample_action" model="ir.actions.act_window">
+            <field name="name">Sales Returns</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('pull_out_no', '!=', False),('name', 'ilike', 'IN'),('quotation_type', '!=', 'regular')]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('metrotiles_logistic_pull_outs.stock_picking_pull_outs_tree')}),]"/>
+        </record>
+
+        <record id="stock_picking_pull_outs_returns_regular_action" model="ir.actions.act_window">
+            <field name="name">Sales Returns</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('pull_out_no', '!=', False),('name', 'ilike', 'IN'),('quotation_type', '=', 'regular')]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('metrotiles_logistic_pull_outs.stock_picking_pull_outs_tree')}),]"/>
+        </record>
+
+
+    </data>
+</odoo>

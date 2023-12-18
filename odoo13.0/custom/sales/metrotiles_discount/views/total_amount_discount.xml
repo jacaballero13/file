@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">Architect Page View</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']//group[@name='note_group']" position="attributes">
+                <attribute name="class" add="d-flex flex-row flex-wrap" seperator=" "></attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']//group[@name='note_group']/group[2]" position="attributes">
+                <attribute name="class" add="w-auto order-1" seperator=" "></attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']//group[@name='note_group']//div[hasclass('oe_clear')]" position="attributes">
+                <attribute name="class" add="w-auto d-none" seperator=" "></attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='order_lines']//group[@name='note_group']/group" position="attributes">
+                <attribute name="colspan">12</attribute>
+                <attribute name="class" add="order-2" seperator=" "></attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

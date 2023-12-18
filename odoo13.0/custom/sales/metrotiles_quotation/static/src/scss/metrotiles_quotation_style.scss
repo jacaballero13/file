@@ -1,0 +1,19 @@
+.o_sale_order .o_form_sheet {
+  max-width: calc(100% - 32px) !important;
+
+  th[data-name="variant"] {
+    text-align: center;
+  }
+
+  th[data-name="size"] {
+    text-align: right;
+  }
+}
+
+.o_form_sheet {
+  max-width: calc(100% - 32px) !important;
+}
+
+.version-page-link {
+  background-color: gainsboro;
+}

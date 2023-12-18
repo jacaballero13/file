@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record model="res.groups" id="administrator_res_groups">
+            <field name="category_id" ref="base.module_category_procurement"/>
+            <field name="name">Administrator</field>
+            <field name="users" eval="[
+                (4, ref('base.user_root'))
+            ]"/>
+            <field name="implied_ids" eval="[
+            (4, ref('metrotiles_procurement.users')),
+            ]"/>
+            <field name="menu_access" eval="[
+                (6, 0, [
+                ref('metrotiles_procurement.proforma_invoice_menu'),
+                ])]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_delivery_contract_delivery_contract,delivery_contract.delivery_contract,model_delivery_contract,base.group_user,1,1,1,1
+access_delivery_line_delivery_line,delivery_line.delivery_line,model_delivery_line,base.group_user,1,1,1,1
+access_delivery_schedule_popup_delivery_schedule_popup,delivery_schedule_popup.delivery_schdeule_popup,model_delivery_schedule_popup,base.group_user,1,1,1,1
+access_delivery_track_user,metrotiles_logistic.delivery.track,model_delivery_track,base.group_user,1,1,1,1
+access_delivery_request_item_user,metrotiles_logistic.delivery.request.item,model_delivery_request_item,base.group_user,1,1,1,1

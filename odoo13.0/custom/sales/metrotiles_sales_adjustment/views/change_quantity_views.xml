@@ -1,0 +1,53 @@
+
+<odoo>
+
+    <record id="metrotiles_change_quantity_view_form" model="ir.ui.view">
+        <field name="name">metrotiles.change.quantity.view.form</field>
+        <field name="model">metrotiles.change.quantity</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Contract Quants">
+                <sheet>
+                <group>
+                    <field name="sales_order_id" widget="one2many_button"/>
+                    <field name="adjustment_type"/>
+                    <!-- <field name="column_discounts" widget="many2many_tags" invisible="0" force_save="1" readonly="1"/> -->
+                </group>
+                    <notebook>
+                        <page string="Change Contract Quantity">
+                            <group>
+                                <field name="change_quant_ids" widget="one2many_list" nolabel="1">
+                                    <tree editable="buttom">
+                                        <field name="change_quant_id" invisible="1"/>
+                                        <field name="location_id" optional="hide"/>
+                                        <field name="factory_id" optional="hide"/>
+                                        <field name="series_id" optional="hide"/>
+                                        <field name="application_id" force_save="1" optional="hide"/>
+                                        <field name="product_id" force_save="1"/>
+                                        <field name="package_id" force_save="1" optional="hide"/>
+                                        <field name="size" force_save="1" readonly="1"/>
+                                        <field name="variant" force_save="1" readonly="1"/>
+                                        <field name="total_qty" force_save="1"/>
+                                        <field name="price_unit" optional="hide" force_save="1" readonly="1"/>
+                                        <field name="column_discounts" widget="many2many_tags" force_save="1" optional="hide"/>
+                                        <field name="rif" force_save="1" optional="hide" readonly="1"/>
+                                        <field name="qty_delivered" optional="hide" readonly="1"/>
+                                        <field name="new_qty"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_change_quantity" string="Create" type="object" class="btn-primary"/>
+                    <button name="action_create_new" 
+                        string="Save/New" 
+                        type="object" 
+                        class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

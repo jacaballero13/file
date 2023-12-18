@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_procurement_shipment_lineup_user,metrotiles_shipments.procurement_shipment.lineup,model_procurement_shipment_lineup,base.group_user,1,1,1,1
+access_shipment_bill_lading_user,metrotiles_shipments.shipment.bill_lading,model_shipment_bill_lading,base.group_user,1,1,1,1
+access_shipment_number_user,metrotiles_shipments.shipment.number,model_shipment_number,base.group_user,1,1,1,1

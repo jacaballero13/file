@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Inherit Form view -->
+	<record id="view_picking_operation_form_inherit" model="ir.ui.view">
+		<field name="name">metrotiles_picking_operation</field>
+		<field name="model">stock.picking</field>
+		<field name="inherit_id" ref="stock.view_picking_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
+				<field name="factory_id" optional="show" force_save="1" domain="[('category_id.name','=', 'Vendor')]"/>
+				<field name="series_id" optional="show" force_save="1"/>
+			</xpath>
+			<xpath expr="//tree//field[@name='description_picking']" position="after">
+				<field name="variant" optional="show"/>
+				<field name="size" optional="show"/>
+			</xpath>
+			<xpath expr="//field[@name='user_id']" position="after">
+				<field name="attn" optional="hide"/>
+				<field name="sales_person"/>
+				<field name="contract_client"/>
+			</xpath>
+			</field>
+	</record>   
+	
+</odoo>

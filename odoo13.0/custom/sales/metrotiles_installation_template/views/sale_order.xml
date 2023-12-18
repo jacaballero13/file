@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="installation_inherit_form">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='quotation_type']" position="after">
+                    <field name="project_name_installation" attrs="{'invisible':[('quotation_type', '!=', 'installation')]}"/>
+                    <field name="re_installation" attrs="{'invisible':[('quotation_type', '!=', 'installation')]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

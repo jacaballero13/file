@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<templates>
+    <t t-name="MetrotileSaleAmendmentNumber">
+        <t t-if="line.version_state == 'MODIFIED'">
+            <t t-if="!line.watched_field_changed">
+                <div t-if="line['is_' + fieldName + '_changed']" class="text-warning"
+                     t-esc="line['new_' + fieldName]"/>
+
+                <strike t-if="line['is_' + fieldName + '_changed']" class="text-muted">
+                    <t t-esc="line[fieldName]"/>
+                </strike>
+
+                <div t-else="" t-esc="line[fieldName]"/>
+            </t>
+
+            <t t-else="">
+                <div t-esc="line['new_' + fieldName]" class="text-warning"/>
+
+                <strike class="text-muted">
+                    <t t-esc="line[fieldName]"/>
+                </strike>
+            </t>
+        </t>
+
+        <t t-elif="line.version_state == 'NEW'">
+            <div class="text-success">
+                <t t-esc="line[line.watched_field_changed ? 'new_' + fieldName : fieldName]"/>
+            </div>
+        </t>
+
+        <t t-elif="line.version_state == 'REMOVED'">
+            <strike class="text-danger">
+                <t t-esc="line[fieldName]"/>
+            </strike>
+        </t>
+    </t>
+
+    <t t-name="MetrotileSaleAmendmentMany2one">
+        <t t-if="line.version_state == 'MODIFIED'">
+            <t t-if="!line.watched_field_changed">
+                <div t-if="line['is_' + fieldName + '_changed']" class="text-warning"
+                     t-esc="line['new_' + fieldName].data.display_name"></div>
+
+                <strike t-if="line['is_' + fieldName + '_changed']" class="text-muted">
+                    <t t-esc="line[fieldName].data.display_name"/>
+                </strike>
+
+                <div t-else="" t-esc="line[fieldName].data.display_name"/>
+            </t>
+
+            <t t-else="">
+                <div t-esc="line['new_' + fieldName].data.display_name" class="text-warning"/>
+
+                <strike class="text-muted">
+                    <t t-esc="line[fieldName].data.display_name"/>
+                </strike>
+            </t>
+        </t>
+
+        <t t-elif="line.version_state == 'NEW'">
+            <div class="text-success">
+                <t t-esc="line[fieldName].data.display_name"/>
+            </div>
+        </t>
+        <t t-elif="line.version_state == 'REMOVED'">
+            <strike class="text-danger">
+                <t t-esc="line[fieldName].data.display_name"/>
+            </strike>
+        </t>
+    </t>
+
+    <t t-name="MetrotileSaleAmendmentString">
+        <t t-if="line.version_state == 'MODIFIED'">
+            <t t-if="!line.watched_field_changed">
+                <div t-if="line['is_' + fieldName + '_changed']" class="text-warning"
+                     t-esc="line['new_' + fieldName]"></div>
+
+                <strike t-if="line['is_' + fieldName + '_changed']" class="text-muted">
+                    <t t-esc="line[fieldName]"/>
+                </strike>
+
+                <span t-else="" t-esc="line[fieldName]"/>
+
+            </t>
+
+            <t t-else="">
+                <div t-esc="line[fieldName]" class="text-warning"/>
+
+                <strike class="text-muted">
+                    <t t-esc="line[fieldName]"/>
+                </strike>
+            </t>
+
+        </t>
+        <t t-elif="line.version_state == 'NEW'">
+            <div class="text-success">
+                <t t-esc="line[line.watched_field_changed ? 'new_' + fieldName : fieldName]"/>
+            </div>
+        </t>
+        <t t-elif="line.version_state == 'REMOVED'">
+            <strike class="text-danger">
+                <t t-esc="line[fieldName]"/>
+            </strike>
+        </t>
+    </t>
+
+    <t t-name="MetrotileSaleAmendmentStatus">
+        <div class="text-center font-weight-bold">
+            <t t-if="line.version_state === 'MODIFIED'">
+                <span t-attf-class="{{line.is_modified ? 'text-warning': ''}}" t-esc="line.is_modified ? 'MODIFIED' : 'NO CHANGES'"/>
+            </t>
+            <t t-else="">
+                <span t-attf-class="{{line.version_state == 'NEW' ? 'text-success': 'text-danger'}}"
+                     t-esc="line.version_state"/>
+            </t>
+        </div>
+    </t>
+</templates>

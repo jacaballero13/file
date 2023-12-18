@@ -1,0 +1,8 @@
+# -*- coding: utf-8 -*-
+
+from odoo import models, fields, api
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    p_sale_price = fields.Float(related='lst_price')

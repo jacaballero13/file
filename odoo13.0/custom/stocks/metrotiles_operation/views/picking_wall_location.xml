@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <record id="view_metrotiles_wall_tree" model="ir.ui.view">
+        <field name="name">metrotiles.wall.tree</field>
+        <field name="model">metrotiles.wall</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="wall" options="{'no_create': True}"/>
+                <field name="category_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_metrotiles_wall_form" model="ir.ui.view">
+        <field name="name">metrotiles.wall.form</field>
+        <field name="model">metrotiles.wall</field>
+        <field name="arch" type="xml">
+         <form string="Metrotiles Locations">
+          <sheet>
+            <div class="oe_edit_only">
+              <label for="wall" class="oe_inline" />
+            </div>
+            <h1>
+              <field name="wall" class="oe_inline" placeholder="New"/>
+            </h1>
+              <group>
+                  <field name="category_id"/>
+              </group>
+            </sheet>
+            <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipent'}"/>
+            </div>
+        </form>
+        </field>
+    </record>
+    <record id="action_metrotiles_wall" model="ir.actions.act_window">
+        <field name="name">Metrotiles Wall Locations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">metrotiles.wall</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Create your Warehouse Wall Location !
+            </p>
+        </field>
+    </record>
+     <record id="view_metrotiles_category_tree" model="ir.ui.view">
+        <field name="name">metrotiles.category.tree</field>
+        <field name="model">metrotiles.category</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="1" edit="1">
+                <field name="name"/>
+               <!--  <field name="wall"/> -->
+            </tree>
+        </field>
+    </record>
+     <record id="view_metrotiles_category_tree" model="ir.ui.view">
+        <field name="name">metrotiles.category.tree</field>
+        <field name="model">metrotiles.category</field>
+        <field name="arch" type="xml">
+            <form string="Walls Locations">
+              <field name="name"/>
+            </form>
+        </field>
+    </record>
+    <record id="action_metrotiles_category" model="ir.actions.act_window">
+        <field name="name">Metrotiles Wall Category</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">metrotiles.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Create your Warehouse Wall Location Category !
+            </p>
+        </field>
+    </record>
+    <menuitem id="metrotiles_wall_root_menu" 
+              name="Wall Locations"
+              parent="stock.menu_stock_config_settings"
+              sequence="70"/>
+    <menuitem id="metrotiles_wall_menu"
+              name="Wall Category"
+              action="action_metrotiles_category"
+              parent="metrotiles_wall_root_menu"
+              sequence="80"
+              groups="base.group_user"/>
+    <menuitem id="metrotiles_wall_sub_menu"
+              name="Wall Category/ID"
+              action="action_metrotiles_wall"
+              parent="metrotiles_wall_root_menu"
+              sequence="90"
+              groups="base.group_user"/>
+
+</odoo>

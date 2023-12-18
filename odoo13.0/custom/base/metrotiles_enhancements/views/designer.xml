@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="interior_designer_action_report_tree_inherit">
+            <field name="name">metrotiles.designer.inherit.tree.view</field>
+            <field name="model">metrotiles.designer</field>
+            <field name="inherit_id" ref="mti_all_enhancement.interior_designer_action_report_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='designer_sale_id']" position="after">
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="material_total" force_save="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<template>
+    <t t-name="FabSizes">
+        <div t-if="data.cut_sizes.length > 0">
+            <strike t-esc="data.size" class="text-muted"></strike>
+            <t t-foreach="data.cut_sizes" t-as="size">
+                <div class="d-block"><t t-esc="size.display_name"/> <span class="text-info">(<t t-esc="size.quantity"/>)</span></div>
+            </t>
+        </div>
+        <div t-else="">
+            <t t-esc="data.size"/>
+        </div>
+    </t>
+</template>

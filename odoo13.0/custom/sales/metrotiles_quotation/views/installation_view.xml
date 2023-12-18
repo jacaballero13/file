@@ -1,0 +1,40 @@
+<odoo>
+    <record id="metrotiles_quotation_installation_view_order_form" model="ir.ui.view">
+        <field name="name">metrotiles_quotation_view_installation</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <page string="Installation Lines" attrs="{'invisible': [('quotation_type','!=','installation')]}">
+                    <field name="installation_ids">
+                        <tree string="Installation Fees"
+                            editable="bottom"
+                            delete="true"
+                        >
+                            <control>
+                                <create name="add_installation_control" string="Add Installation"/>
+                            </control>
+                            <field name="product_id"/>
+                            <field name="uom_qty"/>
+                            <field name="gross_price" string="Price Per Unit"/>
+                            <field name="uom" readonly="1" force_save="1"
+                                    options="{'no_open': True}"/>
+                            <field name="net_price" readonly="1" force_save="1" invisible="1"/>
+                            <field name="subtotal"/>
+                        </tree>
+                    </field>
+
+                    <group name="installation_group" col="6">
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="installation_total">
+                            <field name="installation_total" string="Total" widget="monetary"/>
+                        </group>
+                        <div class="oe_clear"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                <field name="quotation_type" attrs="{'readonly': [('state', 'in', ('sale','sent','to_check','done','cancel'))]}" force_save="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

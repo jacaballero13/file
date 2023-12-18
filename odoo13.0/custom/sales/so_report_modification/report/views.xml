@@ -1,0 +1,27 @@
+<odoo>
+  <data>
+    <report id="print_report_pdf'"
+        string="Quotation / Order with discounts"
+        model="sale.order"
+        report_type="qweb-pdf"
+        name="so_report_modification.quotation_with_discounts_template"
+        file="so_report_modification.quotation_with_discounts_template"
+        menu="True"/>
+
+    <report id="sales_report_no_image'"
+      string="Quotation / Order(No Image)"
+      model="sale.order"
+      report_type="qweb-pdf"
+      name="so_report_modification.sales_report_without_image_template"
+      file="so_report_modification.sales_report_without_image_template"
+      menu="True"/>
+
+    <report id="discount_without_image'"
+        string="Quotation / Order with discounts(No Image)"
+        model="sale.order"
+        report_type="qweb-pdf"
+        name="so_report_modification.sale_discount_without_image_template"
+        file="so_report_modification.sale_discount_without_image_template"
+        menu="True"/>
+  </data>
+</odoo>

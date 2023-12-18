@@ -1,0 +1,97 @@
+<odoo>
+
+    <record id="res_partner_view_filter" model="ir.ui.view">
+        <field name="name">res.partner.select</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Search Partner">
+                <field name="name"
+                       filter_domain="['|', '|', ('display_name', 'ilike', self), ('ref', '=', self), ('email', 'ilike', self)]"/>
+                <field name="parent_id" domain="[('is_company', '=', True)]" operator="child_of"/>
+                <field name="email" filter_domain="[('email', 'ilike', self)]"/>
+                <field name="phone" filter_domain="['|', ('phone', 'ilike', self), ('mobile', 'ilike', self)]"/>
+                <field name="category_id" string="Tag" filter_domain="[('category_id', 'child_of', self)]"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Customers" name="category_customer"
+                        domain="['|', ('category_id.name', '=ilike', 'customer'), ('category_id.name', '=ilike', 'customer')]"/>
+
+                <filter string="Vendors" name="category_architect"
+                        domain="['|', ('category_id.name', '=ilike', 'vendor'), ('category_id.name', '=ilike', 'vendor')]"/>
+
+                <filter string="Architects" name="category_architect"
+                        domain="['|', ('category_id.name', '=ilike', 'architect'), ('category_id.name', '=ilike', 'architect')]"/>
+
+                <filter string="Interior Designers" name="category_interior_designer"
+                        domain="[('category_id.name', '=ilike', 'interior designer')]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="partner_list">
+        <field name="name">Partners</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="res_partner_view_filter"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">All Partners</p>
+        </field>
+    </record>
+    <menuitem id="partners_root_menu" name="Partners" action="partner_list" web_icon="metrotiles_partners,static/description/icon.png" sequence="1"/>
+
+    <record model="ir.actions.act_window" id="customer_list">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('category_id.name', '=', 'Customer')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Customers</p>
+        </field>
+    </record>
+    <menuitem id="customer_root_menu" name="Customers" action="customer_list" parent="partners_root_menu" sequence="2"/>
+
+     <record model="ir.actions.act_window" id="vendor_list">
+        <field name="name">Product Vendors</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('category_id.name', '=ilike', 'vendor')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Vendors</p>
+        </field>
+    </record>
+    <menuitem id="vendor_root_menu" name="Vendors" action="vendor_list" parent="partners_root_menu" sequence="3"/>
+
+    <record model="ir.actions.act_window" id="architect_list">
+        <field name="name">Architects</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('category_id.name', '=ilike', 'architect')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Architects</p>
+        </field>
+    </record>
+    <menuitem id="architect_root_menu" name="Architects" action="architect_list" parent="partners_root_menu" sequence="4"/>
+
+    <record model="ir.actions.act_window" id="interior_designer_list">
+        <field name="name">Interior Designers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('category_id.name', '=ilike', 'interior designer')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Interior Designers</p>
+        </field>
+    </record>
+    <menuitem id="interior_designer_root_menu" name="Interior Designer" action="interior_designer_list" parent="partners_root_menu" sequence="5"/>
+
+    <record id="metrotiles_partners_view_partner_form" model="ir.ui.view">
+        <field name="name">metrotiles.res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/div/h1 " position="after">
+                <field name="name_abbrev" placeholder="Abbreviation" class="font-weight-bold"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

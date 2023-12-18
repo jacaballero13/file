@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inventory_report_wizard" model="ir.ui.view">
+        <field name="name">inventory.report.wizard.wizard</field>
+        <field name="model">inventory.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Report">
+                <header>
+                    <h1>Inventory Report</h1>
+                </header>
+                <sheet>
+                    <group name="inventory_report" string="Filters">
+                        <group>
+                            <field name="branch_name" invisible="1"/>
+                            <field name="warehouse_id" options="{'no_create': True}"/>
+                            <field name="filter_by" widget="radio"/>
+                            <field name="product_id" widget="many2many_tags" attrs="{'invisible': [('filter_by', '=', 'product_categ')]}" domain="[('branch_id.name', '=', branch_name)]" options="{'no_create': True}"/>
+                            <field name="prod_categ" attrs="{'invisible': [('filter_by', '=', 'product')]}" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <footer>
+                        <button string="Generate xlsx" name="action_generate_xlsx_report" type="object" class="btn-primary"/>
+                        <button string="Generate csv" name="action_generate_csv_report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>    
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="inventory_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Generate Inventory Report</field>
+        <field name="res_model">inventory.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="inventory_report_wizard_menu"
+        name="Generate Inventory Report"
+        action="inventory_report_wizard_action"
+        parent="stock.menu_warehouse_report"
+        sequence="10"/>
+
+</odoo>

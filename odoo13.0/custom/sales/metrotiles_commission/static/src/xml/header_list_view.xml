@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<template xml:space="preserve">
+     <t t-extend="ListView.buttons" >
+          <t t-jquery="button.o_list_button_add" t-operation="before">
+               <t  t-if="widget">
+                    <button type="button" class="btn btn-primary o_list_create_interior_designer" t-if="widget.modelName == 'res.partner' and widget._title == 'Architects and Interior Designers'">Add Interior Designer</button>
+              </t>
+          </t>
+
+            <t t-jquery="button.o_list_create_interior_designer" t-operation="before">
+                <t  t-if="widget">
+                    <button context="{'is_creating_architect': True}" type="button" class="btn btn-primary o_list_create_architect" t-if="widget.modelName == 'res.partner' and widget._title == 'Architects and Interior Designers'">Add Architect</button>
+              </t>
+          </t>
+        </t>
+</template>

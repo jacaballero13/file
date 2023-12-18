@@ -1,0 +1,9 @@
+<odoo>
+    <data>
+         <record model="res.users" id="procurement_res_users">
+            <field name="partner_id" ref="metrotiles_procurement.procurement_res_partner"/>
+            <field name="login">procurement@metrotiles.com.ph</field>
+            <field name="password">procurement</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- Search View -->
+    <record model="ir.ui.view" id="bol_inherit_filters_search">
+        <field name="name">shipment.bill_lading.search</field>
+        <field name="model">shipment.bill_lading</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="bill_line" string="Product Name/Default Code" filter_domain="['|',('bill_line.order_line.product_id.default_code','ilike',self),('bill_line.order_line.product_id.name','ilike',self)]"/>
+                <field name="bill_line" string="Contract Ref #" filter_domain="[('bill_line.so_contract_ref','ilike',self)]"/>
+                <field name="bill_line" string="Client Name" filter_domain="[('bill_line.client_name','ilike',self)]"/>
+                <field name="container_no" string="Container #" filter_domain="[('container_no','ilike',self)]"/>
+                <field name="shipment_id" string="Shipment #" filter_domain="[('shipment_id','ilike',self)]"/>
+                <!-- <field name="payment_method"/>
+                <filter name="fl_draft" string="Draft" domain="[('state','=', 'draft')]"/>
+                <group>
+                    <filter name="gr_pay" string="Bayar Via" context="{'group_by':'payment_method'}"/>
+                </group> -->
+            </search>
+        </field>
+    </record>
+</odoo>

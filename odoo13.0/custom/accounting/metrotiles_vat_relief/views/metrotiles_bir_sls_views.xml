@@ -1,0 +1,57 @@
+<odoo>
+        <record id="metrotiles_bir_sls_view_tree" model="ir.ui.view">
+            <field name="name">metrotiles_bir_sls.tree</field>
+            <field name="model">metrotiles.bir_sls</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="1" edit="1" import="0">
+                    <field name="mt_move_id"/>
+                    <field name="mt_branch"/>
+                    <field name="mt_date"/>
+                    <field name="mt_ref"/>
+                    <field name="mt_tin"/>
+                    <field name="mt_partner_id"/>
+                    <field name="mt_address"/>
+                    <field name="mt_goods"/>
+                    <field name="mt_services"/>
+                    <field name="mt_rental"/>
+                    <field name="mt_zero_rated"/>
+                    <field name="mt_output_tax"/>
+                    <field name="mt_gross_sales"/>
+                    <field name="mt_account_id" optional="hide"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="metrotiles_summary_sales_search_view" model="ir.ui.view">
+            <field name="name">metrotiles.bir_sls.search.view</field>   
+            <field name="model">metrotiles.bir_sls</field>  
+            <field name="arch" type="xml">    
+                <search string="Posting Date">
+                    <field name="mt_tin" string="TIN"/>
+                    <field name="mt_date" string="Posting Date"/>
+                    <separator/>
+                    <filter string="TIN" name="mt_tin" domain="[('mt_tin', '=', True )]"/>
+                    <filter string="Posting Date" name="mt_date" domain="[]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="TIN" name="mt_tin" domain="[]" context="{'group_by':'mt_tin'}"/>
+                        <filter string="Posting Date" name="mt_date" domain="[]" context="{'group_by':'mt_date'}"/>
+                    </group>       
+                </search>     
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_metrotiles_bir_sls">
+            <field name="name">BIR (SLP) Summary List of Sales</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">metrotiles.bir_sls</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="metrotiles_summary_sales_search_view"/>
+            <field name="context">{'group_by': 'mt_date'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_no_content_create">No Summary List of Sales. Create on First !</p>
+            </field>
+        </record>
+
+        <menuitem id="mti_sls_menu_sub" name="BIR (SLS) Report" parent="mti_slp_menu_root" action="action_metrotiles_bir_sls" sequence="15" groups="account.group_account_manager"/>
+</odoo>

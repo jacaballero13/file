@@ -1,0 +1,51 @@
+
+<odoo>
+
+    <record id="metrotiles_change_item_view_form" model="ir.ui.view">
+        <field name="name">metrotiles.change.item.view.form</field>
+        <field name="model">metrotiles.change.item</field>
+        <field name="arch" type="xml">
+            <form string="Change Contract Items">
+                <sheet>
+                    <group>
+                        <field name="sales_order_id"/>
+                        <field name="adjustment_type"/>
+                    </group>
+                    <notebook>
+                        <page string="Change Contract Items">
+                            <group>
+                                <field name="change_item_ids" widget="one2many_list" nolabel="1">
+                                    <tree editable="buttom">
+                                        <field name="change_item_id" invisible="1"/>
+                                        <field name="location_id" optional="hide"/>
+                                        <field name="factory_id" optional="hide"/>
+                                        <field name="series_id" optional="hide"/>
+                                        <field name="application_id" force_save="1" optional="hide"/>
+                                        <field name="product_id" force_save="1"/>
+                                        <field name="package_id" force_save="1" optional="hide"/>
+                                        <field name="size" force_save="1" readonly="1"/>
+                                        <field name="variant" force_save="1" readonly="1"/>
+                                        <field name="total_qty" force_save="1"/>
+                                        <field name="price_unit" force_save="1" readonly="1"/>
+                                        <field name="column_discounts" widget="many2many_tags" force_save="1" optional="hide"/>
+                                        <field name="rif" force_save="1" optional="hide" readonly="1"/>
+                                        <field name="qty_delivered" force_save="1" optional="hide" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_change_items" string="Create" type="object" class="btn-primary"/>
+                    <button name="action_create_new" 
+                        string="Save/New" 
+                        type="object" 
+                        class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

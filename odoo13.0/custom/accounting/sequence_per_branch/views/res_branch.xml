@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="res_branch_sequence_form">
+      <field name="name">res.branch.form</field>
+      <field name="model">res.branch</field>
+      <field name="inherit_id" ref="branch.branch_res_branch_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='address']" position="after">
+          <field name="branch_sequence"/>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

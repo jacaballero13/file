@@ -1,0 +1,74 @@
+
+<odoo>
+    <record id="metrotiles_change_designer_commision_view_form" model="ir.ui.view">
+        <field name="name">metrotiles.changes.designer.commision.view.form</field>
+        <field name="model">metrotiles.changes.designer.commision</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="sales_order_id"/>
+                        <field name="adjustment_type"/>
+                    </group>
+                    <notebook>
+                        <page string="Change Architect">
+                            <field name="architect_page_id" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="architect_line_id" invisible="1"/>
+                                    <!-- <field name="architect_name"/> -->
+                                    <field name="architect_id"/>
+                                    <field name="architect_com_type"/>
+                                    <field name="architect_commission"/>
+                                    <field name="architect_subtotal_price"
+                                        widget="monetary"
+                                        options="{'currency_field': 'architect_currency_id'}"
+                                        modifiers="{'readonly':true}"
+                                        force_save="1" />
+                                    <field name="architect_adjust_total"
+                                        widget="monetary"
+                                        options="{'currency_field': 'architect_currency_id'}"
+                                        modifiers="{'readonly':true}" 
+                                        force_save="1"/>
+                                    <field name="architect_currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <notebook>
+                        <page string="Change Interior Designer">
+                            <field name="designer_page_id" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="change_designer_id" invisible="1"/>
+                                    <field name="designer_id"/>
+                                    <field name="designer_com_type"/>
+                                    <field name="designer_commission"/>
+                                    <field name="designer_initial_price_value"/>
+                                    <field name="designer_subtotal_price"
+                                        widget="monetary"
+                                        options="{'currency_field': 'designer_currency_id'}"
+                                        modifiers="{'readonly':true}"
+                                        force_save="1" />
+                                    <field name="designer_adjust_total"
+                                        widget="monetary"
+                                        options="{'currency_field': 'designer_currency_id'}"
+                                        modifiers="{'readonly':true}"
+                                        force_save="1" />
+                                    <field name="designer_currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_change_designer" string="Create" type="object" class="btn-primary"/>
+                    <button name="action_create_new" 
+                        string="Save/New" 
+                        type="object" 
+                        class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

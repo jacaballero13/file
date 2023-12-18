@@ -1,0 +1,16 @@
+<odoo>
+    <record id="metrotiles_discount_form" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">metrotiles.discount</field>
+            <field name="arch" type="xml">
+              <form string="Discount" class="o_sale_order">
+                  <field name="name" invisible="1"/>
+                  <group>
+                    <field name="is_discount_type_editable" invisible="1"/>
+                    <field name="discount_type" force_save="1" attrs="{'readonly': [('is_discount_type_editable', '=', False)]}"/>
+                    <field name="value" />
+                  </group>
+              </form>
+            </field>
+    </record>
+</odoo>

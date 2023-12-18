@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="action_calendar_events_form_view_inherit">
+            <field name="name">calendar.events.form.view.inherit</field>
+            <field name="model">calendar.events</field>
+            <field name="inherit_id" ref="metrotiles_logistic.action_calendar_events_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='responsible_user']" position="before">
+                    <field name="pullout_type"/>
+                    <field name="pullout_contract_id"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

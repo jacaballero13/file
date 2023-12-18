@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">metrotiles_move_form_view</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@id='invoice_tab']/group[@class='oe_subtotal_footer']/field[@name='amount_by_group']"
+                   position="before">
+                    <field name="discounts" widget="many2many_tags" nolabel="1" class="d-none"/>
+                    <field name="amount_discount"
+                           widget="metrotiles_many2many_discount"
+                           options="{'target_field': 'discounts'}"
+                           nolabel="1" colspan="2"
+                           attrs="{'invisible': [('amount_discount','=', 0.0)]}"
+                    ></field>
+            </xpath>
+
+            <xpath expr="//page[@id='invoice_tab']/group[@class='oe_subtotal_footer']/field[@name='amount_total']"
+                   position="attributes">
+                <attribute name="string">Subtotal</attribute>
+            </xpath>
+
+            <xpath expr="//page[@id='invoice_tab']/group[@class='oe_subtotal_footer']/field[@name='amount_total']"
+                   position="replace">
+               <field name="amount_discounted_total" string="Total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='discount']" position="after">
+                <field name="discounts" widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="//page[@id='invoice_tab']//field[@name='amount_by_group']" position="after">
+                <field name="vatable" force_save="1" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

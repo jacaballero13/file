@@ -1,0 +1,599 @@
+<odoo>
+    <template id="metrotiles_application_template" inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//div[@name='total']/div/table" position="replace">
+        </xpath>
+
+        <xpath expr="//section[@id='details']/table" position="replace">
+            <t t-set="has_column_discount" t-value="len(sale_order.column_discounts) > 0"/>
+            <t t-set="has_charges" t-value="len(sale_order.charge_ids) > 0"/>
+
+            <table class="table table-sm custom-border" id="sales_order_table">
+                <thead class="bg-100">
+                    <!-- <tr>
+                        <th colspan="2">Area Description</th>
+                        <th colspan="2">Product Description</th>
+                        <th colspan="99">Product Specification</th>
+                    </tr> -->
+                    <tr>
+                        <th colspan="2"></th>
+                        <th>Item</th>
+                        <th>Description</th>
+                        <th class="text-center">Size (cm)</th>
+                        <th class="text-right">Qty (Pc)</th>
+                        <!-- <th t-if="has_column_discount" class="text-right">Gross Price</th> -->
+                        <!-- <th t-if="has_column_discount" class="text-center">Discounts</th> -->
+                        <th class="text-right">Price Net</th>
+                        <th colspan="99" class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-200">
+                        <td colspan="99">Materials</td>
+                    </tr>
+
+                    <t t-set="location_total" t-value="0"/>
+                    <t t-set="current_section" t-value="False"/>
+
+                    <t t-foreach="sale_order.location_variant_group" t-as="l">
+                        <t t-if="l.get('display_type') == 'line_section'">
+                            <tr class="bg-100">
+                                <td colspan="99">
+                                    <t t-esc="l.get('name')"/>
+                                </td>
+                            </tr>
+                            <t t-set="current_section" t-value="l.get('name')"/>
+                        </t>
+                        <t t-elif="l.get('display_type') == 'line_total'">
+                            <tr>
+                                <td class="text-right" colspan="9">
+                                    <strong>
+                                        <t t-esc="current_section  + ' SUBTOTAL:'"/>
+                                    </strong>
+                                </td>
+                                <td class="text-right">
+                                    <strong>
+                                        <t t-esc="l.get('amount')"
+                                           t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-else="">
+                            <tr>
+                                <td colspan="2">
+                                    <t t-esc="l.get('application')"/>
+                                </td>
+                                <td>
+                                    <t t-esc="l.get('factory')"/>
+                                </td>
+                                <td t-esc="l.get('product_display_name')"></td>
+                                <td t-esc="l.get('size')" class="text-center"></td>
+                                <td t-esc="l.get('qty')" class="text-right"></td>
+                                <!-- <td t-esc="l.get('price_unit')"
+                                    t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'
+                                    t-if="has_column_discount"
+                                    class="text-right"></td>
+                                <td t-if="has_column_discount" class="text-center">
+                                    <t t-esc="l.get('discounts', 'N/A') or 'N/A'"/>
+                                </td> -->
+                                <td t-esc="l.get('price_net')"
+                                    t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'
+                                    class="text-right"></td>
+                                <td colspan="99" t-esc="l.get('price_subtotal')"
+                                    t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'
+                                    class="text-right"></td>
+                            </tr>
+                            <t t-set="location_total" t-value="location_total + l.get('price_subtotal')"/>
+                        </t>
+                    </t>
+
+                    <!-- MATERIALS TOTAL !-->
+                    <tr class="border-top-0 text-right">
+                        <td colspan="9">
+                            <strong>TOTAL:</strong>
+                        </td>
+                        <td>
+                            <span
+                                    data-id="total_untaxed"
+                                    t-field="sale_order.amount_untaxed"
+                                    t-options='{"widget": "monetary","display_currency": sale_order.pricelist_id.currency_id}'
+                            />
+                        </td>
+                    </tr>
+
+                    <!-- DISCOUNTS !-->
+                    <t t-set="i" t-value="1"/>
+                    <t t-set="total_untaxed" t-value="sale_order.amount_untaxed"/>
+                    <t t-foreach="sale_order.total_discounts" t-as="discount">
+                        <tr class="border-top-0 text-right">
+                            <td colspan="9" class="border-top-0">
+                                <span class="mr-1">Addistional Disc.</span>
+                                <t t-if="discount.discount_type == 'percentage'"
+                                   t-esc="'{}{}'.format(discount.value,'%')"/>:
+                            </td>
+                            <td class="text-right border-top-0">
+                                <t t-if="discount.discount_type == 'percentage'">
+                                    <t t-set="amount_disc" t-value="total_untaxed * (discount.value / 100)"/>
+                                    <t t-set="total_untaxed" t-value="total_untaxed - amount_disc"/>
+
+                                    <t t-esc="amount_disc"
+                                       t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="total_untaxed" t-value="total_untaxed - discount.value"/>
+                                    <t t-esc="discount.value"
+                                       t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </t>
+
+                    <!-- MATERIAL NET TOTAL !-->
+                    <tr class="border-top-0 text-right"
+                        t-if="sale_order.amount_tax > 0 and len(sale_order.total_discounts) > 0">
+                        <td colspan="9" class="border-top-0">
+                            <strong>PRODUCT NET TOTAL:</strong>
+                        </td>
+                        <td class="border-top-0">
+                            <span data-id="materials_net_total" t-field="sale_order.materials_net_total"
+                                  t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                        </td>
+                    </tr>
+
+                    <!-- TAX !-->
+                    <tr class="border-top-0 text-right" t-if="sale_order.amount_tax > 0">
+                        <td colspan="9" class="border-top-0">
+                            <strong>
+                                VAT:
+                            </strong>
+                        </td>
+                        <td class="text-right border-top-0 text-info">
+                            <span data-id="amount_tax" t-field="sale_order.amount_tax"
+                                  t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                        </td>
+                    </tr>
+
+                    <!-- MATERIAL NET TOTAL !-->
+                    <tr class="border-top-0 text-right">
+                        <t t-if="has_charges">
+                            <td colspan="9" class="border-top-0 pb-2">
+                                <strong>PRODUCT TOTAL:</strong>
+                            </td>
+                            <td class="border-top-0 pb-2">
+                                <strong data-id="material_total" t-field="sale_order.material_total"
+                                        class="border-dark border-top"
+                                        t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </t>
+                        <t t-else="">
+                            <td colspan="9" class="border-top-0">
+                                <strong>TOTAL CONTRACT PRICE:</strong>
+                            </td>
+                            <td class="text-right border-top-0 bg-200">
+                                <strong data-id="total_amount" t-field="sale_order.amount_total"
+                                        t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </t>
+
+                    </tr>
+
+                    <!-- CHARGES !-->
+                    <t t-if="has_charges">
+                        <tr>
+                            <th colspan="99" class="border-top-0">
+                                <h4>CHARGES AND FEES</h4>
+                            </th>
+                        </tr>
+                        <tr class="bg-100">
+                            <th colspan="9" name="th_description">
+                                Description
+                            </th>
+                            <th colspan="1" name="th_amount"
+                                style="width:145px; max-width:300px">Amount Charges
+                            </th>
+                        </tr>
+                        <t t-foreach="sale_order.charge_ids" t-as="line">
+                            <tr>
+                                <td colspan="9" class="text-left">
+                                    <span t-field="line.charge_id"/>
+                                </td>
+                                <td colspan="1" class="text-right">
+                                    <span t-field="line.charge_amount"
+                                          t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                                </td>
+                            </tr>
+                        </t>
+                        <!-- NET CHARGES !-->
+                        <tr t-if="sale_order.vat_charges" class="border-top-0 border-bottom-0 text-right">
+                            <td t-if="sale_order.charge_ids" colspan="9" class="border-top-0">
+                                <strong>NET CHARGES:</strong>
+                            </td>
+                            <td class="border-top-0 ">
+                                <span data-id="net_charges" t-field="sale_order.net_charges"
+                                      t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+                        <!-- VAT CHARGES !-->
+                        <tr t-if="sale_order.vat_charges" class="border-top-0 border-bottom-0 text-right">
+                            <td colspan="9" class="border-top-0">
+                                <strong>VAT:</strong>
+                            </td>
+                            <td class="border-top-0 ">
+                                <span class="text-info" data-id="vat_charges" t-field="sale_order.vat_charges"
+                                      t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+                        <!-- CHARGE TOTAL !-->
+                        <tr class="border-top-0 border-bottom-0 text-right">
+                            <td class="border-top-0 pb-4" colspan="9">
+                                <strong>CHARGE TOTAL:</strong>
+                            </td>
+                            <td class="border-top-0 pb-4">
+                                <strong t-if="sale_order.vat_charges" class="border-dark border-top"
+                                        data-id="total_charges"
+                                        t-field="sale_order.total_charges"
+                                        t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+
+                                <strong t-else="" data-id="total_charges" t-field="sale_order.total_charges"
+                                        t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+
+                        <tr class="text-right">
+                            <td colspan="10" class="border-top">
+                            </td>
+                        </tr>
+
+                        <!-- VAT TOTAL !-->
+                        <t t-set="vat_total" t-value="sale_order.amount_tax + sale_order.vat_charges"/>
+
+                        <tr class="text-right" t-if="vat_total > 0">
+                            <td colspan="9" class="border-top-0">
+                                <strong>VAT TOTAL</strong>
+                            </td>
+                            <td class="text-right border-top-0">
+                                <strong t-esc="vat_total"
+                                        t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+
+                        <tr class="text-right">
+                            <td colspan="9" class="border-top-0 ">
+                                <strong>PRODUCT AND CHARGES NET TOTAL</strong>
+                            </td>
+                            <td class="text-right border-top-0 ">
+                                <strong t-esc="sale_order.net_charges + sale_order.materials_net_total"
+                                        t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+
+                        <!-- CONTRACT PRICE !-->
+                        <tr class="text-right">
+                            <td colspan="9" class="border-top-0">
+                                <strong>TOTAL CONTRACT PRICE:</strong>
+                            </td>
+                            <td class="text-right border-top-0 bg-200">
+                                <strong data-id="total_amount" t-field="sale_order.amount_total"
+                                        t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+    <template id="metrotiles_application_report" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@id='total']/div/table"
+               position="replace">
+        </xpath>
+
+        <xpath expr="//table[@class='table table-sm o_main_table']" position="replace">
+            <t t-set="has_column_discount" t-value="len(doc.column_discounts) > 0"/>
+            <t t-set="has_charges" t-value="len(doc.charge_ids) > 0"/>
+
+            <table class="table table-sm" id="sales_order_table">
+                <thead class="bg-100 text-danger">
+                    <!-- <tr>
+                        <th colspan="2" class="border">Area Description</th>
+                        <th colspan="2" class="border">Product Description</th>
+                        <th colspan="99" class="border">Product Specification</th>
+                    </tr> -->
+                    <tr>
+                        <!-- <th colspan="2" class="border"></th> -->
+                        <th class="border">Image</th>
+                        <th colspan="2" class="border">AREA DESCRIPTION</th>
+                        <th class="border">DESCRIPTION</th>
+                        <th class="text-center">SIZE (cm)</th>
+                        <th class="border text-right">QTY (Pc)</th>
+                        <!-- <th t-if="has_column_discount" class="border text-right">GROSS PRICE</th>
+                        <th t-if="has_column_discount" class="border text-center">DISCOUNTS</th> -->
+                        <th class="border text-right">PRICE NET</th>
+                        <th class="border text-right" colspan="99">AMOUNT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="location_total" t-value="0"/>
+                    <t t-set="current_section" t-value="False"/>
+
+                    <t t-foreach="doc.location_variant_group" t-as="l">
+                        <t t-if="l.get('display_type') == 'line_section'">
+                            <tr class="bg-100">
+                                <td></td>
+                                <td colspan="99">
+                                    <t t-esc="l.get('name')"/>
+                                </td>
+                            </tr>
+                            <t t-set="current_section" t-value="l.get('name')"/>
+                        </t>
+                        <t t-elif="l.get('display_type') == 'line_total'">
+                            <tr>
+                                <td colspan="9" class="text-right" style="border: 0px solid #dee2e6">
+                                    <strong>
+                                        <t t-esc="current_section  + ' SUBTOTAL:'"/>
+                                    </strong>
+                                </td>
+                                <td style="border: 0px solid #dee2e6" class="text-right">
+                                    <strong>
+                                        <t t-esc="l.get('amount')"
+                                           t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-else="">
+                            <tr>
+                                <td>
+                                    <t t-value="l.get('product_id')" t-set="photo_id"/>
+                                    <t t-foreach="doc.order_line.product_id" t-as="p_id">
+                                        <t t-if="p_id.id == photo_id">
+                                            <img t-attf-src="data:image/*;base64,{{p_id.image_1920}}"  style="height:100px%; width:100px"/>          
+                                        
+                                        </t>
+                                    </t>
+                                </td>
+                                <td class="border" colspan="2">
+                                    <t t-esc="l.get('application','N/A')"/>
+                                </td>
+                                <!-- <td class="border">
+                                    <t t-esc="l.get('factory','N/A')"/>
+                                </td>
+                                <td t-esc="l.get('product_display_name')" class="border"></td> -->				
+                                <td class="border">
+				
+
+				<t t-if="l.get('factory')">
+                 		 <span style="text-transform: uppercase;"> 
+                                        <t style="text-transform: uppercase;" t-esc="l.get('factory')+' - '+l.get('series_id','N/A')+' '+ l.get('product_display_name')"/>
+                                    </span>
+				</t>
+					<t t-if="not l.get('factory')">
+                                    <span style="text-transform: uppercase;"> 
+                                        <t style="text-transform: uppercase;" t-esc="'N/A'+' - '+l.get('series_id','N/A')+' '+ l.get('product_display_name')"/>
+                                    </span>
+</t>
+                                </td>
+                                <td t-esc="l.get('size')" class="border text-center"></td>
+                                <td t-esc="l.get('qty')" class="border text-right"></td>
+                                <!-- <td t-if="has_column_discount" t-esc="l.get('price_unit')"
+                                    t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                    class="border text-right"></td>
+                                <td t-if="has_column_discount" class="border text-center">
+                                    <t t-esc="l.get('discounts', 'N/A') or 'N/A'"/>
+                                </td> -->
+                                <td t-esc="l.get('price_net')"
+                                    t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                    class="border text-right"></td>
+                                <td t-esc="l.get('price_subtotal')"
+                                    t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                    class="border text-right"
+                                    colspan="99"></td>
+                            </tr>
+
+                            <t t-set="location_total" t-value="location_total + l.get('price_subtotal')"/>
+                        </t>
+                    </t>
+<!--                    <tr class="border-top-0 text-right">-->
+<!--                        <td colspan="9">-->
+<!--                            <strong>WASTAGE <t t-esc="doc.wastage" />%:</strong>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <span-->
+<!--                                    data-id="wastage_amount"-->
+<!--                                    t-field="doc.wastage_amount"-->
+<!--                                    t-options='{"widget": "monetary","display_currency": doc.pricelist_id.currency_id}'-->
+<!--                            />-->
+<!--                        </td>-->
+<!--                    </tr>-->
+
+                    <tr class="border-top-0 text-right">
+                        <td colspan="9">
+                            <strong>TOTAL:</strong>
+                        </td>
+                        <td>
+                            <span
+                                    data-id="total_untaxed"
+                                    t-field="doc.amount_untaxed"
+                                    t-options='{"widget": "monetary","display_currency": doc.pricelist_id.currency_id}'
+                            />
+                        </td>
+                    </tr>
+
+                    <!-- DISCOUNTS !-->
+                    <t t-set="i" t-value="1"/>
+                    <t t-set="total_untaxed" t-value="doc.amount_untaxed"/>
+                    <t t-foreach="doc.total_discounts" t-as="discount">
+                        <tr class="border-top-0 text-right">
+                            <td colspan="9" class="border-top-0">
+                                <span class="mr-1">Addistional Disc.</span>
+                                <t t-if="discount.discount_type == 'percentage'"
+                                   t-esc="'{}{}'.format(discount.value,'%')"/>:
+                            </td>
+                            <td class="text-right border-top-0">
+                                <t t-if="discount.discount_type == 'percentage'">
+                                    <t t-set="amount_disc" t-value="total_untaxed * (discount.value / 100)"/>
+                                    <t t-set="total_untaxed" t-value="total_untaxed - amount_disc"/>
+
+                                    <t t-esc="amount_disc"
+                                       t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="total_untaxed" t-value="total_untaxed - discount.value"/>
+                                    <t t-esc="discount.value"
+                                       t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </t>
+
+                    <!-- MATERIAL NET TOTAL !-->
+                    <tr class="border-top-0 text-right" t-if="doc.amount_tax > 0 and len(doc.total_discounts) > 0">
+                        <td colspan="9" class="border-top-0">
+                            <strong>PRODUCT NET TOTAL:</strong>
+                        </td>
+                        <td class="border-top-0">
+                            <span data-id="materials_net_total" t-field="doc.materials_net_total"
+                                  t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                        </td>
+                    </tr>
+
+                    <!-- TAX !-->
+                    <tr class="border-top-0 text-right" t-if="doc.amount_tax > 0">
+                        <td colspan="9" class="border-top-0">
+                            <strong>
+                                VAT:
+                            </strong>
+                        </td>
+                        <td class="text-right border-top-0 text-info">
+                            <span data-id="amount_tax" t-field="doc.amount_tax"
+                                  t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                        </td>
+                    </tr>
+
+                    <!-- MATERIAL NET TOTAL !-->
+                    <tr class="border-top-0 text-right">
+                        <t t-if="has_charges">
+                            <td colspan="9" class="border-top-0 pb-4">
+                                <strong>PRODUCT TOTAL:</strong>
+                            </td>
+                            <td class="border-top-0">
+                                <strong data-id="material_total" t-field="doc.material_total"
+                                        class="border-dark border-top"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                            </td>
+                        </t>
+                        <t t-else="">
+                            <tr class="border-top text-right">
+                                <td colspan="9" class="border-top-0">
+                                    <strong>TOTAL CONTRACT PRICE:</strong>
+                                </td>
+                                <td class="text-right border-top-0 bg-200">
+                                    <strong data-id="total_amount" t-field="doc.amount_total"
+                                            t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tr>
+
+                    <!-- CHARGES !-->
+                    <t t-if="doc.charge_ids">
+                        <tr>
+                            <th colspan="99" class="bg-100 text-danger text-left border">Charges and Fees</th>
+                        </tr>
+                        <tr>
+                            <th colspan="9" name="th_description" class="bg-100 text-danger text-left border">
+                                Description
+                            </th>
+                            <th colspan="1" name="th_amount" class="bg-100 text-danger text-right border"
+                                style="width:145px; max-width:300px">Amount Charges
+                            </th>
+                        </tr>
+                        <t t-foreach="doc.charge_ids" t-as="line">
+                            <tr>
+                                <td colspan="9" class="text-left border">
+                                    <span t-field="line.charge_id"/>
+                                </td>
+                                <td colspan="" class="text-right border">
+                                    <span t-field="line.charge_amount"
+                                          t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+                        <!-- NET CHARGES !-->
+                        <tr t-if="doc.vat_charges" class="border-top-0 border-bottom-0 text-right">
+                            <td t-if="doc.charge_ids" colspan="9" class="border-top-0">
+                                <strong>NET CHARGES:</strong>
+                            </td>
+                            <td class="border-top-0 ">
+                                <span data-id="net_charges" t-field="doc.net_charges"
+                                      t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+                        <!-- VAT CHARGES !-->
+                        <tr t-if="doc.vat_charges" class="border-top-0 border-bottom-0 text-right">
+                            <td colspan="9" class="border-top-0">
+                                <strong>VAT:</strong>
+                            </td>
+                            <td class="border-top-0 ">
+                                <span class="text-info" data-id="vat_charges" t-field="doc.vat_charges"
+                                      t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+                        <!-- CHARGE TOTAL !-->
+                        <tr class="border-top-0 border-bottom-0 text-right">
+                            <td class="border-top-0 pb-4" colspan="9">
+                                <strong>CHARGE TOTAL:</strong>
+                            </td>
+                            <td class="border-top-0 pb-4">
+                                <strong t-if="doc.vat_charges" class="border-dark border-top" data-id="total_charges"
+                                        t-field="doc.total_charges"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+
+                                <strong t-else="" data-id="total_charges" t-field="doc.total_charges"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+
+                        <!-- GRAND TOTALS !-->
+                        <!-- VAT TOTAL !-->
+                        <t t-set="vat_total" t-value="doc.amount_tax + doc.vat_charges"/>
+                        <tr class="text-right">
+                            <td colspan="10" class="border-top">
+                            </td>
+                        </tr>
+                        <tr class="border-top text-right" t-if="vat_total > 0">
+                            <td colspan="9" class="border-top-0">
+                                <strong>VAT TOTAL:</strong>
+                            </td>
+                            <td class="text-right border-top-0">
+                                <strong t-esc="vat_total"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+
+                        <tr class="text-right" t-if="vat_total > 0">
+                            <td colspan="9" class="border-top-0 ">
+                                <strong>PRODUCT AND CHARGES NET TOTAL:</strong>
+                            </td>
+                            <td class="text-right border-top-0 ">
+                                <strong t-esc="doc.net_charges + doc.materials_net_total"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+
+                        <!-- CONTRACT PRICE !-->
+                        <tr class="text-right">
+                            <td colspan="9" class="border-top-0">
+                                <strong>TOTAL CONTRACT PRICE:</strong>
+                            </td>
+                            <td class="text-right border-top-0 bg-200">
+                                <strong data-id="total_amount" t-field="doc.amount_total"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+</odoo>

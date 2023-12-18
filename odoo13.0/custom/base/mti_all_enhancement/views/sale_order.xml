@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added required fields in columns of list view -->
+        <record model="ir.ui.view" id="sale_order_inherit_sales_report_tree">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                    <attribute name="string">Total</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="attributes">
+                    <attribute name="string">Total Contract Price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_tax']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='client_order_ref']" position="attributes">
+                    <attribute name="optional">hide</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="before">
+                    <field name="amount_discount" string="Additional Disc." optional="hide"/>
+                    <field name="materials_net_total" string="Product Net Total" optional="hide"/>
+                    <field name="amount_tax" string="Vat" optional="hide"/>
+                    <field name="material_total" string="Product Total" optional="hide"/>
+                    <field name="net_charges" string="Net Charges" optional="hide"/>
+                    <field name="vat_charges" string="Vat Charges" optional="hide"/>
+                    <field name="total_charges" string="Charges Total" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="delivery_charge" string="Delivery Charges" optional="hide"/>
+                    <field name="interior_designer" string="Interior Designer " optional="hide"/>
+                    <field name="architect" string="Architect" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- Added Unserved Qty and Related SAF -->
+        <record id="view_order_form_inherit_id" model="ir.ui.view">
+            <field name="name">metrotiles_userved_quantity</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_invoice']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <button name="open_sales_adjustment" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('saf_count', '=', 0)]}">
+                        <field name="saf_count" widget="statinfo" string="Sales Adjustment Form"/>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='qty_delivered']" position="after">
+                    <field name="unserved_qty" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- Added Separation of Contract Reports -->
+        <record id="contract_action_report_tree" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Order Reports">
+                    <field name="name" widget="many2one_button" />
+                    <field name="date_order" />
+                    <field name="commitment_date" />
+                    <field name="partner_id" />
+                    <field name="user_id" />
+                    <field name="amount_untaxed" optional="show"/>
+                    <field name="amount_discount" string="Additional Disc." optional="show"/>
+                    <field name="materials_net_total" string="Product Net Total" optional="show"/>
+                    <field name="amount_tax" string="Vat" optional="show" />
+                    <field name="material_total" string="Product Total" optional="show"/>
+                    <field name="net_charges" string="Net Charges" optional="show"/>
+                    <field name="vat_charges" string="Vat Charges" optional="show"/>
+                    <field name="total_charges" string="Charges Total" optional="show"/>
+                    <field name="amount_total" optional="show"/>
+                    <field name="delivery_charge" string="Delivery Charges" optional="show"/>
+                    <field name="interior_designer" string="Interior Designer" optional="show"/>
+                    <field name="architect" string="Architect" optional="show"/>
+                </tree> 
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="sales_order_inherit_action_report">
+            <field name="name">Contract Reports</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('state','in', ('sale', 'to_check', 'done'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_smiling_face"> No Data
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="sales_order_parent_menu1"
+            name="Sales Order Report"
+            groups="sales_team.group_sale_manager"
+            parent="sale.menu_sale_report"
+            action="sales_order_inherit_action_report"
+            sequence="3"/>
+        <!-- Added Arch. and ID Reports -->
+        <record id="architect_action_report_tree" model="ir.ui.view">
+            <field name="name">metrotiles.architect.tree</field>
+            <field name="model">metrotiles.architect</field>
+            <field name="arch" type="xml">
+                <tree string="Architect">
+                    <field name="architect_sale_id" string="Sales Order" widget="many2one_button"/>
+                    <field name="architect_id"/>
+                    <field name="architect_commission"/>
+                    <field name="architect_com_type"/>
+                    <field name="architect_subtotal_price" />
+                </tree> 
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="architect_action_report">
+            <field name="name">Architect</field>
+            <field name="res_model">metrotiles.architect</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_smiling_face">No Data
+                </p>
+            </field>
+        </record>
+
+        <record id="interior_designer_action_report_tree" model="ir.ui.view">
+            <field name="name">metrotiles.designer.tree</field>
+            <field name="model">metrotiles.designer</field>
+            <field name="arch" type="xml">
+                <tree string="Interior Designers">
+                    <field name="designer_sale_id" string="Sales Order" widget="many2one_button"/>
+                    <field name="designer_id"/>
+                    <field name="designer_commission"/>
+                    <field name="designer_com_type"/>
+                    <field name="designer_subtotal_price" />
+                </tree> 
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="interior_designer_action_report">
+            <field name="name">Interior Designers</field>
+            <field name="res_model">metrotiles.designer</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_smiling_face">No Data
+                </p>
+            </field>
+        </record>
+        
+        <menuitem
+            id="commission_parent_menu"
+            name="Commission Reports"
+            groups="sales_team.group_sale_manager"
+            parent="sale.menu_sale_report"
+            sequence="10"/>
+        <menuitem
+            id="architect_report_menu"
+            name="Architect Report"
+            action="architect_action_report"
+            groups="sales_team.group_sale_manager"
+            parent="commission_parent_menu"
+            sequence="5"/>
+        <menuitem
+            id="interior_report_menu"
+            name="Interior Designer Report"
+            action="interior_designer_action_report"
+            groups="sales_team.group_sale_manager"
+            parent="commission_parent_menu"
+            sequence="6"/>
+    </data>
+</odoo>

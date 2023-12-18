@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record model="res.partner" id="procurement_res_partner">
+            <field name="name">Procurement</field>
+            <field name="is_company" eval="False"/>
+            <field name="zip">6000</field>
+            <field name="country_id" ref="base.ph"/>
+            <field name="email">procurement@metrotiles.com.ph</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+    </data>
+</odoo>

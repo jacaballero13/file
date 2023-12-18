@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem
+            id="sales_approval_invoice_menu"
+            name="Contracts Approvals"
+            parent="metrotiles_sales_adjustment.accounting_extension_menu_root"
+            sequence="50"
+        />
+
+        <menuitem
+            id="approved_contracts_accounting_menu"
+            name="Approved Contracts"
+            parent="sales_approval_invoice_menu"
+            action="app_sale_approval.action_quotations_draft_approved"
+            sequence="5"
+        />
+
+        <menuitem
+            id="to_approve_contracts_accounting_menu"
+            name="To Approve Contracts"
+            parent="sales_approval_invoice_menu"
+            action="app_sale_approval.action_quotations_to_approve"
+            sequence="10"
+        />
+
+         <menuitem
+            id="cancelled_contracts_accounting_menu"
+            name="Cancelled Contracts"
+            parent="sales_approval_invoice_menu"
+            action="app_sale_approval.action_order_cancel"
+        />
+        
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- metrotiles.generated.slip form view -->
+        <record id="metrotiles_pull_out_slips_view_form" model="ir.ui.view">
+            <field name="name">metrotiles.pull.out.slips.view.form</field>
+            <field name="model">metrotiles.pull.out.slips</field>
+            <field name="arch" type="xml">
+                <form string="Pull Outs">
+                    <header>
+                        <field name="status" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="pu_no"/>
+                            <field name="pu_type"/>
+                            <field name="pu_date"/>
+                            <field name="warehouse_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- metrotiles.pull.outs tree view -->
+        <record id="metrotiles_generated_slips_view_tree" model="ir.ui.view">
+            <field name="name">metrotiles.pull.outs.slips.view.tree</field>
+            <field name="model">metrotiles.pull.out.slips</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="pu_no"/>
+                    <field name="pu_type"/>
+                    <field name="pu_date"/>
+                    <field name="warehouse_id"/>
+                    <field name="sale_order_id"/>
+                    <field name="sales_ac"/>
+                    <field name="partner_id"/>
+                    <field name="status"/> 
+                </tree>
+            </field>
+        </record>
+
+        <!-- pull.outs.slips action window -->
+        <record id="metrotiles_pull_out_slips_action" model="ir.actions.act_window">
+            <field name="name">Pull Outs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">metrotiles.pull.out.slips</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

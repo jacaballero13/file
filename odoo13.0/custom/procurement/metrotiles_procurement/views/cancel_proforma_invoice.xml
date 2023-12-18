@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="cancel_proforma_invoice_form">
+            <field name="name">metrotiles_procurement.cancel_proforma_invoice.form</field>
+            <field name="model">metrotiles_procurement.cancel_proforma_invoice</field>
+            <field name="arch" type="xml">
+                <form string="Cancel Proforma Invoice Payment">
+                    <sheet>
+                        <center>
+                        <h4>Would like to cancel this PO <strong><field name="accounting_proforma_invoice_id"/></strong>? </h4>
+                        </center>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" type="object"
+                                class="btn btn-danger"
+                                string="Confirm"/>
+                        <button special="cancel" class="btn btn-primary" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

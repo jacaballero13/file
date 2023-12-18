@@ -1,0 +1,160 @@
+<odoo>
+    <data>
+        <report id='po_report_template' 
+            model='purchase.order' 
+            string='PO' 
+            report_type='qweb-pdf' 
+            name='metrotiles_rfq_po_template.po_international_template' 
+            file='metrotiles_rfq_po_template.po_international_template' 
+            paperformat="metrotiles_rfq_po_template.rfq_po_template_paperformat"/>
+
+            <!-- attachment='str(purchase.order.name)' +'.pdf'  -->
+        
+        
+        <template id='po_international_template'>
+            <t t-call='web.html_container'>
+                <t t-foreach='docs' t-as='o'>
+                    <t t-call='web.external_layout'>
+                    <style>
+                    table {
+                        table-layout: fixed;
+                        border-collapse: collapse;
+                        width:100%;
+                    }
+                    td{
+                        text-align: left;
+                    }
+                    ul{
+                        display:table;
+                        width:100%;
+                        table-layout:fixed;
+                    }
+                    li{
+                        display:table-cell;
+                        word-wrap:break-word;
+                    }   
+                    </style>
+                    <!-- HEADER -->
+                    <div >
+                        <span style="font-family: 'Adobe Garamond Pro Bold', sans-serif;font-size:55px;color:red;">metrotiles</span>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <table>
+                            <tr>
+                                <td><strong>PURCHASE ORDER</strong></td>
+                                <td>PURCHASE ORDER DATE</td>
+                                <td>SUPPLIER NAME:</td>
+                            </tr>
+                            
+                            <tr>            
+                                <td><span t-field="o.name" style="color:red;"/></td>
+                                <td><strong><span t-field="o.date_approve"/></strong></td>
+                                <td><span t-field="o.partner_id"/></td>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td>PURCHASE ORDER NUMBER<br/><strong><span t-field="o.name"/></strong></td>
+                                <td></td>
+                            </tr>
+                            
+                            <tr>
+                                <td></td>
+                                <td>REFERENCE<br/><strong><span t-field="o.partner_ref"/></strong></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div class='page'>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>CONTRACT NO.</th>
+                                    <th>CUSTOMER NAME.</th>
+                                    <th>ITEM CODE</th>
+                                    <th>SERIES</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>SIZE</th>
+                                    <th>QTY IN PC.</th>
+                                    <th>QTY IN SQM.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.order_line" t-as="lines">
+                                    <td><span t-field="lines.indention_id"/></td>
+                                    <td><span t-field="lines.indention_id.customer"/></td>
+                                    <td><span t-field="lines.product_id.default_code"/></td>
+                                    <td><span t-field="lines.series_id"/></td>
+                                    <td><span t-field="lines.product_id.name"/></td>
+                                    <td><span t-field="lines.size"/></td>
+                                    <td><span t-field="lines.product_qty"/></td>
+                                    <td><span t-field="lines.qty_sqm"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div>
+                            <table class="table table-condensed" style="width:100%;table-layout:fixed;">
+                                <tr>
+                                    <td class="text-center">PREPARED BY:
+                                    <span style="text-decoration-line: underline;" t-field="o.write_uid"/><br/>
+                                        <p style="font-size:12px;">PROCUREMENT OFFICER</p> 
+                                    </td>
+                                    <td class="text-center">APPROVED BY: _________________<br/>
+                                        <p style="font-size:12px;">PRESIDENT/MANAGING DIRECTOR</p> 
+                                    </td>
+                                </tr>
+                            </table>    
+                        </div>
+
+                        <div>
+                            <table class="table table-condensed" style="width:100%;table-layout:fixed;">
+                                    <tr>
+                                        <th class="text-center" colspan="3">OTHER DETAILS:</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td> 
+                                            <strong>Terms of Payment</strong>
+                                        </td>
+                                        <td> 
+                                            <strong>Delivery Contact</strong>
+                                        </td>
+                                        <td> 
+                                            <strong>Delivery Address</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 
+                                            <strong>Notes:</strong><br/>
+                                            N/A
+                                        </td>
+                                        <td> 
+                                            <strong>Contact Number/s</strong>
+                                        </td>
+                                        <td rowspan="2">
+                                        </td>
+                                    </tr>
+                            </table>
+                        </div>
+
+                        <div class="container" style="margin-top:-10px">
+                            <div class="footer" style="font-size:10px;">
+                                <p>NOTE: THIS IS NOT CONSIDERED AS PURCHASE ORDER.<br/><br/>
+
+                                Metro Tiles, Inc.<br/>
+                                Address: 228 Tomas Morato Ave. Cor. Scout De Guia, Quezon City, Philippines 1103<br/>
+                                Tel: +63 8-290-9371 / +63 8-928-9357<br/>
+                                Website: https://metrotiles.com.ph</p>
+                            </div>
+                        </div>
+                    </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

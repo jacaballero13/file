@@ -1,0 +1,17 @@
+<!-- Inherit Form view
+
+<odoo>
+        <record id="mrp_production_view_form_inherit" model="ir.ui.view">
+                <field name="name">mrp.production.view.form.inherit</field>
+                <field name="model">mrp.production</field>
+                <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+                <field name="arch" type="xml">
+                    <field name="origin" position="after">
+                        <!-- Add your fields or attributes here -->
+                        <field name="commitment_date" invisible="1"/>
+                    
+                    </field>
+            </field>
+        </record>
+</odoo>
+-->

@@ -1,0 +1,247 @@
+<odoo>
+    <data>
+        <record id="metrotiles_reservation_sale_order_form" model="ir.ui.view">
+            <field name="name">metrotiles_quotation_view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!-- FORM !-->
+                <xpath expr="//field[@name='order_line']/form" position="replace">
+                    <form>
+                        <field name="display_type" invisible="1"/>
+                        <!--
+                            We need the sequence field to be here for new lines to be added at the correct position.
+                            TODO: at some point we want to fix this in the framework so that an invisible field is not required.
+                        -->
+                        <field name="sequence" invisible="1"/>
+                        <field name="product_uom_category_id" invisible="1"/>
+                        <field name="series_ids" invisible="1"/>
+                        <group>
+                            <field name="location_id"/>
+                            <field name="application_id"/>
+                            <field name="factory_id" domain="[('category_id.name','=', 'Vendor')]"/>
+                            <field name="series_id" domain="[('id', 'in', series_ids)]"/>
+                            <field name="product_id" string="Product"
+                                   domain="[
+                                    ('factory_id', '=', factory_id),
+                                    ('product_id.sale_ok', '=', True),
+                                    ('product_id.series_id', '=', series_id)
+                                   ]"
+                            />
+                            <field name="pallet_id" domain="[('product_id','=', product_id )]"/>
+                            <field name="package_id" force_save="1" readonly="1" invisible="1"/>
+                            <field name="price_unit" groups="base.group_erp_manager"/>
+                            <field name="product_uom_qty"/>
+                        </group>
+
+                        <div>
+                            <!-- BOM !-->
+                            <group>
+                                <field name="to_fabricate"/>
+                                <field name="bom" string="Raw Material"
+                                       domain="[('product_id.id', '=', product_id)]"
+                                       context="{'sale_order_line_bom': 1}"
+                                       attrs="{'invisible': [('to_fabricate', '=', False)]}"/>
+
+                                <field name="bom_display_name" readonly="1" attrs="{'invisible': [('to_fabricate', '=', False)]}"/>
+                            </group>
+                        </div>
+
+                        <group>
+                            <group attrs="{'invisible': [('display_type', '!=', False)]}">
+                                <field name="product_updatable" invisible="1"/>
+                                <field name="branch_id" invisible="1"/>    
+                                <field invisible="1" name="product_id"
+                                       domain="[('branch_id','=',branch_id),('series_id', '=', series_id), ('factory_id', '=',factory_id),('sale_ok', '=', True)]"
+                                       context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                       attrs="{
+                                                    'readonly': [('product_updatable', '=', False)],
+                                                    'required': [('display_type', '=', False)],
+                                                }"
+                                       force_save="1"
+                                       widget="many2one_barcode"
+                                />
+                                <field name="invoice_status" invisible="1"/>
+                                <field name="qty_to_invoice" invisible="1"/>
+                                <field name="qty_delivered_manual" invisible="1"/>
+                                <field name="qty_delivered_method" invisible="1"/>
+                                <field name="price_total" invisible="1"/>
+                                <field name="price_tax" invisible="1"/>
+                                <field name="price_subtotal" invisible="1"/>
+                                <label for="product_uom_qty" invisible="1"/>
+                                <div class="o_row" name="ordered_qty" invisible="1">
+                                    <field
+                                            context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}"
+                                            name="product_uom_qty"/>
+                                    <field
+                                            name="product_uom"
+                                            force_save="1"
+                                            groups="uom.group_uom"
+                                            class="oe_no_button"
+                                            attrs="{
+                                                        'readonly': [('state', 'in', ('sale', 'done', 'cancel'))],
+                                                        'required': [('display_type', '=', False)],
+                                                    }"
+                                    />
+                                </div>
+                                <label for="qty_delivered" string="Delivered"
+                                       attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                                <div name="delivered_qty"
+                                     attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}">
+                                    <field name="qty_delivered"
+                                           attrs="{'readonly': [('qty_delivered_method', '!=', 'manual')]}"/>
+                                </div>
+                                <label for="qty_invoiced" string="Invoiced"
+                                       attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                                <div name="invoiced_qty"
+                                     attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}">
+                                    <field name="qty_invoiced"
+                                           attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                                </div>
+                                <field invisible="1" name="price_unit" readonly="1" force_save="1"/>
+                                <field invisible="1" name="tax_id" widget="many2many_tags" options="{'no_create': True}"
+                                       context="{'search_view_ref': 'account.account_tax_view_search'}"
+                                       domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                                       attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                <label for="discount" groups="product.group_discount_per_so_line"/>
+                                <div name="discount" groups="product.group_discount_per_so_line">
+                                    <field name="discount" class="oe_inline"/>
+                                    %%
+                                </div>
+                                <!--
+                                    We need the sequence field to be here
+                                    because we want to be able to overwrite the default sequence value in the JS
+                                    in order for new lines to be added at the correct position.
+                                    NOTE: at some point we want to fix this in the framework so that an invisible field is not required.
+                                -->
+                                <field name="sequence" invisible="1"/>
+                            </group>
+                            <group attrs="{'invisible': [('display_type', '!=', False)]}" invisible="1">
+                                <label for="customer_lead"/>
+                                <div name="lead">
+                                    <field name="customer_lead" class="oe_inline"/>
+                                    days
+                                </div>
+                                <field name="analytic_tag_ids" widget="many2many_tags"
+                                       groups="analytic.group_analytic_tags" options="{'color_field': 'color'}"
+                                       domain="['|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
+                            </group>
+                        </group>
+                        <label for="name" string="Description" invisible="1"/>
+                        <label for="name" string="Section Name (eg. Products, Services)"
+                               attrs="{'invisible': [('display_type', '!=', 'line_section')]}"/>
+                        <label for="name" string="Note" attrs="{'invisible': [('display_type', '!=', 'line_note')]}"/>
+                        <field name="name" invisible="1"/>
+                        <div class="oe_read_only" name="invoice_lines" groups="base.group_no_one"
+                             attrs="{'invisible': [('display_type', '!=', False)]}">
+                            <label for="invoice_lines"/>
+                            <field name="invoice_lines"/>
+                        </div>
+                        <field name="state" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                    </form>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']/form//field[@name='invoice_lines']" position="attributes">
+                    <attribute name="class" add=" oe_read_only" separator=" "/>
+                </xpath>
+
+                <!-- !-->
+                <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom']" position="after">
+                    <field name="rif" string="R|I|F"/>
+                    <field name="indent" invisible="1"/>
+                    <!--                    <field name="fabricate" context="{'default_raw_material': product_id, 'default_quantity': product_uom_qty}" domain="[('sale_order_line','=', id), ('sale_order_line', '!=', False)]"/>-->
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
+                    <button name="updateRIF" class="fa fa-refresh text-success oe_read_only"
+                            type="object" style="height: 14px; padding: 0; font-size:14px; vertical-align: top"
+                            attrs="{'readonly': ['|', ('state', 'in', ('cancel', 'done', 'sale')), ('indent', '=', 0)]}"
+                    />
+
+                    <!-- <button name="fabricate_raw_material" class="fa fa-gavel oe_read_only"
+                            type="object" style="height: 14px; padding: 0; font-size:14px; vertical-align: top"
+                            help="Fabricate Raw Materials"
+                            attrs="{'readonly': ['|', ('state', 'in', ('cancel', 'done', 'sale')), ('indent', '=', 0)]}"
+                        /> -->
+
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+<!--                <xpath expr="//field[@name='order_line']/tree//field[@name='series_id']" position="after">-->
+<!--                    <field name="stock_quant" string="Product" class="oe_edit_only"-->
+<!--                           domain="[-->
+<!--                                ('location_id.name', '=ilike', 'stock'),-->
+<!--                                ('product_id.sale_ok', '=', True),-->
+<!--                                ('product_id.series_id', '=', series_id)-->
+<!--                            ]"-->
+<!--                           context="{'quotation_view': 1}"-->
+<!--                    />-->
+<!--                </xpath>-->
+
+                <xpath expr="//widget[@name='qty_at_date_widget']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Bill Of Materials !-->
+                <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="after">
+                    <field name="bom" string="Raw Material"
+                        invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+<!-- 
+        <record id="metrotiles_reservation_sale_order_line_form" model="ir.ui.view">
+            <field name="name">metrotiles_quotation_view</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <h1>Test</h1>
+                    <field name="product_id" invisible="1"/>
+                    <field name="product_template_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="variant" invisible="1"/>
+                    <field name="size" invisible="1"/>
+                    <field name="fabrication_raw_materials">
+                        <tree>
+                            <field name="product_id"/>
+                            <field name="variant"/>
+                            <field name="size"/>
+                            <field name="quantity"/>
+                            <field name="cut_height"/>
+                            <field name="cut_width"/>
+                            <field name="new_quantity" string="New Qty"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record id="metrotiles_reservation_sale_order_line_form_action" model="ir.actions.act_window">
+            <field name="name">Temporary Reserved</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="metrotiles_reservation_sale_order_line_form"/>
+            <field name="target">new</field>
+        </record>
+
+
+        <record id="stock_production_type_kanban" model="ir.ui.view">
+            <field name="name">stock.picking.type.kanban</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.stock_picking_type_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr='//div[@name="stock_picking"]' position="after">
+                <div t-if="record.code.raw_value == 'mrp_operation'" t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}">
+                        <t t-esc="record.code.raw_value" />
+                    </div>
+                </xpath>
+            </field>
+        </record> -->
+
+
+    </data>
+</odoo>

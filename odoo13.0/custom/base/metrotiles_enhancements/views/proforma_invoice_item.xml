@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="proforma_line_item_inherit_tree_view">
+            <field name="name">metrotiles.procurement.proforma.invoice.item.inherit.tree.view</field>
+            <field name="model">metrotiles_procurement.proforma_invoice_item</field>
+            <field name="inherit_id" ref="metrotiles_procurement.proforma_invoice_item_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='po_reference']" position="after">
+                    <field name="apv_reference" optional="hide"/>
+                    <field name="payment_term_id"/>
+                    <field name="po_date"/>
+                    <field name="or_date_approved"/>
+                    <field name="weight" optional="show"/>
+                    <field name="number_of_space" optional="show"/>
+                    <field name="date_availiability"/>
+                    <field name="availability"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='total_po_qty']" position="after">
+                    <field name="currency_id" invisible="1"/>
+                    <field name="default_currency_id" invisible="1"/>
+                    <field name="qty_sqm"/>
+                    <field name="item_sqm"/>
+                    <field name="price_type"/>
+                    <field name="price_amount" widget="monetary" optional="hide" options="{'currency_field': 'currency_id'}"/>
+                    <field name="forex_rate" optional="hide"/>
+                    <field name="php_amount" widget="monetary" optional="hide" options="{'currency_field': 'default_currency_id'}"/>
+                    <field name="buy_unit_price_sqm" widget="monetary" optional="hide" options="{'currency_field': 'default_currency_id'}"/>
+                    <!-- <field name="expense_unit_price_sql" widget="monetary" optional="hide" options="{'currency_field': 'default_currency_id'}"/> -->
+                    <field name="landed_cost_sqm" widget="monetary" optional="hide" options="{'currency_field': 'default_currency_id'}"/>
+                    <field name="landed_cost_pc" widget="monetary" optional="hide" options="{'currency_field': 'default_currency_id'}"/>
+                    <field name="landed_cost_tot_sqm" widget="monetary" optional="hide" options="{'currency_field': 'default_currency_id'}"/>
+                    <field name="landed_cost_tot_pc" widget="monetary" optional="hide" options="{'currency_field': 'default_currency_id'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+    

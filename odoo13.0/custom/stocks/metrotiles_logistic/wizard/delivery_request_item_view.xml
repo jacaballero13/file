@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="create_delivery_request_form" model="ir.ui.view">
+        <field name="name">delivery_request_item_wizard</field>
+        <field name="model">delivery.request.item</field>
+        <field name="arch" type="xml">
+            <form string="Delivery Request">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="quotation_type"/>
+                            <field name="warehouse_id"/>
+                            <field name="sales_ac"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="site_contact"/>
+                            <field name="site_number"/>
+                            <field name="site_permit"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Request Line">
+                            <field name="order_request_line" widget='section_one2many'>
+                                <tree editable="buttom" create="false" delete="true">
+                                    <field name="request_id" invisible="1"/>
+                                    <field name="sequence" invisible="1"/>
+                                    <field name="display_type" invisible="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="location_id" readonly="1" invisible="1" force_save="1"/>
+                                    <field name="application_id" readonly="1" force_save="1"/>
+                                    <field name="factory_id" readonly="1" force_save="1"/>
+                                    <field name="series_id" readonly="1" force_save="1"/>
+                                    <field name="product_id" force_save="1"  readonly="1" optional="hide"/>
+                                    <field name="variant" readonly="1" force_save="1"/>
+                                    <field name="size" readonly="1" force_save="1"/>
+                                    <field name="product_uom_qty" readonly="1" force_save="1"/>
+                                    <field name="sale_order_line_id" invisible="1" force_save="1"/>
+                                    <field name="requested_qty" readonly="1" force_save="1"/>
+                                    <field name="picked_qty" readonly="1" force_save="1"/>
+                                    <field name="qty_to_deliver"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="create_delivery_req" string="Delivery Request" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

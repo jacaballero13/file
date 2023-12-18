@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_metrotiles_inventory_modification_metrotiles_inventory_modification,metrotiles_inventory_modification.metrotiles_inventory_modification,model_metrotiles_inventory_modification_metrotiles_inventory_modification,,1,0,0,0

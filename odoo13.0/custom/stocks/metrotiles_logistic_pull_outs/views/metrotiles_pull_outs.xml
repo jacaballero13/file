@@ -1,0 +1,105 @@
+<odoo>
+    <data>
+        <record id="view_metrotiles_pull_outs_tree" model="ir.ui.view">
+            <field name="name">pull.outs.tree</field>
+            <field name="model">metrotiles.pull.outs</field>
+            <field name="arch" type="xml">
+                <tree string="Lineups">
+                    <field name="dt_created" options="{'format': 'MM/DD/YYYY'}"/>
+                    <field name="quotation_type"/>
+                    <field name="warehouse_id"/>
+                    <field name="sale_order_id"/>
+                    <field name="partner_id"/>
+                    <field name="manual_pos"/>
+                    <field name="manual_pos_date"/>
+                    <field name="track_id"/>
+                    <field name="trip"/>
+                    <field name="pull_out_no"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_metrotiles_pull_outs_form" model="ir.ui.view">
+            <field name="name">pull.outs.form</field>
+            <field name="model">metrotiles.pull.outs</field>
+            <field name="arch" type="xml">
+                <form string="Lineups">
+                    <header>
+                        <button name="generate_pull_out_schedule" type="object" icon="fa-calendar-minus-o" class="btn btn-primary" string="Create Pull Out Schedule" />
+                        <button name="generate_pull_out_slip" type="object" class="btn btn-primary" string="Generate Sales Adjustment Pull Out Slip" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" statusbar_colors="{&quot;approved&quot;:&quot;blue&quot;}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="open_delivery_schedule" class="oe_stat_button" type="object" icon="fa-truck" attrs="{'invisible':[('pull_out_no', '=', False)]}">
+                                <field string="Pull-Out Delivery Order" name="delivery_count" widget="statinfo"/>
+                            </button>
+                            <button name="open_pullout_schedule" class="oe_stat_button" type="object" icon="fa-calendar">
+                                <field string="Pull Out Schedule" name="schedule_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        
+                        <h1>
+                            <field name="name" class="oe_readonly" style="font-weight:400;" /> 
+                            <span class="alert alert-info badge badge-pill text-success text-center ml16" attrs="{'invisible': [('state', '!=', 'approved')]}" role="alert">
+                                Approved
+                            </span>  
+                        </h1>
+
+                        <group>
+                            <group>
+                                <field name="quotation_type"/>
+                                <field name="sales_ac" options="{'no_create': True}" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="sale_order_id"/>
+                                <field name="partner_id"/>
+                                <field name="pullout_type"/>
+                                <field name="manual_pos"/>
+                                <field name="manual_pos_date"/>
+                            </group>
+                            <group>
+                                <field name="dt_created" options="{'format': 'MM/DD/YYYY'}"/>
+                                <field name="warehouse_id"/>
+                                <field name="trip"/>
+                                <field name="track_id"/>
+                                <field name="responsible_user"/>
+                                <field name="is_editable" invisible="1"/>
+                                <field name="pull_out_no"/>
+                                <field name="sale_order_id" options="{'no_create': True}" attrs="{'readonly': [('is_editable','=', False)]}" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook attrs="{'invisible':[('pullout_type', '=', 'cancel')]}">
+                            <page string="Pull Out Details">
+                                <field name="pu_order_lines"  nolabel="1" widget="one2many_list">
+                                    <tree editable="bottom" create="false">
+                                        <field name="location_id" readonly="1"/>
+                                        <field name="application_id" readonly="1"/>
+                                        <field name="product_id" readonly="1"/>
+                                        <field name="size" readonly="1"/>
+                                        <field name="variant" readonly="1"/>
+                                        <field name="qty_delivered" readonly="1"/>
+                                        <field name="pull_out_qty"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <record id="action_metrotiles_pull_outs" model="ir.actions.act_window">
+        <field name="name">Lineups</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">metrotiles.pull.outs</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'draft')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Records !
+            </p>
+        </field>
+    </record>
+    </data>
+</odoo>

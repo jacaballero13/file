@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="terms_popup_form">
+            <field name="name">metrotiles_procurement.terms_popup.form</field>
+            <field name="model">metrotiles_procurement.terms_popup</field>
+            <field name="arch" type="xml">
+                <form string="Payment Details">
+                    <sheet>
+                       <field name="proforma_invoice_id" invisible="1"/>
+                        <group>
+                            <field name="due_date"/>
+                            <field name="notes"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" type="object"
+                                class="btn btn-success"
+                                icon="fa-money"
+                                string="Confirm"/>
+                        <button special="cancel" class="btn btn-danger" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+     
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <report id="inventory_report_xlsx"
+            string="Inventory Report"
+            model="inventory.report.wizard"
+            report_type="xlsx"
+            name="metrotiles_inventory_report.inventory_report_xlsx"
+            file="metrotiles_inventory_report.inventory_report_xlsx"
+            menu="False"
+        />
+
+    <report id="inventory_report_ccsv"
+            string="Inventory Report CSV"
+            model="inventory.report.wizard"
+            report_type="csv"
+            name="metrotiles_inventory_report.inventory_report_ccsv"
+            file="metrotiles_inventory_report.inventory_report_ccsv"
+            menu="False"
+        />
+</odoo>

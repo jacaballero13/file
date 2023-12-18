@@ -1,0 +1,34 @@
+<odoo>
+    <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sale1</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="purchase.res_config_settings_view_form_purchase"/>
+        <field name="arch" type="xml">
+			<xpath expr="//field[@name='po_lock']" position="after">
+				<h2>Sequence</h2>
+                <div class="row mt16 o_settings_container">
+					<div class="col-xs-12 col-md-6 o_setting_box">
+						<div class="o_setting_right_pane">
+							<label for="rfq_sequence_id" string="RFQ Sequence"/>
+								<div class="content-group">
+								<div class="mt16">
+									<field name="rfq_sequence_id" class="o_light_label" options="{'no_create_edit': True, 'no_open': True}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6 o_setting_box">
+						<div class="o_setting_right_pane">
+							<label for="po_sequence_id" string="PO Sequence"/>
+								<div class="content-group">
+								<div class="mt16">
+									<field name="po_sequence_id" class="o_light_label" options="{'no_create_edit': True, 'no_open': True}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

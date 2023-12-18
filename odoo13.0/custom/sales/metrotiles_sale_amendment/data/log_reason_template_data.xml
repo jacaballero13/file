@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <template id="metrotiles_sale_order_template_declined_reason">
+            <p>Your Sale Adjustment <t t-esc="name"/> has been declined</p>
+            <ul class="o_timeline_tracking_value_list">
+                <li>Current State : <t t-esc="state"/></li>
+                <li>Reason : <t t-esc="reason"/></li>
+            </ul>
+        </template>
+
+        <template id="metrotiles_sale_order_template_cancel_contract_reason">
+            <p>Cancellation of contract.</p>
+            <pre><t t-esc="reason" /></pre>
+        </template>
+    </data>
+</odoo>

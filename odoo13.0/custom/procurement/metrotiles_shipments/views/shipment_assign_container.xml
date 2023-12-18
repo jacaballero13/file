@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_container_details_form" model="ir.ui.view">
+        <field name="name">shipment.number.form</field>
+        <field name="model">shipment.number</field>
+        <field name="inherit_id" ref="metrotiles_shipments.view_metrotiles_procurement_shipment_number_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='shipment_line']" position="after">
+                <page name="Container" string="Container Details" attrs="{'invisible':[('container_no', '=', False)]}">
+                    <field name="assign_container_line" widget="one2many_list">
+                        <tree editable="buttom">
+                            <field name="warehouse_id"/>
+                            <field name="container_no"/>
+                            <field name="xx_ets"/>
+                            <field name="xx_eta"/>
+                            <field name="xx_broker"/>
+                            <field name="xx_forwarder"/>
+                            <field name="xx_forwarder_ref"/>
+                            <field name="xx_consignee"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added required fields in columns of tree view -->
+        <record model="ir.ui.view" id="res_partner_inherit_tree_view">
+            <field name="name">res.partner.inherited.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="metrotiles_reservation.create_rfq_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sale_indentions']/tree/field[@name='contract_ref']" position="after">
+                    <field name="date_order" force_save="1" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

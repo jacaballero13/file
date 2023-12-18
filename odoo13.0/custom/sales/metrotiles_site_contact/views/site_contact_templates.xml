@@ -1,0 +1,63 @@
+<odoo>
+<template id="metrotiles_site_contact_template" inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//div[2]/section[1]" position="before">
+                <section class="mt-5">
+                        <div class="row">
+                                <div t-if="sale_order.site_contact" class="col-auto mw-100 mb-2">
+                                <strong>Site Contact Person:</strong>
+                                <p class="m-0" t-field="sale_order.site_contact"/>
+                                </div>
+                                <div t-if="sale_order.site_number" class="col-auto mw-100 mb-2">
+                                        <strong>Site Contact Number:</strong>
+                                        <p class="m-0" t-field="sale_order.site_number"/>
+                                </div>
+                                <div t-if="sale_order.from_time" class="col-auto mw-100 mb-2">
+                                        <strong>Delivery Date:</strong>
+                                        <p class="m-0" t-field="sale_order.commitment_date"/>
+                                </div>
+                                <div t-if="sale_order.from_time" class="col-auto mw-100 mb-2">
+                                        <strong>Delivery Time (From):</strong>
+                                        <p class="m-0" t-field="sale_order.from_time"/>
+                                </div>
+                                <div t-if="sale_order.to_time" class="col-auto mw-100 mb-2">
+                                        <strong>Delivery Time (To):</strong>
+                                        <p class="m-0" t-field="sale_order.to_time"/>
+                                </div>
+                                <div t-if="sale_order.sales_ac"  class="col-auto mw-100 mb-2">
+                                        <strong>Account Coordinator:</strong>
+                                        <p class="m-0" t-field="sale_order.sales_ac"/>
+                                </div>
+                        </div>
+                </section>
+        </xpath>
+</template>
+
+        <template id="metrotiles_application_report" inherit_id="sale.report_saleorder_document">
+                <xpath expr="//div[@class='page']/div[2]/div[5]" position="after">
+                        <div t-if="doc.site_contact" class="col-auto mw-100 mb-2">
+                                <strong>Site Contact Person:</strong>
+                                <p class="m-0" t-field="doc.site_contact"/>
+                        </div>
+                        <div t-if="doc.site_number" class="col-auto mw-100 mb-2">
+                                <strong>Site Contact Number:</strong>
+                                <p class="m-0" t-field="doc.site_number"/>
+                        </div>
+                        <div t-if="doc.from_time" class="col-auto mw-100 mb-2">
+                                <strong>Delivery Date:</strong>
+                                <p class="m-0" t-field="doc.commitment_date" widget="date"/>
+                        </div>
+                        <div t-if="doc.from_time" class="col-auto mw-100 mb-2">
+                                <strong>Delivery Time (From):</strong>
+                                <p class="m-0" t-field="doc.from_time"/>
+                        </div>
+                        <div t-if="doc.to_time" class="col-auto mw-100 mb-2">
+                                <strong>Delivery Time (To):</strong>
+                                <p class="m-0" t-field="doc.to_time"/>
+                        </div>
+                        <div t-if="doc.sales_ac" class="col-auto mw-100 mb-2">
+                                <strong>Account Coordinator:</strong>
+                                <p class="m-0" t-field="doc.sales_ac"/>
+                        </div>
+                </xpath>        
+        </template>
+</odoo>

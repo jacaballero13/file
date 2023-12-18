@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_credit_memo_details_user,metrotiles_credit_memo.credit.memo.details,model_credit_memo_details,base.group_user,1,1,1,1
+access_credit_memo_line_user,metrotiles_credit_memo.credit.memo.line,model_credit_memo_line,base.group_user,1,1,1,1
+access_credit_charge_line_user,metrotiles_credit_memo.credit.charge.line,model_credit_memo_charges_line,base.group_user,1,1,1,1

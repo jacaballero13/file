@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mti_all_enhancement_mti_all_enhancement,mti_all_enhancement.mti_all_enhancement,model_mti_all_enhancement_mti_all_enhancement,,1,0,0,0

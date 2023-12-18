@@ -1,0 +1,138 @@
+<odoo>
+    <record id="proforma_invoice_form" model="ir.ui.view">
+        <field name="name">metrotiles_procurement.proforma_invoice.form</field>
+        <field name="model">metrotiles_procurement.proforma_invoice</field>
+        <field name="arch" type="xml">
+            <form string="Proforma Invoice" class="o_proforma_invoice" create="false">
+                <header>
+                    <button name="action_rejected" type="object"
+                                class="btn btn-danger"
+                                string="Rejected"
+                                attrs="{'invisible': [('status', 'in', ('pending', 'approved', 'rejected'))]}"
+                                groups="purchase.group_purchase_manager"/>
+
+                    <button name="action_pending" type="object"
+                                class="btn btn-primary"
+                                string="Pending"
+                                attrs="{'invisible': [('status', '!=','rejected')]}"/>
+
+                    <button name="action_processing" type="object"
+                                class="btn btn-primary"
+                                string="Process"
+                                attrs="{'invisible': [('status', 'in', ('processing', 'approved', 'rejected'))]}"/>
+                    <button name="action_cancelled" type="object"
+                                class="btn btn-danger"
+                                string="Cancelled"
+                                attrs="{'invisible': [('status', 'in', ('pending', 'rejected'))]}"
+                                groups="purchase.group_purchase_manager"/>
+                    <button name="action_approved" type="object"
+                                class="btn btn-primary"
+                                string="Approve"
+                                attrs="{'invisible': [('status', 'in', ('pending', 'approved', 'rejected'))]}"
+                                groups="purchase.group_purchase_manager"/>
+                        <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="purchase_order_id"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="payment_status"/>
+                            <field name="payment_term_id"/>
+                            <field name="availability"/>
+                            <field name="date_availiability" attrs="{'invisible': [('availability','!=', 'unavailable')]}"/>
+                        </group>
+                        <group>
+                            <field name="number_of_space"/>
+                            <field name="weight"/>
+                            <field name="currency"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Purchase Order Items">
+                            <field name="proforma_item_ids" context="{'default_proforma_invoice_id' : id, 'default_purchase_order_id': purchase_order_id}">
+                                <tree string="Purchase Order Lines">
+                                    <field name="order_line"/>
+                                    <field name="partner_id"/>
+                                    <field name="series_id"/>
+                                    <field name="variant"/>
+                                    <field name="size"/>
+                                    <field name="total_po_qty"/>
+                                    <field name="product_qty"/>
+                                    <field name="additional_qty"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="price_unit"/>
+                            </tree>
+                            </field>
+                            <group>
+                                <field name="amount_total" attrs="{'required': [('weight','!=', 0)]}"/>
+                            </group>
+                        </page>
+                         <page string="Other Information">
+                            <field name="proforma_attach" widget="pdf_viewer" string="Add Attachment"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="proforma_invoice_tree_view">
+        <field name="name">proforma_invoice.tree</field>
+        <field name="model">metrotiles_procurement.proforma_invoice</field>
+        <field name="arch" type="xml">
+            <tree string="Proforma Invoice Tree">
+                <field name="purchase_order_id"/>
+                <field name="name"/>
+                <field name="payment_status"/>
+                <field name="availability"/>
+                <field name="number_of_space"/>
+                <field name="weight"/>
+                <field name="currency"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="proforma_invoice_search_view">
+        <field name="name">proforma_invoice.search</field>
+        <field name="model">metrotiles_procurement.proforma_invoice</field>
+        <field name="arch" type="xml">
+            <search string="proforma_invoice search">
+                <field name="purchase_order_id"/>
+                <field name="name"/>
+                <field name="payment_status"/>
+                <field name="availability"/>
+                <field name="number_of_space"/>
+                <field name="weight"/>
+                <field name="currency"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="proforma_invoice_list_action">
+        <field name="name">Proforma Invoice</field>
+        <field name="res_model">metrotiles_procurement.proforma_invoice</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smiling_face">Create the first Proforma Invoice
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="proforma_invoice_menu" name="Proforma Invoice" parent="metrotiles_procurement.proforma_invoice_root_menu"
+              action="proforma_invoice_list_action" sequence="1"/>
+
+</odoo>

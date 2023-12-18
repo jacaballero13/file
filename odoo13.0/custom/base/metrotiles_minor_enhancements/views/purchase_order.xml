@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="purchase_order_proforma_invoice_inherit">
+            <field name="name">purchase.order.inherit.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='product_id']" position="before">
+                    <field name="client_name"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+    <data>
+        <record model="ir.ui.view" id="proforma_line_item_inherit">
+            <field name="name">metrotiles.procurement.proforma.invoice.item.inherit.form</field>
+            <field name="model">metrotiles_procurement.proforma_invoice_item</field>
+            <field name="inherit_id" ref="metrotiles_procurement.proforma_invoice_item_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='po_reference']" position="after">
+                    <field name="so_contract_ref" string="Contract"/>
+                    <field name="client_name"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+    

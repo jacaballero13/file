@@ -1,0 +1,63 @@
+<odoo>
+    <record model="ir.ui.view" id="product_header_button">
+        <field name="name">product.product.procurement.secret</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_quants']" position="after">
+                <field name="temporary_reserve_ids" invisible="1"/>
+                <field name="contract_reserve_ids" invisible="1"/>
+                <button class="oe_stat_button"
+                        icon="fa-cubes"
+                        name="%(metrotiles_reservation.product_contract_reserve_wizard_action)d" type="action"
+                        context="{'default_name': name, 'default_contract_reserve_ids': contract_reserve_ids}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="reserved_qty" widget="statinfo" nolabel="1" class="mr4"/>
+                            <field name="uom_name"/>
+                        </span>
+                        <span class="o_stat_text">Reserved</span>
+                    </div>
+                </button>
+
+                <button class="oe_stat_button"
+                        icon="fa-cubes"
+                        name="%(metrotiles_reservation.product_temp_reserve_wizard_action)d" type="action"
+                        context="{'default_name': name, 'default_temporary_reserve_ids': temporary_reserve_ids}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="temporary_reserved_qty" widget="statinfo" nolabel="1" class="mr4"/>
+                            <field name="uom_name"/>
+                        </span>
+                        <span class="o_stat_text">Temp. Reserved</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='series_id']" position="after">
+                <field name="pallet_ids">
+                    <tree>
+                        <field name="pallet"/>
+                        <field name="location_id"/>
+                    </tree>
+                    <tree  editable="bottom" string="Pallets">
+                        <field name="pallet"/>
+                        <field name="location_id"/>
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="secret">
+        <field name="name">product.product_product_tree_view_resevation</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qty_available']" position="after">
+                <field name="reserved_qty"/>
+                <field name="temporary_reserved_qty"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

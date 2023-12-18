@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>    
+        <record id="view_skit_res_partner_form_inherited" model="ir.ui.view">
+            <field name="name">res.partner.inherit.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='trust']" position="after">
+                    <field name="customer_tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('is_withholding_tax','=',False)]"/>
+                    <field name="customer_wt_tax_id" domain="[('is_withholding_tax','=',True),('type_tax_use','=','sale')]"/>
+                </xpath>
+                <xpath expr="//field[@name='property_supplier_payment_term_id']" position="after">
+                    <field name="vendor_tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','purchase'),('is_withholding_tax','=',False)]"/>
+                    <field name="vendor_wt_tax_id" domain="[('is_withholding_tax','=',True),('type_tax_use','=','purchase')]"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

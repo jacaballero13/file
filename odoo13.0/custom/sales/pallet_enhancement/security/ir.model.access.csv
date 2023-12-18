@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pallet_enhancement_pallet_enhancement,pallet_enhancement.pallet_enhancement,model_pallet_enhancement,,1,1,1,1

@@ -1,0 +1,15 @@
+<data noupdate='1'>
+    <record id="ir_sequence_logistic_line_ups" model="ir.sequence">
+        <field name="name">Line ups Sequence</field>
+        <field name="code">logistic.line.ups</field>
+        <field name="prefix">lu</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="ir_sequence_logistic_pull_outs" model="ir.sequence">
+        <field name="name">Pull Outs Sequence</field>
+        <field name="code">logistic.pull.outs</field>
+        <field name="prefix">PU</field>
+        <field name="padding">5</field>
+    </record>
+</data>

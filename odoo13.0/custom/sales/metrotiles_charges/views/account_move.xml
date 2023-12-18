@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="metrotiles_charges_view_move_form" model="ir.ui.view">
+        <field name="name">metrotiles.account.move.inherit.form.view</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- eb: added net charges -->
+            <xpath expr="//page[@id='invoice_tab']//field[@name='amount_discounted_total']" position="before">
+                <!-- NET CHARGES !-->
+                <field name="net_charges" attrs="{'invisible': [('net_charges','=', 0.0)]}" />
+                <!-- VAT CHARGES !-->
+                <field name="vat_charges" widget="monetary" options="{'currency_field': 'currency_id'}"
+                        attrs="{'invisible': [('vat_charges','=', 0.0)]}"/>
+                <!-- TOTAL CHARGES !-->
+                <field name="total_charges" attrs="{'invisible': [('total_charges','=', 0.0)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

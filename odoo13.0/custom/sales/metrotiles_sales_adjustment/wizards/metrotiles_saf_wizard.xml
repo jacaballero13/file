@@ -1,0 +1,49 @@
+
+<odoo>
+    
+    <record id="metrotiles_saf_wizard_view_form" model="ir.ui.view">
+        <field name="name">Metrotiles SAF Wizard</field>
+        <field name="model">metrotiles.saf.wizard</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="adjustment_type" string="Choose Adjustment Type"/>
+                        <field name="sales_order_id"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="confirm_saf" 
+                        string="Confirm" 
+                        type="object" 
+                        class="btn-primary"/>
+                    <button 
+                        string="Cancel" 
+                        class="btn-secondary" 
+                        special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="metrotiles_saf_wizard_action_server" model="ir.actions.server">
+        <field name="name">Create Sales Adjustment</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_adjustment_wizard()
+        </field>
+    </record>
+
+
+    <!-- <act_window id="metrotiles_create_sales_adjustment_action"
+            name="Create Sales Adjustment"
+            view_id="metrotiles_saf_wizard_view_form"
+            res_model="metrotiles.saf.wizard" 
+            binding_model="sale.order"
+            view_mode="form" 
+            target="new"/> -->
+
+</odoo>

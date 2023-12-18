@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="view_generate_pull_out_slip_form" model="ir.ui.view">
+            <field name="name">Pull Out Details</field>
+            <field name="model">pull.out.slip</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create Pull Out Schedule">
+                    <group col="3">
+                        <group>
+                            <field name="warehouse_id" readonly="1"/>
+                            <field name="pu_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="pu_type" readonly="1"/>
+                            <field name="track_id" readonly="1"/>
+                        </group>         
+                        <group>
+                            <field name="contract_no" readonly="1"/>
+                            <field name="trip" readonly="1"/>
+                        </group>               
+                    </group>
+                    <footer>
+                        <button name="generate_slip" string="Confirm" type="object" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel" class="oe_link" default_focus="1"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_generate_pull_out_slip" model="ir.actions.act_window">
+            <field name="name">Wizard</field>
+            <field name="res_model">pull.out.slip</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

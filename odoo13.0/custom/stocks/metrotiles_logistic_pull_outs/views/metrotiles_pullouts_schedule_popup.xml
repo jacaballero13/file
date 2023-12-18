@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="pullout_schedule_popup_form">
+            <field name="name">pullout.schedule.popup.form</field>
+            <field name="model">pullout.schedule.popup</field>
+            <field name="arch" type="xml">
+                <form string="Create Pull Out Schedule">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="warehouse_id"/>
+                                <field name="pullout_type" readonly="1"/>
+                                <field name="sale_order_id"/>
+                            </group>
+                            <group>
+                                <field name="commitment_date"/>
+                                <field name="track_id"/>
+                                <field name="trip"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" type="object"
+                                class="btn btn-success"
+                                icon="fa-calendar-minus-o"
+                                string="Confirm"/>
+                        <button special="cancel" class="btn btn-danger" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_generate_pull_out_schedule" model="ir.actions.act_window">
+            <field name="name">Wizard</field>
+            <field name="res_model">pullout.schedule.popup</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

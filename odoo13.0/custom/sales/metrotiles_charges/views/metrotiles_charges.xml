@@ -1,0 +1,34 @@
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">Charges Page View</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <page name="charges" string="Charges Page">
+                    <field name="charge_ids">
+                        <tree string="Charges and Fees"
+                            editable="bottom"
+                            delete="true"
+                            width="60%"
+                        >
+                            <control>
+                                <create name="add_charge_control" string="Add a charges"/>
+                            </control>
+                            <field name="charge_id" style="width:135px; max-width:200px;"/>
+                            <field name="charge_amount" style="width:135px; max-width:200px"/>
+                            <field name="code_status" style="width:75px; max-width:100px;" groups="account.group_account_manager"/>
+                        </tree>
+                    </field>
+                    <group name="note_group" col="6" modifiers="{}">
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_charges" modifiers="{}">
+                            <field name="net_charges" widget="monetary"
+                                options="{'currency_field': 'currency_id'}"
+                                modifiers="{'readonly':true}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

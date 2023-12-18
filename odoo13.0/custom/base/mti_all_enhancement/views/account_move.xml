@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="create_bills_inherit_form">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <label for="currency_rate"/>
+                    <div class="d-flex">
+                        <field name="currency_rate" placeholder="Currency Rate" force_save="1"/>
+                        <button name="updateCurrencyRate" class="fa fa-refresh text-success oe_read_only" type="object" style="height: 15px; padding: 1px; font-size:14px; vertical-align: top"/>
+                    </div>
+                </xpath>
+
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='discount']" position="after">
+                    <field name="price_type"/>
+                    <field name="qty_sqm"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='discount']" position="after">
+                    <field name="price_type" invisible="1"/>
+                    <field name="qty_sqm" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="credit_note_inherit_form">
+            <field name="name">account.move.tree</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total_signed']" position="after">
+                    <field name="amount_discounted_total" string="CM Total Amount" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

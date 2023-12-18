@@ -1,0 +1,70 @@
+<odoo>
+    <record id="totals_and_reports_sale_view_order_form" model="ir.ui.view">
+        <field name="name">metrotiles_totals_and_reports_view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']//group[@name='note_group']//group[@name='sale_total']"
+                   position="replace">
+
+                <group class="oe_subtotal_footer oe_right order-1 sale-total" style="width: 340px !important"
+                       name="sale_total">
+                    <!-- METROTILES_QUOTATION !-->
+                    <field nolabel="1" colspan="2" name="location_subtotal_group"
+                           widget="metrotiles_location_subtotal"/>
+
+                    <!-- MATERIALS Gross TOTAL !-->
+                    <field name="amount_untaxed" string="TOTAL"/>
+
+                    <!-- METROTILES_DISCOUNT !-->
+                    <field name="amount_discount"
+                           widget="metrotiles_many2many_discount"
+                           options="{'target_field': 'total_discounts'}"
+                           nolabel="1" colspan="2"
+                           attrs="{'invisible': [('amount_discount','=', 0.0)]}"
+                    />
+
+                    <!-- MATERIALS Net TOTAL !-->
+                    <field name="materials_net_total" string="PRODUCT NET TOTAL"
+                           attrs="{'invisible': ['|', ('amount_discount', '=', 0), ('amount_tax', '=', 0)]}"/>
+
+                    <!-- METROTILES_TAX !-->
+                    <div class="d-inline-flex flex-row-reverse o_td_label w-100">
+                        <label for="vatable"/>
+                        <field name="vatable" nolabel="1" class="w-auto"/>
+                    </div>
+                    <field name="amount_tax" string="VAT" widget='monetary' options="{'currency_field': 'currency_id'}"
+                           nolabel="1" class="text-primary"/>
+
+                    <!-- MATERIALS Net TOTAL !-->
+                    <div class="oe_inline o_td_label">
+                        <label for="material_total" string="PRODUCT TOTAL"/>
+                    </div>
+                    <field name="material_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+
+                    <!-- NET CHARGES !-->
+                    <field name="net_charges" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"/>
+
+                    <!-- VAT CHARGES !-->
+                    <div class="d-inline-flex flex-row-reverse o_td_label w-100">
+                        <label for="vat_activated"/>
+                        <field name="vat_activated" nolabel="1" class="w-auto"/>
+                    </div>
+                    <field name="vat_charges" widget="monetary" options="{'currency_field': 'currency_id'}"
+                           nolabel="1"
+                           class="text-primary"/>
+
+                    <!-- TOTAL CHARGES !-->
+                    <field name="total_charges" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"/>
+
+                    <!-- TOTAL AMOUNT !-->
+                    <field name="amount_total" string="TOTAL CONTRACT PRICE" class="oe_subtotal_footer_separator"
+                           widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

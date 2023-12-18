@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <record id="view_metrotiles_delivery_tree" model="ir.ui.view">
+        <field name="name">delivery.conctract.tree</field>
+        <field name="model">delivery.contract</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="charge_amount"/>
+                <field name="quotation_type"/>
+                <field name="warehouse_id"/>
+                <field name="sales_ac"/>
+                <field name="commitment_date"/>
+                <field name="delivery_area"/>
+                <field name="r_permit"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="delivery_contract_calendar">
+          <field name="name">delivery.conctract.calendar</field>
+          <field name="model">delivery.contract</field>
+          <field name="priority" eval="2"/>
+          <field name="arch" type="xml">
+              <calendar string="Delivery Schedule" date_start="dt_created" color="partner_id" event_limit="5">
+                <field name="sale_order_id"/>
+                <field name="quotation_type"/>
+                <field name="warehouse_id"/>
+                <field name="partner_id"/>
+                <field name="dt_created"/>
+              </calendar>
+          </field>
+    </record>
+
+    <record id="view_metrotiles_delivery_form" model="ir.ui.view">
+        <field name="name">delivery.contract.form</field>
+        <field name="model">delivery.contract</field>
+        <field name="arch" type="xml">
+            <form string="Delivery Contract">
+              <header>
+                    <button name="action_schedule" type="object"
+                            icon="fa-calendar-minus-o"
+                            class="btn btn-primary"
+                            string="Create Delivery Schedule"
+                            attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+                    <button name="action_generate_dr" type="object"
+                            class="btn btn-primary"
+                            string="Generate DR"
+                            attrs="{'invisible': [('state', '!=', 'approved')]}"
+                            confirm="Generate Delivery No.?"/>
+                    <button name="button_approved" states="to_approve"         string="Approve"
+                            type="object" 
+                            class="oe_highlight" 
+                            attrs="{'invisible': [('state', '!=', 'to_approve')]}"/>
+                    <button name="button_to_approve" type="object"
+                            states="draft" 
+                            string="Request Certificate"
+                            class="oe_highlight" 
+                            attrs="{'invisible': [('state', '!=', 'draft')]}" />
+                    <button name="button_rejected" 
+                            states="to_approve,approved" 
+                            string="Reject" 
+                            type="object" 
+                            statusbar_colors='rejected:"red"}'   
+                            attrs="{'invisible': ['|',('state', 'not in', ['to_approve'])]}"/>
+                    <field name="state" widget="statusbar"
+                            statusbar_visible="draft,to_approve,approved,rejected"
+                            statusbar_colors='{"approved":"blue"}' />
+              </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                  <button name="open_delivery_orders" class="oe_stat_button" type="object" icon="fa-truck">
+                    <field string="Delivery Orders" name="delivery_count" widget="statinfo"/>
+                  </button>
+                  <button name="open_delivery_schedule" class="oe_stat_button" type="object" icon="fa-calendar">
+                    <field string="Delivery Schedule" name="schedule_count" widget="statinfo"/>
+                  </button>
+                </div>
+                <div class="oe_edit_only">
+                    <label for="name" class="oe_inline" />
+                </div>
+                <h1>
+                  <field name="name" class="oe_readonly" style="font-weight:400;" attrs="{'readonly': [('is_editable','=', False)]}" /> 
+                  <span class="alert alert-info badge badge-pill text-success text-center ml16"
+                          attrs="{'invisible': [('state', '!=', 'approved')]}" role="alert">
+                      Approved
+                  </span>  
+                  <span class="alert alert-info badge badge-pill text-danger text-center ml16" role="alert"
+                            attrs="{'invisible': [('approve_refused_reason', '=', False)]}">
+                        Refused:
+                        <field name="approve_refused_reason" class="ml4"/>
+                  </span>        
+                </h1>
+                  <group>
+                      <group>
+                          <field name="is_editable" invisible='1'/>
+                          <field name="sale_order_id" options="{'no_create': True}" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                          <field name="quotation_type" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                          <field name="warehouse_id" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                          <field name="sales_ac" options="{'no_create': True}" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                          <field name="wh_ref"/>
+                          <field name="delivery_no"/>
+                      </group>
+                      <group>
+                          <field name="partner_id" options="{'no_create': True}" attrs="{'readonly': [('is_editable','=', False)]}" invisible="1"/>
+                          <field name="site_contact" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                          <field name="site_number" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                          <field name="responsible_user" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                          <field name="site_permit" attrs="{'readonly': [('is_editable','=', False)]}" />
+                          <field name="commitment_date" readonly="0"/>
+                      </group>
+                  </group>
+                  <notebook>
+                    <page string="Contract Order Line">
+                      <field name="contract_line" widget="section_one2many">
+                        <tree delete="false" editable="bottom">
+                              <field name="contract_id" invisible="1"/>
+                              <field name="display_type" invisible="1"/>
+                              <field name="name" readonly="1" invisible="1"/>
+                              <field name="location_id" readonly="1" force_save="1"/>
+                              <field name="application_id" readonly="1" force_save="1"/>
+                              <field name="factory_id" readonly="1" force_save="1"/>
+                              <field name="series_id" readonly="1" force_save="1"/>
+                              <field name="variant" readonly="1" force_save="1"/>
+                              <field name="size" readonly="1" force_save="1"/>
+                              <field name="product_uom_qty" readonly="1" force_save="1"/>
+                              <field name="qty_to_deliver" />
+                        </tree>
+                      </field>
+                    </page>
+                    <page string="Delivery Schedule" attrs="{'invisible':[('commitment_date', '=', False)]}"> 
+                        <group>
+                            <group>
+                              <field name="dt_created" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                              <field name="commitment_date"/>
+                              <field name="delivery_area" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                            </group>
+                            <group>
+                              <field name="track_id"  attrs="{'readonly': [('is_editable','=', False)]}"/>
+                              <field name="trip" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                  </notebook>
+              </sheet>
+              <div class="oe_chatter">
+                      <field name="message_follower_ids" widget="mail_followers" />
+                      <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipent'}"/>
+              </div>
+          </form>
+        </field>
+    </record>
+    <record id="action_metrotiles_delivery" model="ir.actions.act_window">
+        <field name="name">Logistic Delivery</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">delivery.contract</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your Delivery Schedule !
+            </p>
+        </field>
+    </record>
+  
+    <menuitem id="metrotiles_delivery_root_menu" 
+              name="Delivery Orders"
+              parent="fleet.menu_root"
+              sequence="2"/>
+    <menuitem id="metrotiles_delivery_sub_menu"
+              name="Lineups "
+              action="action_metrotiles_delivery"
+              parent="metrotiles_delivery_root_menu"
+              sequence="3"
+              groups="base.group_user"/>
+
+</odoo>

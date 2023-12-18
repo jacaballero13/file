@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_metrotiles_bir_slp_user,metrotiles_vat_relief.metrotiles.bir_slp,model_metrotiles_bir_slp,account.group_account_manager,1,1,1,1
+access_metrotiles_bir_sls_user,metrotiles_vat_relief.metrotiles.bir_sls,model_metrotiles_bir_sls,account.group_account_manager,1,1,1,1

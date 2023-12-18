@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <record id="view_metrotiles_pallet_tree" model="ir.ui.view">
+        <field name="name">metrotiles.pallet.tree</field>
+        <field name="model">metrotiles.pallet</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="1" edit="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_metrotiles_pallet" model="ir.actions.act_window">
+        <field name="name">Metrotiles Pallet</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">metrotiles.pallet</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Create your Pallet ID !
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="metrotiles_pallet_menu" 
+              name="Metrotiles Pallet ID"
+              action="action_metrotiles_pallet"
+              parent="metrotiles_operation.metrotiles_wall_root_menu"
+              sequence="90"
+              groups="base.group_user"/>
+</odoo>

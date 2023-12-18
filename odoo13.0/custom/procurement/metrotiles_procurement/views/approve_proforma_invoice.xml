@@ -1,0 +1,40 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="approved_proforma_invoice_form">
+            <field name="name">metrotiles_procurement.approved_proforma_invoice.form</field>
+            <field name="model">metrotiles_procurement.approved_proforma_invoice</field>
+            <field name="arch" type="xml">
+                <form string="Payment Details">
+                    <header>
+                        <field name="status" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                       <field name="accounting_proforma_invoice_id" invisible="1"/>
+                        <group>
+                            <field name="currency_id"/>
+                            <field name="amount_total"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="cancelled_payment"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_credit_memo"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="adjustment"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="discount" widget="percent"/>
+                            <field name="grand_total"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="remaining_amount" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" type="object"
+                                class="btn btn-success"
+                                icon="fa-money"
+                                string="Create Payment"/>
+                        <button special="cancel" class="btn btn-danger" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,61 @@
+<odoo>
+    <record id="proforma_terms_form" model="ir.ui.view">
+        <field name="name">metrotiles_procurement.proforma_terms.form</field>
+        <field name="model">metrotiles_procurement.proforma_terms</field>
+        <field name="arch" type="xml">
+            <form string="Proforma Terms" class="o_proforma_terms" edit="false" create="false">
+                <sheet>
+                    <group>
+                        <field name="proforma_invoice_id"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="due_date"/>
+                        </group>
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="proforma_terms_tree_view">
+        <field name="name">proforma_terms.tree</field>
+        <field name="model">metrotiles_procurement.proforma_terms</field>
+        <field name="arch" type="xml">
+            <tree string="Proforma Terms Tree"  edit="false" create="false">
+                <field name="proforma_invoice_id"/>
+                <field name="due_date"/>
+                <field name="notes"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="proforma_terms_search_view">
+        <field name="name">proforma_terms.search</field>
+        <field name="model">metrotiles_procurement.proforma_terms</field>
+        <field name="arch" type="xml">
+            <search string="proforma_terms search">
+                <field name="proforma_invoice_id"/>
+                <field name="due_date"/>
+                <field name="notes"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="proforma_terms_list_action">
+        <field name="name">Proforma Terms</field>
+        <field name="res_model">metrotiles_procurement.proforma_terms</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smiling_face">Create the first Proforma Terms
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="proforma_terms_menu" name="Terms" parent="metrotiles_procurement.proforma_invoice_root_menu"
+              action="proforma_terms_list_action" sequence="3"/>
+
+</odoo>

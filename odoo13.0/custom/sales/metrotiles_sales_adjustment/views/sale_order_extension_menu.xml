@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Top Menu -->
+        <menuitem id="sales_adjustment_menu_root"
+            name="Sales Adjustment"
+            parent="sale.sale_order_menu"
+            sequence="30"
+        />
+        <menuitem id="sales_adjustment_menu_pending"
+            name="Sales Adjustment / Pending Request"
+            action="metrotiles_sales_adjustment.action_sales_order_adjustment"
+            parent="sales_adjustment_menu_root"
+            sequence="10"
+        />
+        <menuitem id="sales_adjustment_menu_approved"
+            name="Sales Adjustment / Approved"
+            parent="sales_adjustment_menu_root"
+            sequence="15"
+        />
+
+    </data>
+</odoo>

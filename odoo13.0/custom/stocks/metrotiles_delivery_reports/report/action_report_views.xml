@@ -1,0 +1,11 @@
+<odoo>
+  <data>
+    <report id="print_report_pdf'"
+        string="Pull Out Slip"
+        model="stock.picking"
+        report_type="qweb-pdf"
+        name="metrotiles_delivery_reports.pull_out_slip_template"
+        file="metrotiles_delivery_reports.pull_out_slip_template"
+        menu="True"/>
+    </data>
+</odoo>

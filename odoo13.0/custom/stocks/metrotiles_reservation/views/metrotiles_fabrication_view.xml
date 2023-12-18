@@ -1,0 +1,102 @@
+<odoo>
+    <template id="assets_backend" name="tree view menu" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript"
+                    src="/metrotiles_reservation/static/src/js/fab_sizes.js"></script>
+            <script type="text/javascript"
+                    src="/metrotiles_reservation/static/src/js/canvas.js"></script>
+        </xpath>
+    </template>
+    <!--    <record id="fabrication_form" model="ir.ui.view">-->
+    <!--        <field name="name">metrotiles.fabrication.raw.material.form</field>-->
+    <!--        <field name="model">metrotiles.fabrication.raw.material</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <form string="Fabricate" class="o_fabricate container">-->
+    <!--                <h2>Raw Material</h2>-->
+    <!--                <div class="container">-->
+    <!--                    <div class="row">-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="stock_quant" string="Product"-->
+    <!--                                       domain="[-->
+    <!--                                       ('location_id.name', '=ilike', 'stock'),-->
+    <!--                                       ('product_id.product_tmpl_id', '=', parent.product_template_id),-->
+    <!--                                       ('product_id.product_template_attribute_value_ids.name', '=', parent.variant),-->
+    <!--                                       ('on_hand', '>', 0)-->
+    <!--                                       ]"-->
+    <!--                                       context="{'quotation_view': 1}"/>-->
+    <!--                            </group>-->
+
+    <!--                            <field name="product_id" invisible="1"/>-->
+    <!--                        </div>-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="quantity"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="variant" class="text-left"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="size" class="text-left"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <hr/>-->
+    <!--                <h2>Cut Size</h2>-->
+
+    <!--                <div class="container">-->
+    <!--                    <div class="row">-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="cut_height"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="cut_width"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                        <div class="col-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="new_quantity"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </form>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!--    <record id="fabrication_cut_sizes_form" model="ir.ui.view">-->
+    <!--        <field name="name">metrotiles.fabrication.raw.material.cut.size.form</field>-->
+    <!--        <field name="model">metrotiles.fabrication.raw.material.cut.size</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <form string="Fabricate" class="o_fabricate container">-->
+    <!--                <div class="container">-->
+    <!--                    <div class="row">-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="height"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="width"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                        <div class="col-lg-6 col-md-6 col-sm-12">-->
+    <!--                            <group>-->
+    <!--                                <field name="quantity" class="text-center"/>-->
+    <!--                            </group>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </form>-->
+    <!--        </field>-->
+    <!--    </record>-->
+</odoo>

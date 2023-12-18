@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+
+        <record id="seq_inventory_count_tags" model="ir.sequence">
+            <field name="name">Inventory Count Tags</field>
+            <field name="code">inventory.count.tags</field>
+            <field name="prefix"></field>
+            <field name="padding">6</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <!-- <field name="company_id" eval="False"/> -->
+        </record>
+
+        <record id="seq_inventory_adjustment" model="ir.sequence">
+            <field name="name">Adjustment Sequence</field>
+            <field name="code">seq.inventory.adjustment</field>
+            <field name="prefix"></field>
+            <field name="padding">6</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <!-- <field name="company_id" eval="False"/> -->
+        </record>
+
+    </data>
+
+</odoo>

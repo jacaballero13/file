@@ -1,0 +1,33 @@
+<odoo>
+    <record id="product_temp_reserve_wizard_form" model="ir.ui.view">
+        <field name="name">product.temp.reserve.wizard.form</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+           <form>
+                <field name="temporary_reserve_ids">
+                <tree create="false" delete="false" editable="false">
+                    <field name="order_name"/>
+                    <field name="client_name"/>
+                    <field name="account_executive"/>
+                    <field name="quantity"/>
+                    <field name="validity_date"/>
+                    <field name="stock_location_id" optional="hide"/>
+                    <field name="package_id" optional="hide"/>
+                </tree>
+            </field>
+
+            <footer>
+                <button string="Close" class="oe_link" special="cancel"/>
+            </footer>
+           </form>
+        </field>
+    </record>
+
+    <record id="product_temp_reserve_wizard_action" model="ir.actions.act_window">
+        <field name="name">Temporary Reserved</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_temp_reserve_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

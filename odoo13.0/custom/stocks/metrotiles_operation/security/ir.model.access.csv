@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_metrotiles_pallet_metrotiles_pallet,metrotiles_pallet.metrotiles_pallet,model_metrotiles_pallet,base.group_user,1,1,1,1
+access_metrotiles_wall_metrotiles_wall,metrotiles_wall.metrotiles_wall,model_metrotiles_wall,base.group_user,1,1,1,1

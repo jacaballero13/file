@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="inventory_count_tag_view">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <div class="inline col-12" style="display: inline;float:left;">
+                            <t t-foreach="docs" t-as="doc">
+                            <!-- class="col-6" class="table table-bordered"-->
+                                <div  style="display:inline-block;width:48%;float:left;height:380px;overflow: hidden;padding:2px">
+                                    <table  style="border: 1px solid black;border-collapse: collapse;padding:5px;height:100%;width:100%;font-size: 13px;">
+                                        <tr style="padding:2px;">
+                                            <td colspan="2" style="width: 50%; !important;padding:2px;">
+                                                <h5>
+                                                    <span t-field="doc.company_id.name"/>
+                                                </h5>
+                                            </td>
+                                            <td colspan="2" style="text-align:right">
+                                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" alt="Logo" style="max-width: 90px;max-height: 50px;text-align:right;padding-right: 2px;padding-top: 2px;"/>
+                                            </td>
+                                        </tr>
+                                        <tr style="padding:2px;">
+                                            <th style="padding:2px;" colspan="2">INVENTORY COUNT TAG</th>
+                                            <th colspan="2" style="text-align:right;padding-right: 2px;">
+                                                <span t-field="doc.name" />
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px;" >Product Code:</td>
+                                            <td>
+                                                <span t-field="doc.product_id.default_code"/>
+                                            </td>
+                                            <td>Adjustment ID:</td>
+                                            <td>
+                                                <span t-field="doc.inventory_id"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px;" >Product Name:</td>
+                                            <td>
+                                                <span t-field="doc.product_id.name"/>
+                                            </td>
+                                            <td>Warehouse:</td>
+                                            <td>
+                                                <span t-field="doc.warehouse_id"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px;" >Unit of Measure:</td>
+                                            <td>
+                                                <span t-field="doc.product_uom_id"/>
+                                            </td>
+                                            <td>Warehouse Location:</td>
+                                            <td>
+                                                <span t-field="doc.location_id"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:2px;" >Counted QTY:</td>
+                                            <td>
+                                                <span t-field="doc.product_qty"/>
+                                            </td>
+                                            <td>Notes/Remarks:</td>
+                                            <td>
+                                                <span t-field="doc.note"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <record id="paperformat_us_landscape" model="report.paperformat">
+            <field name="name">US Letter Landscape</field>
+            <field name="default" eval="True" />
+            <field name="format">Letter</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="print_count_tag_report" model="ir.actions.report">
+            <field name="name">Count Tag</field>
+            <field name="model">inventory.count.tags</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">inventory_adjustment_enhanced.inventory_count_tag_view</field>
+            <field name="report_file">inventory_adjustment_enhanced.inventory_count_tag_view</field>
+            <field name="binding_model_id" ref="model_inventory_count_tags"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="inventory_adjustment_enhanced.paperformat_us_landscape"/>
+        </record>
+
+
+
+        <template id="inventory_adjustment_count_tags_list_report">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-foreach="docs" t-as="doc">
+                            <center>
+                                <h2> COUNT TAG LIST </h2>
+                            </center>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th> Adjustment ID:</th>
+                                    <td>
+                                        <span t-field="doc.name"/>
+                                    </td>
+                                    <th>
+                                    </th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th> Warehouse:</th>
+                                    <td>
+                                        <span t-field="doc.warehouse_id"/>
+                                    </td>
+                                    <th> Warehouse Location:</th>
+                                    <td>
+                                        <span t-field="doc.location_ids"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <t t-set="index" t-value="0"/>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Count Tag ID:</th>
+                                        <th>Product Code</th>
+                                        <th>Product Name</th>
+                                        <th>UOM</th>
+                                        <th>Count QTY</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <t t-foreach="doc.get_count_tag()" t-as="tag">
+                                    <tr>
+                                        <td>
+                                            <t t-set="index" t-value="index+1"/>
+                                            <span t-esc="index" />
+                                        </td>
+                                        <td>
+                                            <span t-field="tag.name" />
+                                        </td>
+                                        <td>
+                                            <span t-field="tag.product_id.default_code" />
+                                        </td>
+                                        <td>
+                                            <span t-field="tag.product_id.name" />
+                                        </td>
+                                        <td>
+                                            <span t-field="tag.product_uom_id" />
+                                        </td>
+                                        <td>
+                                            <span t-field="tag.product_qty" />
+                                        </td>
+                                        <td>
+                                            <span t-field="tag.note" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                            Total Lines : <t t-esc="index"/>
+                            <br/>
+                            <br/>
+                            <table class="table table-borderless">
+                                <tr style="text-align: center;">
+                                    <th> Prepared by:</th>
+                                    <th> Checked by:</th>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td>
+                                        <span t-field="doc.create_uid"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.create_uid"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- </center> -->
+                        </t>
+                        <div style="text-align: right;" >
+                            <span t-esc="datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')"></span>
+                        </div>
+                        <!-- .strftime('%Y-%m-%d') -->
+                    </div>
+                </t>
+            </t>
+        </template>
+
+
+        <record id="inventory_adjustment_count_tag_list_report" model="ir.actions.report">
+            <field name="name">COUNT TAG LIST</field>
+            <field name="model">stock.inventory</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">inventory_adjustment_enhanced.inventory_adjustment_count_tags_list_report</field>
+            <field name="report_file">inventory_adjustment_enhanced.inventory_adjustment_count_tags_list_report</field>
+            <field name="binding_model_id" ref="model_stock_inventory"/>
+            <field name="binding_type">report</field>
+            <!-- <field name="menu">0</field> -->
+            <!-- <field name="paperformat_id" ref="inventory_adjustment_enhanced.paperformat_us_landscape"/> -->
+        </record>
+
+
+    </data>
+
+</odoo>
