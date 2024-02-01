@@ -37,8 +37,7 @@ Add public key using curl:
  • sudo curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
 Add pgAdmin respository and update server’s packages:
 
- • sudo sh -c ‘echo “deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb release -cs) pgadmin4 main” 
-  > /etc/apt/resources.list.d/pgadmin4.list && apt update’
+ • sudo sh -c ‘echo “deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb release -cs) pgadmin4 main” > /etc/apt/resources.list.d/pgadmin4.list && apt update’
 
 Install pgAdmin:
 
