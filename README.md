@@ -1,5 +1,5 @@
 # How to install Odoo13 Community Version, PostgreSql 9.6 and PgAdmin on Ubuntu 20.04
-
+as
 ## Set-up and Commands
 
 ### Update the System:
